@@ -95,14 +95,17 @@ function full_report_LP(M, report, x, x_navne, c, constraints, b, b_dir, b_navne
 end
 
 ##########################################################
-function full_report_LP_latex(output_latex_navn, M, report, x, x_navne, c, constraints, b, b_dir, b_navne, dec=2, tol=1e-9, x_type=nothing)
+function full_report_LP_latex(output_latex_navn, M, report, x, x_navne, c, A, obj, constraints, b, b_dir, b_navne, dec=2, tol=1e-9, x_type=nothing, fortegn=nothing)
 open(output_latex_navn, "w") do file
     # Skriv LaTeX header
     println(file, "\\documentclass{article}")
     println(file, "\\usepackage[utf8]{inputenc}")
+    println(file, "\\usepackage{amsmath,amssymb}")
     println(file, "\\usepackage{booktabs}")
     println(file, "\\begin{document}")
     println(file, "\\begin{flushleft}")
+    println(file, "")
+    print_problem_latex_LP_MIP(file, obj, c, A, b, b_dir, x_navne, fortegn, x_type)
     println(file, "")
     println(file, "\\section*{Resultater fra optimering}")
     println(file, "")
@@ -222,8 +225,8 @@ end
 end
 
 ##########################################################
-function standard_LP_output(M, x, x_navne, c, constraints, b, b_dir, b_navne, dec=2, tol=1e-9, output_terminal=true,
-     output_fil=false, output_latex=false, output_fil_navn="output.txt", output_latex_navn="output.tex", model_type="LP", x_type=nothing)
+function standard_LP_output(M, x, x_navne, c, A, obj, constraints, b, b_dir, b_navne, dec=2, tol=1e-9, output_terminal=true,
+     output_fil=false, output_latex=false, output_fil_navn="output.txt", output_latex_navn="output.tex", model_type="LP", x_type=nothing, fortegn=nothing)
 
 if model_type != "LP"
     println("Fejl: Modeltype er ikke LP. Benyt anden output funktion.")
@@ -263,7 +266,7 @@ if output_fil
 end
 
 if output_latex
-    full_report_LP_latex(output_latex_navn, M, report, x, x_navne, c, constraints, b, b_dir, b_navne, dec, tol, x_type)
+    full_report_LP_latex(output_latex_navn, M, report, x, x_navne, c, A, obj, constraints, b, b_dir, b_navne, dec, tol, x_type, fortegn)
     println("Output er gemt i .tex filen: ", output_latex_navn)
 end
 
@@ -322,16 +325,97 @@ function full_report_MIP(M, x, x_navne, x_type, constraints, b, b_dir, b_navne, 
     print_optimal_solution(M, x, x_navne, x_type, dec)
     print_slack(constraints, b_navne, b, b_dir, dec, tol)
 end
+##########################################################
+
+function latex_var_domæner(x_navne, fortegn, x_type)
+    latex_tekst = String[]
+    for i in eachindex(x_navne)
+        if x_type[i] == :Binary
+            push!(latex_tekst, x_navne[i] * " \\in \\{0,1\\}")
+        elseif x_type[i] == :Integer
+            if fortegn[i] == :>=
+                push!(latex_tekst, x_navne[i] * " \\in \\mathbb{Z}, " * x_navne[i] * " \\geq 0")
+            elseif fortegn[i] == :<=
+                push!(latex_tekst, x_navne[i] * " \\in \\mathbb{Z}, " * x_navne[i] * " \\leq 0")
+            else
+                push!(latex_tekst, x_navne[i] * " \\in \\mathbb{Z}")
+            end
+        elseif x_type[i] == :Continuous
+            if fortegn[i] == :R
+                push!(latex_tekst, x_navne[i] * " \\in \\mathbb{R}")
+            elseif fortegn[i] == :<=
+                push!(latex_tekst, x_navne[i] * " \\leq 0")
+            elseif fortegn[i] == :>=
+                push!(latex_tekst, x_navne[i] * " \\geq 0")
+            end
+        end
+    end
+    return join(latex_tekst, ", ")
+end
 
 ##########################################################
-function full_report_MIP_latex(output_latex_navn, M, x, x_navne, x_type, constraints, b, b_dir, b_navne, dec=2, tol=1e-9)
+function print_problem_latex_LP_MIP(file, obj, c, A, b, b_dir, x_navne, fortegn, x_type)
+    sense = obj == MOI.MAX_SENSE ? "\\max " : "\\min "
+
+    obj_funktion = String[]
+    for i in eachindex(c)
+        coef = c[i]
+        if coef == 0; continue; end
+
+        fortegn_str = coef < 0 ? " -" : (isempty(obj_funktion) ? "" : " +")
+        abscoef = abs(coef)
+        coef_tekst = abscoef == 1 ? "" : string(abscoef) * " "
+
+        push!(obj_funktion, fortegn_str * coef_tekst * x_navne[i])
+    end
+
+    println(file, "\\subsection*{Problemformulering}")
+    println(file, "\\[")
+    println(file, "\\begin{aligned}")
+    println(file, sense, " \\;& ", join(obj_funktion, " "))
+
+    println(file, "\\\\ \\text{u.b.b. } \\;& ")
+    for i in 1:size(A, 1)
+        row_terms = String[]
+        for j in 1:size(A, 2)
+            a = A[i, j]
+            if a == 0; continue; end
+
+            fortegn_str = a < 0 ? " -" : (isempty(row_terms) ? "" : " +")
+            abs_a = abs(a)
+            coef_tekst = abs_a == 1 ? "" : string(abs_a) * " "
+
+            push!(row_terms, fortegn_str * coef_tekst * x_navne[j])
+        end
+
+        dir = b_dir[i] == :<= ? "\\le" : (b_dir[i] == :>= ? "\\ge" : "=")
+        println(file, (i == 1 ? "" : "\\\\ & "), join(row_terms, " "), " ", dir, " ", b[i])
+    end
+
+    dom = latex_var_domæner(x_navne, fortegn, x_type)
+    if !isempty(dom)
+        println(file, "\\\\ \\text{Samt fortegnskrav: } \\;& ", dom)
+    end
+    println(file, "\\end{aligned}")
+    println(file, "\\]")
+end
+
+
+
+
+
+##########################################################
+function full_report_MIP_latex(output_latex_navn, M, x, x_navne, x_type, c, A, obj, constraints, b, b_dir, b_navne, dec=2, tol=1e-9, fortegn=nothing)
 open(output_latex_navn, "w") do file
     # Skriv LaTeX header
     println(file, "\\documentclass{article}")
     println(file, "\\usepackage[utf8]{inputenc}")
+    println(file, "\\usepackage{amsmath,amssymb}")
     println(file, "\\usepackage{booktabs}")
     println(file, "\\begin{document}")
     println(file, "\\begin{flushleft}")
+    println(file, "")
+    print_problem_latex_LP_MIP(file, obj, c, A, b, b_dir, x_navne, fortegn, x_type)
     println(file, "")
     println(file, "\\section*{Resultater fra optimering}")
     println(file, "\\textbf{Type:} MIP")
@@ -390,8 +474,8 @@ end
 end
 
 ##########################################################
-function standard_MIP_output(M, x, x_navne, x_type, c, constraints, b, b_dir, b_navne, dec=2, tol=1e-9, output_terminal=true,
-     output_fil=false, output_latex=false, output_fil_navn="output.txt", output_latex_navn="output.tex", model_type="MIP")
+function standard_MIP_output(M, x, x_navne, x_type, c, A, obj, constraints, b, b_dir, b_navne, dec=2, tol=1e-9, output_terminal=true,
+     output_fil=false, output_latex=false, output_fil_navn="output.txt", output_latex_navn="output.tex", model_type="MIP", fortegn=nothing)
 
 if model_type != "MIP"
     println("Fejl: Modeltype er ikke MIP. Benyt anden output funktion.")
@@ -430,7 +514,7 @@ if output_fil
 end
 
 if output_latex
-    full_report_MIP_latex(output_latex_navn, M, x, x_navne, x_type, constraints, b, b_dir, b_navne, dec, tol)
+    full_report_MIP_latex(output_latex_navn, M, x, x_navne, x_type, c, A, obj, constraints, b, b_dir, b_navne, dec, tol, fortegn)
     println("Output er gemt i .tex filen: ", output_latex_navn)
 end
 

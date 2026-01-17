@@ -8,12 +8,13 @@
 \subsection*{Problemformulering}
 \[
 \begin{aligned}
-\min  \;& 3 y_1  -5 y_2  +2 y_3  +6 y_4
+\max  \;& 2 x_1  +4 x_2  +7 x_3
 \\ \text{u.b.b. } \;& 
-y_1  +2 y_2  +y_3  +3 y_4 = 2
-\\ &  -y_1  +y_2  -2 y_3  -5 y_4 = 4
-\\ & 2 y_1  +y_2  +2 y_4 \ge 7
-\\ \text{med fortegnskrav: } \;& y_1 \geq 0, y_2 \geq 0, y_3 \in \mathbb{R}, y_4 \in \mathbb{R}
+x_1  -x_2  +2 x_3 \le 3
+\\ & 2 x_1  +x_2  +x_3 \le -5
+\\ & x_1  -2 x_2 = 2
+\\ & 3 x_1  -5 x_2  +2 x_3 = 6
+\\ \text{Samt fortegnskrav: } \;& x_1 \in \mathbb{R}, x_2 \in \mathbb{R}, x_3 \geq 0
 \end{aligned}
 \]
 
@@ -28,10 +29,9 @@ y_1  +2 y_2  +y_3  +3 y_4 = 2
 \toprule
 Variabelnavn & Variabeltype & Værdi \\
 \midrule
-y_1 & Continuous & 0.0 \\
-y_2 & Continuous & 1.0 \\
-y_3 & Continuous & -9.0 \\
-y_4 & Continuous & 3.0 \\
+x_1 & Continuous & -2.0 \\
+x_2 & Continuous & -2.0 \\
+x_3 & Continuous & 1.0 \\
 \bottomrule
 \end{tabular}
 
@@ -40,9 +40,10 @@ y_4 & Continuous & 3.0 \\
 \toprule
 Begrænsning & LHS & RHS & Slack & Skyggepris & Status \\
 \midrule
-BDual_1 & 2.0 & 2.0 & 0.0 & -2.0 & Bindende \\
-BDual_2 & 4.0 & 4.0 & 0.0 & -2.0 & Bindende \\
-BDual_3 & 7.0 & 7.0 & 0.0 & 1.0 & Bindende \\
+B1 & 2.0 & 3.0 & 1.0 & -0.0 & Ikke-bindende \\
+B2 & -5.0 & -5.0 & 0.0 & 1.0 & Bindende \\
+B3 & 2.0 & 2.0 & 0.0 & -9.0 & Bindende \\
+B4 & 6.0 & 6.0 & 0.0 & 3.0 & Bindende \\
 \bottomrule
 \end{tabular}
 
@@ -51,10 +52,9 @@ BDual_3 & 7.0 & 7.0 & 0.0 & 1.0 & Bindende \\
 \toprule
 Variabelnavn & Koefficientværdi & Maksimalt fald & Maksimal stigning & Reduced costs \\
 \midrule
-y_1 & 3.0 & -1.0 & $\infty$ & 1.0 \\
-y_2 & -5.0 & $-\infty$ & 9.0 & 0.0 \\
-y_3 & 2.0 & -0.5 & 0.69 & 0.0 \\
-y_4 & 6.0 & -1.8 & 1.0 & 0.0 \\
+x_1 & 2.0 & -2.25 & $\infty$ & -0.0 \\
+x_2 & 4.0 & -4.5 & $\infty$ & -0.0 \\
+x_3 & 7.0 & $-\infty$ & 9.0 & -0.0 \\
 \bottomrule
 \end{tabular}
 
@@ -63,9 +63,10 @@ y_4 & 6.0 & -1.8 & 1.0 & 0.0 \\
 \toprule
 Begrænsning & RHS (nu) & Maksimalt fald & Maksimal stigning \\
 \midrule
-BDual_1 & 2.0 & -2.25 & $\infty$ \\
-BDual_2 & 4.0 & -4.5 & $\infty$ \\
-BDual_3 & 7.0 & $-\infty$ & 9.0 \\
+B1 & 3.0 & -1.0 & $\infty$ \\
+B2 & -5.0 & $-\infty$ & 9.0 \\
+B3 & 2.0 & -0.5 & 0.69 \\
+B4 & 6.0 & -1.8 & 1.0 \\
 \bottomrule
 \end{tabular}
 

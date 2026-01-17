@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\begin{document}
+\begin{flushleft}
+
+\subsection*{Problemformulering}
+\[
+\begin{aligned}
+\max  \;& 4 x_1  +3 x_2  +5 x_3
+\\ \text{u.b.b. } \;& 
+2 x_1  +x_2  +3 x_3 \le 4
+\\ &  -x_1  +x_2 \ge 0
+\\ & x_1  +x_3 \le 1
+\\ \text{Samt fortegnskrav: } \;& x_1 \in \{0,1\}, x_2 \in \mathbb{Z}, x_2 \geq 0, x_3 \in \{0,1\}
+\end{aligned}
+\]
+
+\section*{Resultater fra optimering}
+\textbf{Type:} MIP
+
+\textbf{Objektivfunktionens værdi:} 12.0
+
+\subsection*{Optimale variabelværdier}
+\begin{tabular}{ccc}
+\toprule
+Variabelnavn & Variabeltype & Værdi \\
+\midrule
+x_1 & Binary & 0.0 \\
+x_2 & Integer & 4.0 \\
+x_3 & Binary & 0.0 \\
+\bottomrule
+\end{tabular}
+
+\subsection*{Slack}
+\begin{tabular}{ccccc}
+\toprule
+Begrænsning & LHS & RHS & Slack & Status \\
+\midrule
+B1 & 4.0 & 4.0 & 0.0 & Bindende \\
+B2 & 4.0 & 0.0 & 4.0 & Ikke-bindende \\
+B3 & 0.0 & 1.0 & 1.0 & Ikke-bindende \\
+\bottomrule
+\end{tabular}
+
+\end{flushleft}
+\end{document}
