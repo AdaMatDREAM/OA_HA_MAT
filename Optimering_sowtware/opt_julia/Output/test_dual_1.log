@@ -1,0 +1,634 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.7)  4 DEC 2025 00:52
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**"c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex"
+(c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex
+LaTeX2e <2025-11-01>
+L3 programming layer <2025-10-24>
+(c:/texlive/2025/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2025/01/22 v1.4n Standard LaTeX document class
+(c:/texlive/2025/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count275
+\c@section=\count276
+\c@subsection=\count277
+\c@subsubsection=\count278
+\c@paragraph=\count279
+\c@subparagraph=\count280
+\c@figure=\count281
+\c@table=\count282
+\abovecaptionskip=\skip49
+\belowcaptionskip=\skip50
+\bibindent=\dimen148
+) (c:/texlive/2025/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2024/02/08 v1.3d Input encoding file
+\inpenc@prehook=\toks17
+\inpenc@posthook=\toks18
+) (c:/texlive/2025/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen149
+\lightrulewidth=\dimen150
+\cmidrulewidth=\dimen151
+\belowrulesep=\dimen152
+\belowbottomsep=\dimen153
+\aboverulesep=\dimen154
+\abovetopsep=\dimen155
+\cmidrulesep=\dimen156
+\cmidrulekern=\dimen157
+\defaultaddspace=\dimen158
+\@cmidla=\count283
+\@cmidlb=\count284
+\@aboverulesep=\dimen159
+\@belowrulesep=\dimen160
+\@thisruleclass=\count285
+\@lastruleclass=\count286
+\@thisrulewidth=\dimen161
+) (c:/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count287
+) (./test_dual_1.aux)
+\openout1 = `test_dual_1.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 14.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 14.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:18: Missing $ inserted.
+<inserted text> 
+                $
+l.18 y_
+       1 & Continuous & 0.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:18: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \endtemplate 
+l.18 y_1 &
+           Continuous & 0.0 \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:18: Missing $ inserted.
+<inserted text> 
+                $
+l.18 y_1 &
+           Continuous & 0.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:18: Missing } inserted.
+<inserted text> 
+                }
+l.18 y_1 &
+           Continuous & 0.0 \\
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:19: Missing $ inserted.
+<inserted text> 
+                $
+l.19 y_
+       2 & Continuous & 1.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:19: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \endtemplate 
+l.19 y_2 &
+           Continuous & 1.0 \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:19: Missing $ inserted.
+<inserted text> 
+                $
+l.19 y_2 &
+           Continuous & 1.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:19: Missing } inserted.
+<inserted text> 
+                }
+l.19 y_2 &
+           Continuous & 1.0 \\
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:20: Missing $ inserted.
+<inserted text> 
+                $
+l.20 y_
+       3 & Continuous & -9.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:20: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \endtemplate 
+l.20 y_3 &
+           Continuous & -9.0 \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:20: Missing $ inserted.
+<inserted text> 
+                $
+l.20 y_3 &
+           Continuous & -9.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:20: Missing } inserted.
+<inserted text> 
+                }
+l.20 y_3 &
+           Continuous & -9.0 \\
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:21: Missing $ inserted.
+<inserted text> 
+                $
+l.21 y_
+       4 & Continuous & 3.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:21: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \endtemplate 
+l.21 y_4 &
+           Continuous & 3.0 \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:21: Missing $ inserted.
+<inserted text> 
+                $
+l.21 y_4 &
+           Continuous & 3.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:21: Missing } inserted.
+<inserted text> 
+                }
+l.21 y_4 &
+           Continuous & 3.0 \\
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:30: Missing $ inserted.
+<inserted text> 
+                $
+l.30 BDual_
+           1 & 2.0 & 2.0 & 0.0 & -2.0 & Bindende \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:30: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \endtemplate 
+l.30 BDual_1 &
+               2.0 & 2.0 & 0.0 & -2.0 & Bindende \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:30: Missing $ inserted.
+<inserted text> 
+                $
+l.30 BDual_1 &
+               2.0 & 2.0 & 0.0 & -2.0 & Bindende \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:30: Missing } inserted.
+<inserted text> 
+                }
+l.30 BDual_1 &
+               2.0 & 2.0 & 0.0 & -2.0 & Bindende \\
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:31: Missing $ inserted.
+<inserted text> 
+                $
+l.31 BDual_
+           2 & 4.0 & 4.0 & 0.0 & -2.0 & Bindende \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:31: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \endtemplate 
+l.31 BDual_2 &
+               4.0 & 4.0 & 0.0 & -2.0 & Bindende \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:31: Missing $ inserted.
+<inserted text> 
+                $
+l.31 BDual_2 &
+               4.0 & 4.0 & 0.0 & -2.0 & Bindende \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:31: Missing } inserted.
+<inserted text> 
+                }
+l.31 BDual_2 &
+               4.0 & 4.0 & 0.0 & -2.0 & Bindende \\
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:32: Missing $ inserted.
+<inserted text> 
+                $
+l.32 BDual_
+           3 & 7.0 & 7.0 & 0.0 & 1.0 & Bindende \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:32: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \endtemplate 
+l.32 BDual_3 &
+               7.0 & 7.0 & 0.0 & 1.0 & Bindende \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:32: Missing $ inserted.
+<inserted text> 
+                $
+l.32 BDual_3 &
+               7.0 & 7.0 & 0.0 & 1.0 & Bindende \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:32: Missing } inserted.
+<inserted text> 
+                }
+l.32 BDual_3 &
+               7.0 & 7.0 & 0.0 & 1.0 & Bindende \\
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:41: Missing $ inserted.
+<inserted text> 
+                $
+l.41 y_
+       1 & 3.0 & -1.0 & $\infty$ & 1.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:41: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \endtemplate 
+l.41 y_1 &
+           3.0 & -1.0 & $\infty$ & 1.0 \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:41: Missing $ inserted.
+<inserted text> 
+                $
+l.41 y_1 &
+           3.0 & -1.0 & $\infty$ & 1.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:41: Missing } inserted.
+<inserted text> 
+                }
+l.41 y_1 &
+           3.0 & -1.0 & $\infty$ & 1.0 \\
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:42: Missing $ inserted.
+<inserted text> 
+                $
+l.42 y_
+       2 & -5.0 & $-\infty$ & 9.0 & 0.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:42: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \endtemplate 
+l.42 y_2 &
+           -5.0 & $-\infty$ & 9.0 & 0.0 \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:42: Missing $ inserted.
+<inserted text> 
+                $
+l.42 y_2 &
+           -5.0 & $-\infty$ & 9.0 & 0.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:42: Missing } inserted.
+<inserted text> 
+                }
+l.42 y_2 &
+           -5.0 & $-\infty$ & 9.0 & 0.0 \\
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:43: Missing $ inserted.
+<inserted text> 
+                $
+l.43 y_
+       3 & 2.0 & -0.5 & 0.69 & 0.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:43: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \endtemplate 
+l.43 y_3 &
+           2.0 & -0.5 & 0.69 & 0.0 \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:43: Missing $ inserted.
+<inserted text> 
+                $
+l.43 y_3 &
+           2.0 & -0.5 & 0.69 & 0.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:43: Missing } inserted.
+<inserted text> 
+                }
+l.43 y_3 &
+           2.0 & -0.5 & 0.69 & 0.0 \\
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:44: Missing $ inserted.
+<inserted text> 
+                $
+l.44 y_
+       4 & 6.0 & -1.8 & 1.0 & 0.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:44: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \endtemplate 
+l.44 y_4 &
+           6.0 & -1.8 & 1.0 & 0.0 \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:44: Missing $ inserted.
+<inserted text> 
+                $
+l.44 y_4 &
+           6.0 & -1.8 & 1.0 & 0.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:44: Missing } inserted.
+<inserted text> 
+                }
+l.44 y_4 &
+           6.0 & -1.8 & 1.0 & 0.0 \\
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+
+Overfull \hbox (51.86194pt too wide) in paragraph at lines 37--47
+[]  
+ []
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:53: Missing $ inserted.
+<inserted text> 
+                $
+l.53 BDual_
+           1 & 2.0 & -2.25 & $\infty$ \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:53: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \endtemplate 
+l.53 BDual_1 &
+               2.0 & -2.25 & $\infty$ \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:53: Missing $ inserted.
+<inserted text> 
+                $
+l.53 BDual_1 &
+               2.0 & -2.25 & $\infty$ \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:53: Missing } inserted.
+<inserted text> 
+                }
+l.53 BDual_1 &
+               2.0 & -2.25 & $\infty$ \\
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:54: Missing $ inserted.
+<inserted text> 
+                $
+l.54 BDual_
+           2 & 4.0 & -4.5 & $\infty$ \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:54: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \endtemplate 
+l.54 BDual_2 &
+               4.0 & -4.5 & $\infty$ \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:54: Missing $ inserted.
+<inserted text> 
+                $
+l.54 BDual_2 &
+               4.0 & -4.5 & $\infty$ \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:54: Missing } inserted.
+<inserted text> 
+                }
+l.54 BDual_2 &
+               4.0 & -4.5 & $\infty$ \\
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:55: Missing $ inserted.
+<inserted text> 
+                $
+l.55 BDual_
+           3 & 7.0 & $-\infty$ & 9.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:55: Extra }, or forgotten $.
+<template> \unskip \hfil }
+                          \hskip \tabcolsep \endtemplate 
+l.55 BDual_3 &
+               7.0 & $-\infty$ & 9.0 \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:55: Missing $ inserted.
+<inserted text> 
+                $
+l.55 BDual_3 &
+               7.0 & $-\infty$ & 9.0 \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Materiale/Opgaver/Optimering_sowtware/opt_julia/Output/test_dual_1.tex:55: Missing } inserted.
+<inserted text> 
+                }
+l.55 BDual_3 &
+               7.0 & $-\infty$ & 9.0 \\
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+[1
+
+{c:/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./test_dual_1.aux)
+ ***********
+LaTeX2e <2025-11-01>
+L3 programming layer <2025-10-24>
+ ***********
+ ) 
+Here is how much of TeX's memory you used:
+ 545 strings out of 467538
+ 10466 string characters out of 5423725
+ 443736 words of memory out of 5000000
+ 29519 multiletter control sequences out of 15000+600000
+ 629239 words of font info for 45 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 35i,7n,38p,301b,178s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on test_dual_1.pdf (1 page, 66045 bytes).
+PDF statistics:
+ 33 PDF objects out of 1000 (max. 8388607)
+ 19 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+

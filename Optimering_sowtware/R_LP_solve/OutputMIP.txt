@@ -1,0 +1,33 @@
+>>>>>>>>>>>>>>> PROBLEMFORMULERING (MIP) <<<<<<<<<<<<<<<
+Maksimer Z = 40 * x1 + 35 * x2
+
+(B1) 15 * x1 + 10 * x2 <= 300
+(B2) 8 * x1 + 12 * x2 <= 230
+( Parameter restriktioner ) x1 >= 0.00, x2 >= 0.00
+
+( Variabletyper ) x1: Heltal, x2: Heltal
+
+________________________________________________________________________________
+>>>>>>>>>>>>>>> STATUS <<<<<<<<<<<<<<<
+
+-> Optimal løsning fundet.
+
+>>>>>>>>>>>>>>> OPTIMUM <<<<<<<<<<<<<<<
+
+Objektivfunktionens værdi:
+-> 875.00
+
+>>>>>>>>>>>>>>> VARIABLER <<<<<<<<<<<<<<<
+
+Variabel  Type    Værdi  Nedre gr.  Øvre gr.
+-------------------------------------------- 
+x1        Heltal  14.00       0.00       Inf
+x2        Heltal   9.00       0.00       Inf
+
+>>>>>>>>>>>>>>> BEGRÆNSNINGER <<<<<<<<<<<<<<<
+
+Begrænsning     LHS  Retning     RHS  Slack  Bindende                                       
+-------------------------------------------------------------------------------------------- 
+B1           300.00  <=       300.00   0.00  Bindende                                       
+B2           220.00  <=       230.00  10.00  Ikk
+                                 e-bindende

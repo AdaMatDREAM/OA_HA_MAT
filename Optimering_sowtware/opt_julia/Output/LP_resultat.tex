@@ -1,0 +1,52 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs}
+\begin{document}
+
+\section*{Resultater fra optimering}
+
+\textbf{Objektivfunktionens værdi:} 51.0
+
+\subsection*{Optimale variabelværdier}
+\begin{tabular}{cc}
+\toprule
+Variabelnavn & Værdi \\
+\midrule
+A & 5.25 \\
+B & 5.0 \\
+\bottomrule
+\end{tabular}
+
+\subsection*{Slack og Skyggepriser}
+\begin{tabular}{cccccc}
+\toprule
+Begrænsning & LHS & RHS & Slack & Skyggepris & Status \\
+\midrule
+B1 & 10.5 & 14.0 & 3.5 & -0.0 & Ikke-bindende \\
+B2 & 15.0 & 15.0 & 0.0 & 1.0 & Bindende \\
+B3 & 36.0 & 36.0 & 0.0 & 1.0 & Bindende \\
+\bottomrule
+\end{tabular}
+
+\subsection*{Sensitivitetsrapport for Objektivkoefficienter}
+\begin{tabular}{ccccc}
+\toprule
+Variabelnavn & Koefficientværdi & Maksimalt fald & Maksimal stigning & Reduced costs \\
+\midrule
+A & 4.0 & -4.0 & 4.0 & -0.0 \\
+B & 6.0 & -3.0 & $\infty$ & -0.0 \\
+\bottomrule
+\end{tabular}
+
+\subsection*{Sensitivitetsrapport for RHS (Kapacitet)}
+\begin{tabular}{cccc}
+\toprule
+Begrænsning & RHS (nu) & Maksimalt fald & Maksimal stigning \\
+\midrule
+B1 & 14.0 & -3.5 & $\infty$ \\
+B2 & 15.0 & -7.0 & 21.0 \\
+B3 & 36.0 & -21.0 & 7.0 \\
+\bottomrule
+\end{tabular}
+
+\end{document}
