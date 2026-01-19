@@ -1,3 +1,4 @@
+
 # Pragram til at konvertere primalt program til dualt program
 function convert_dual(obj, A, b, b_dir, c, fortegn, x_type)
 if obj == MOI.MAX_SENSE
@@ -78,4 +79,37 @@ return (
     øvre_grænse_D = øvre_grænse_D
 )
 end
+
+#######################################################################################
+# Skriv kun problemformuleringen til LaTeX (uden at løse)
+function write_problem_latex_file(path, obj, c, A, b, b_dir, x_navne, fortegn, x_type)
+open(path, "w") do file
+    # LaTeX header
+    println(file, "\\documentclass{article}")
+    println(file, "\\usepackage[utf8]{inputenc}")
+    println(file, "\\usepackage{amsmath,amssymb}")
+    println(file, "\\begin{document}")
+    println(file, "\\begin{flushleft}")
+    println(file, "")
+    # Problemformulering (ingen løsning)
+    print_problem_latex_LP_MIP(file, obj, c, A, b, b_dir, x_navne, fortegn, x_type)
+    println(file, "\\end{flushleft}")
+    println(file, "\\end{document}")
+end
+end
+
+# Funktion der kan kaldes direkte for at skrive primal + dual til .tex
+function write_primal_dual_latex(P)
+    # Skriv primal problemformulering
+    write_problem_latex_file(P.output_latex_navn, P.obj, P.c, P.A, P.b, P.b_dir, P.x_navne, P.fortegn, P.x_type)
+    println("Primal problem skrevet til: ", P.output_latex_navn)
+
+    # Skriv dual problemformulering (hvis ønsket)
+    if P.dual_defined
+        D = convert_dual(P.obj, P.A, P.b, P.b_dir, P.c, P.fortegn, P.x_type)
+        write_problem_latex_file(P.output_latex_navn_D, D.obj, D.c_D, D.A_D, D.b_D, D.b_dir_D, D.y_navne, D.fortegn_D, D.y_type)
+        println("Dual problem skrevet til: ", P.output_latex_navn_D)
+    end
+end
+
 

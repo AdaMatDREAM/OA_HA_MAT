@@ -1,16 +1,15 @@
 function simplex_skabelon()
 
     # Objektivcoefficienter og variabelnavne
-    c = [2, 1];
-    x_navne = ["x_1", "x_2"];
+    c = [120, 200, 260];
+    x_navne = ["x_1", "x_2", "x_3"];
     
     # Begr??nsningskoefficienter og kapaciteter
-    A = [0 1;
-         2 5;
-         1 1;
-         3 1];
+    A = [1  1  1;
+         30 15 45;
+         40 80 120];
     
-    b = [10, 60, 18, 44];
+    b = [11, 300, 820];
     
     # Danner slackvariable
     # S_navne = ["S_1", "S_2", "S_3"];
@@ -29,7 +28,7 @@ function simplex_skabelon()
     if !isdir(output_mappe)
         mkpath(output_mappe)
     end
-    output_latex_navn = joinpath(output_mappe, "simplex_tableau.tex")
+    output_latex_navn = joinpath(output_mappe, "simplex_u1_o4_b.tex")
     return (
         c = c, 
         x_navne = x_navne, 

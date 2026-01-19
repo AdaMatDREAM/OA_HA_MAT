@@ -1,8 +1,8 @@
 function LP_MIP_model_skabelon()
 # Type af model: LP eller MIP
-model_type = "MIP";
+model_type = "LP";
 # True hvis du også vil have dualt program
-dual_defined = false;
+dual_defined = true;
 
 # Objektiv MAX eller MIN
 obj = MOI.MAX_SENSE;
@@ -15,7 +15,7 @@ x_navne = ["x_1", "x_2", "x_3"];
 # :R -> ]-inf, inf[
 # :>= -> x_i >= 0
 # :<= -> x_i <= 0
-fortegn = [:>=, :>=, :>=]
+fortegn = [:R, :>=, :>=]
 nedre_grænse = zeros(length(fortegn))
 øvre_grænse = zeros(length(fortegn))
 for i in eachindex(fortegn)
@@ -38,7 +38,7 @@ A = [2  1  3;
 
 b = [4, 0, 1];
 # Retningen af begrænsningerne kan skiftes mellem :<=, :>= og :(==)
-b_dir = [:<=, :>=, :<=];
+b_dir = [:<=, :>=, :(==)];
 b_navne = ["B1", "B2", "B3"];
 
 if model_type == "MIP"

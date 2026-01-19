@@ -1,0 +1,71 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[      2106,         61]
+NotebookOptionsPosition[       557,         21]
+NotebookOutlinePosition[      2242,         64]
+CellTagsIndexPosition[      2199,         61]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+},
+WindowSize->{960, 532},
+WindowMargins->{{-5.5, Automatic}, {Automatic, -5.5}},
+FrontEndVersion->"14.3 for Microsoft Windows (64-bit) (July 8, 2025)",
+StyleDefinitions->Notebook[{
+   Cell[
+    StyleData[StyleDefinitions -> "Default.nb"]], 
+   Cell[
+    StyleData["Title"], TextAlignment -> Center, FontFamily -> 
+    "Times New Roman", FontWeight -> "Normal", FontColor -> GrayLevel[0]], 
+   Cell[
+    StyleData["Subtitle"], TextAlignment -> Center, FontFamily -> 
+    "Times New Roman", FontWeight -> "Normal", FontSlant -> "Italic", 
+    FontColor -> GrayLevel[0]], 
+   Cell[
+    StyleData["Chapter"], FontFamily -> "Times New Roman", FontWeight -> 
+    "Normal", FontColor -> GrayLevel[0]], 
+   Cell[
+    StyleData["Section"], CellFrameColor -> GrayLevel[0], FontFamily -> 
+    "Times New Roman", FontWeight -> "Normal", FontColor -> GrayLevel[0]], 
+   Cell[
+    StyleData["Subsection"], FontFamily -> "Times New Roman", FontWeight -> 
+    "Bold", FontColor -> GrayLevel[0]], 
+   Cell[
+    StyleData["Subsubsection"], FontFamily -> "Times New Roman", FontWeight -> 
+    "Normal", FontColor -> GrayLevel[0]], 
+   Cell[
+    StyleData["Text"], FontFamily -> "Times New Roman", FontWeight -> 
+    "Normal", FontColor -> GrayLevel[0]]}, WindowSize -> {582, 442}, 
+  WindowMargins -> {{0, Automatic}, {Automatic, 0}}, Visible -> False, 
+  FrontEndVersion -> "14.3 for Microsoft Windows (64-bit) (July 8, 2025)", 
+  StyleDefinitions -> "PrivateStylesheetFormatting.nb"],
+ExpressionUUID->"b0382b9d-1751-664d-9bb3-a3b4161a4f1f"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+}
+]
+*)
+
+(* End of internal cache information *)
+

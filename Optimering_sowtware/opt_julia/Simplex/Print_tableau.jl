@@ -19,7 +19,11 @@ end
 
 # Formatterer tal til LaTeX-venlig tekst
 function format_num(x; dec=2)
-    return string(round(x, digits=dec))
+    r = round(x, digits=dec)
+    if r == -0.0
+        r = 0.0
+    end
+    return string(r)
 end
 
 ##########################################################
@@ -59,7 +63,7 @@ function tableau_to_latex(P_tableau; ratios=nothing, highlight_col=nothing, high
             ratio_val = ""
         end
 
-        println(io, basis[i], " & ", join(row_vals, " & "), " & ", rhs_val,
+        println(io, "\$" * string(basis[i]) * "\$", " & ", join(row_vals, " & "), " & ", rhs_val,
                 (ratio_position == :right && ratios !== nothing ? " & " * ratio_val : ""),
                 " \\\\")
     end
