@@ -173,26 +173,51 @@ end
 
 
 ##########################################################
-function simplex_solve(P_tableau; max_iter_dual=50, max_iter_primal=50)
+
+
+
+
+##########################################################
+function simplex_solve(P_tableau; max_iter_dual=50, max_iter_primal=50, print_tableaux_iterationer=true)
     # Dual simplex loop (kør indtil BFS)
+    # Holder styr på om slut-tableau allerede er printet
+    dual_printed = false
     for k in 1:max_iter_dual
         P_tableau, stop, _, _, _ = dual_simplex_iteration(P_tableau)
         if stop
             println("Dual simplex stoppet grundet funden BFS")
+            print_tableau(P_tableau)
+            dual_printed = true
             break
         end
+        if print_tableaux_iterationer
+            print_tableau(P_tableau)
+        end
+    end
+    if !dual_printed
         print_tableau(P_tableau)
     end
 
+
     # Primal simplex loop (kør indtil optimal)
+    # Holder styr på om slut-tableau allerede er printet
+    primal_printed = false
     for k in 1:max_iter_primal
         P_tableau, stop, _, _, _ = simplex_iteration(P_tableau)
         if stop
             println("Primal simplex stoppet grundet funden optimal løsning")
+            print_tableau(P_tableau)
+            primal_printed = true
             break
         end
+        if print_tableaux_iterationer
+            print_tableau(P_tableau)
+        end
+    end
+    if !primal_printed
         print_tableau(P_tableau)
     end
+
 
     return P_tableau
 end

@@ -18,5 +18,5 @@ if P.output_latex
 end
 
 if P.output_terminal
-    simplex_solve(P_tableau)
+    simplex_solve(P_tableau; print_tableaux_iterationer=P.print_tableaux_iterationer)
 end

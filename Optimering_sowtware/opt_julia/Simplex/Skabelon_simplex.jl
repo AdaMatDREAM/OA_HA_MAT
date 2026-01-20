@@ -16,8 +16,9 @@ function simplex_skabelon()
     S_navne = ["S_$(i)" for i in 1:length(b)];
     
     # LaTeX output konfiguration
-    output_latex = true;
+    output_latex = false;
     output_terminal = true;
+    print_tableaux_iterationer = true;
     output_base_sti = ""  # tom streng -> samme mappe som koden
     output_mappe_navn = "Output"
     if output_base_sti == ""
@@ -37,6 +38,7 @@ function simplex_skabelon()
         S_navne = S_navne,
         output_latex = output_latex,
         output_terminal = output_terminal,
+        print_tableaux_iterationer = print_tableaux_iterationer,
         output_base_sti = output_base_sti,
         output_mappe_navn = output_mappe_navn,
         output_mappe = output_mappe,
