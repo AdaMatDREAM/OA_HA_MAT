@@ -1,15 +1,15 @@
 function simplex_skabelon()
 
     # Objektivcoefficienter og variabelnavne
-    c = [120, 200, 260];
+    c = [4, 2, 5];
     x_navne = ["x_1", "x_2", "x_3"];
     
     # Begr??nsningskoefficienter og kapaciteter
-    A = [1  1  1;
-         30 15 45;
-         40 80 120];
+    A = [5 4 3;
+         -2 -1 -3;
+         2 1 3];
     
-    b = [11, 300, 820];
+    b = [11, -8, 8];
     
     # Danner slackvariable
     # S_navne = ["S_1", "S_2", "S_3"];

@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1768840506.03925 "c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Eksamen/OA_HA_MAT/Optimering_sowtware/opt_julia/Simplex/Output/simplex_u1_o4_b.tex" "simplex_u1_o4_b.pdf" "simplex_u1_o4_b" 1768840507.02491 0
-  "c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Eksamen/OA_HA_MAT/Optimering_sowtware/opt_julia/Simplex/Output/simplex_u1_o4_b.tex" 1768840490 3394 8ade64a29628c41a2223f340a53fae24 ""
+["pdflatex"] 1768873609.31724 "c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Eksamen/OA_HA_MAT/Optimering_sowtware/opt_julia/Simplex/Output/simplex_u1_o4_b.tex" "simplex_u1_o4_b.pdf" "simplex_u1_o4_b" 1768873610.34402 0
+  "c:/Users/Adam/OneDrive - CBS - Copenhagen Business School/Skrivebord/Operationsanalyse/Eksamen/OA_HA_MAT/Optimering_sowtware/opt_julia/Simplex/Output/simplex_u1_o4_b.tex" 1768873609 2910 66c20fe240d9e4dc400b5dd959c2bb9e ""
   "c:/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1762110748 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1762108487 1328 c834bbb027764024c09d3d2bf908b5f0 ""
   "c:/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmti10.tfm" 1762108487 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
@@ -37,8 +37,8 @@
   "c:/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1762542601 5574345 9e0538e80e24c9ae9ee679f6f1bbacd7 ""
   "c:/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1762543365 3635475 a5c6bfeca54a698cf8fabe0310d68022 ""
   "c:/texlive/2025/texmf.cnf" 1762161905 713 e69b156964470283e0530f5060668171 ""
-  "simplex_u1_o4_b.aux" 1768840506 151 220ebb3d1a1c23c16a118babfee22008 "pdflatex"
-  "simplex_u1_o4_b.tex" 1768840490 3394 8ade64a29628c41a2223f340a53fae24 ""
+  "simplex_u1_o4_b.aux" 1768873610 151 220ebb3d1a1c23c16a118babfee22008 "pdflatex"
+  "simplex_u1_o4_b.tex" 1768873609 2910 66c20fe240d9e4dc400b5dd959c2bb9e ""
   (generated)
   "simplex_u1_o4_b.aux"
   "simplex_u1_o4_b.log"

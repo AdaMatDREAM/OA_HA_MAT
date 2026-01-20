@@ -144,7 +144,7 @@ function dual_simplex_iteration(P_tableau)
         row = T[pivot_række, 1:end-1]
            if any(row .< -tol)
             # Find z-rækken
-            z = T[end, 1:end-1]
+            z = -T[end, 1:end-1]
             # Find ratios z_j/a_ij
             ratios = fill(-Inf, length(z))
             for j in eachindex(z)

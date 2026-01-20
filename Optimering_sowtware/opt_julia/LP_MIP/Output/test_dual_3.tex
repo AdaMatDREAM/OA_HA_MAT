@@ -1,6 +1,7 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb}
+\usepackage{booktabs}
 \begin{document}
 \begin{flushleft}
 
@@ -15,5 +16,56 @@
 \\ \text{Samt fortegnskrav: } \;& y_1 \geq 0, y_2 \leq 0, y_3 \in \mathbb{R}
 \end{aligned}
 \]
+
+\section*{Resultater fra optimering}
+
+\textbf{Type:} Standard LP
+
+\textbf{Objektivfunktionens værdi:} 10.0
+
+\subsection*{Optimale variabelværdier}
+\begin{tabular}{ccc}
+\toprule
+Variabelnavn & Variabeltype & Værdi \\
+\midrule
+y_1 & Continuous & 3.0 \\
+y_2 & Continuous & 0.0 \\
+y_3 & Continuous & -2.0 \\
+\bottomrule
+\end{tabular}
+
+\subsection*{Slack og Skyggepriser}
+\begin{tabular}{cccccc}
+\toprule
+Begrænsning & LHS & RHS & Slack & Skyggepris & Status \\
+\midrule
+BDual_1 & 4.0 & 4.0 & 0.0 & 1.0 & Bindende \\
+BDual_2 & 3.0 & 3.0 & 0.0 & 2.0 & Bindende \\
+BDual_3 & 7.0 & 5.0 & 2.0 & 0.0 & Ikke-bindende \\
+\bottomrule
+\end{tabular}
+
+\subsection*{Sensitivitetsrapport for Objektivkoefficienter}
+\begin{tabular}{ccccc}
+\toprule
+Variabelnavn & Koefficientværdi & Maksimalt fald & Maksimal stigning & Reduced costs \\
+\midrule
+y_1 & 4.0 & -1.0 & $\infty$ & 0.0 \\
+y_2 & 0.0 & $-\infty$ & 1.0 & -1.0 \\
+y_3 & 1.0 & $-\infty$ & 0.33 & 0.0 \\
+\bottomrule
+\end{tabular}
+
+\subsection*{Sensitivitetsrapport for RHS (Kapacitet)}
+\begin{tabular}{cccc}
+\toprule
+Begrænsning & RHS (nu) & Maksimalt fald & Maksimal stigning \\
+\midrule
+BDual_1 & 4.0 & -2.0 & $\infty$ \\
+BDual_2 & 3.0 & -2.0 & $\infty$ \\
+BDual_3 & 5.0 & $-\infty$ & 2.0 \\
+\bottomrule
+\end{tabular}
+
 \end{flushleft}
 \end{document}

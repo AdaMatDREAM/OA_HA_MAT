@@ -7,12 +7,10 @@ include("Skabelon_simplex.jl")
 include("Primal_Dual_simplex_alg.jl")
 include("Print_tableau.jl")
 
+println("Ny kørsel")
 
 P = simplex_skabelon()
 P_tableau = simplex_tableau_BFS(P.c, P.x_navne, P.A, P.b, P.S_navne)
-
-
-println("Ny kørsel")
 
 
 if P.output_latex

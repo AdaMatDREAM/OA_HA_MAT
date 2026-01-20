@@ -2,20 +2,20 @@ function LP_MIP_model_skabelon()
 # Type af model: LP eller MIP
 model_type = "LP";
 # True hvis du også vil have dualt program
-dual_defined = true;
+dual_defined = false;
 
 # Objektiv MAX eller MIN
 obj = MOI.MAX_SENSE;
 
 # Objektivcoefficienter og variabelnavne
 # Simpelt MIP testproblem med binære og heltalsvariable
-c = [4, 3, 5];
+c = [4, 2, 5];
 x_navne = ["x_1", "x_2", "x_3"];
 # Fortegnskrav 
 # :R -> ]-inf, inf[
 # :>= -> x_i >= 0
 # :<= -> x_i <= 0
-fortegn = [:R, :>=, :>=]
+fortegn = [:>=, :>=, :>=]
 nedre_grænse = zeros(length(fortegn))
 øvre_grænse = zeros(length(fortegn))
 for i in eachindex(fortegn)
@@ -32,13 +32,13 @@ for i in eachindex(fortegn)
 end
 
 # Begrænsninger og kapaciteter
-A = [2  1  3;
-    -1  1  0;
-     1  0  1];
+A = [5 4 3;
+     -2 -1 -3;
+     2 1 3];
 
-b = [4, 0, 1];
+b = [11, -8, 8];
 # Retningen af begrænsningerne kan skiftes mellem :<=, :>= og :(==)
-b_dir = [:<=, :>=, :(==)];
+b_dir = [:<=, :<=, :<=];
 b_navne = ["B1", "B2", "B3"];
 
 if model_type == "MIP"
@@ -55,7 +55,7 @@ tol = 1e-9;
 # Output af resultater i terminal eller fil
 output_terminal = true;
 output_fil = false;
-output_latex = true;
+output_latex = false;
 
 # Output mappe konfiguration
 # Du kan enten bruge en absolut sti eller en relativ sti
