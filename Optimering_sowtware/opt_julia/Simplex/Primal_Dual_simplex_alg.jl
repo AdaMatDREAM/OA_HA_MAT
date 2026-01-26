@@ -179,11 +179,21 @@ end
 
 ##########################################################
 function simplex_solve(P_tableau; max_iter_dual=50, max_iter_primal=50, print_tableaux_iterationer=true)
+    # Print starttableauet først
+    println("Starttableau:")
+    print_tableau(P_tableau)
+    
     # Dual simplex loop (kør indtil BFS)
     # Holder styr på om slut-tableau allerede er printet
     dual_printed = false
     for k in 1:max_iter_dual
-        P_tableau, stop, _, _, _ = dual_simplex_iteration(P_tableau)
+        # Gem det gamle tableau før vi pivoterer (dyb kopi)
+        P_tableau_gammel = (
+            T = copy(P_tableau.T),
+            x_S_navne = P_tableau.x_S_navne,
+            basis_navne = copy(P_tableau.basis_navne)
+        )
+        P_tableau, stop, _, _, ratios = dual_simplex_iteration(P_tableau)
         if stop
             println("Dual simplex stoppet grundet funden BFS")
             print_tableau(P_tableau)
@@ -191,7 +201,8 @@ function simplex_solve(P_tableau; max_iter_dual=50, max_iter_primal=50, print_ta
             break
         end
         if print_tableaux_iterationer
-            print_tableau(P_tableau)
+            # Print det gamle tableau med ratios (ratios er beregnet fra det gamle tableau)
+            print_tableau(P_tableau_gammel; ratios=ratios, ratio_position=:bottom)
         end
     end
     if !dual_printed
@@ -203,7 +214,13 @@ function simplex_solve(P_tableau; max_iter_dual=50, max_iter_primal=50, print_ta
     # Holder styr på om slut-tableau allerede er printet
     primal_printed = false
     for k in 1:max_iter_primal
-        P_tableau, stop, _, _, _ = simplex_iteration(P_tableau)
+        # Gem det gamle tableau før vi pivoterer (dyb kopi)
+        P_tableau_gammel = (
+            T = copy(P_tableau.T),
+            x_S_navne = P_tableau.x_S_navne,
+            basis_navne = copy(P_tableau.basis_navne)
+        )
+        P_tableau, stop, _, _, ratios = simplex_iteration(P_tableau)
         if stop
             println("Primal simplex stoppet grundet funden optimal løsning")
             print_tableau(P_tableau)
@@ -211,7 +228,8 @@ function simplex_solve(P_tableau; max_iter_dual=50, max_iter_primal=50, print_ta
             break
         end
         if print_tableaux_iterationer
-            print_tableau(P_tableau)
+            # Print det gamle tableau med ratios (ratios er beregnet fra det gamle tableau)
+            print_tableau(P_tableau_gammel; ratios=ratios, ratio_position=:right)
         end
     end
     if !primal_printed
@@ -220,6 +238,47 @@ function simplex_solve(P_tableau; max_iter_dual=50, max_iter_primal=50, print_ta
 
 
     return P_tableau
+end
+
+# Funktion til at identificere flere optimale løsninger
+function check_multiple_solutions(P_tableau; tol=1e-9)
+    T = P_tableau.T
+    x_S_navne = P_tableau.x_S_navne
+    basis_navne = P_tableau.basis_navne
+    
+    # Tjek z-rækken for non-basic variabler med reduced cost = 0
+    z_row = T[end, 1:end-1]
+    non_basic_with_zero_rc = String[]
+    
+    for j in 1:length(z_row)
+        var_name = x_S_navne[j]
+        # Tjek om variablen er non-basic (ikke i basis)
+        if !(var_name in basis_navne[1:end-1])
+            # Tjek om reduced cost er 0 (husk: z-rækken er -c^*, så vi tjekker om den er tæt på 0)
+            if abs(z_row[j]) <= tol
+                push!(non_basic_with_zero_rc, var_name)
+            end
+        end
+    end
+    
+    # Tjek for degenerering (basisvariabel = 0 i b-kolonnen)
+    b_opt = T[1:end-1, end]
+    degenerate_vars = String[]
+    for i in 1:length(b_opt)
+        if abs(b_opt[i]) <= tol
+            push!(degenerate_vars, basis_navne[i])
+        end
+    end
+    
+    # Bestem om der er flere løsninger
+    has_multiple = length(non_basic_with_zero_rc) > 0
+    
+    return (
+        has_multiple = has_multiple,
+        non_basic_zero_rc = non_basic_with_zero_rc,
+        degenerate_vars = degenerate_vars,
+        is_degenerate = length(degenerate_vars) > 0
+    )
 end
 
 function optimal_tableau(P_tableau)
@@ -347,6 +406,10 @@ for k in eachindex(b_opt)
         end
     end
 end
+
+# Tjek for flere optimale løsninger
+multiple_solutions_info = check_multiple_solutions(P_tableau)
+
 return (
     z_opt = z_opt,
     x_S_opt = x_S_opt,
@@ -354,7 +417,8 @@ return (
     c_sens_lower = c_sens_lower,
     c_sens_upper = c_sens_upper,
     b_sens_lower = b_sens_lower,
-    b_sens_upper = b_sens_upper
+    b_sens_upper = b_sens_upper,
+    multiple_solutions_info = multiple_solutions_info
 )
 
 end

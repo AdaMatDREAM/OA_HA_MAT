@@ -1,25 +1,24 @@
 function simplex_skabelon()
 
     # Objektivcoefficienter og variabelnavne
-    c = [5, 3, 2];
+    c = [60, 40, 80];
     x_navne = ["x_1", "x_2", "x_3"];
     
     # Begr??nsningskoefficienter og kapaciteter
-    A = [1 1 1;
-         2 1 0;
-         1 2 1];
+    A = [2 4 1;
+         2 1 4];
     
-    b = [10, 8, 12];
-    b_navne = ["B1", "B2", "B3"];
+    b = [80, 40];
+    b_navne = ["B1", "B2"];
     
     # Danner slackvariable
     # S_navne = ["S_1", "S_2", "S_3"];
     S_navne = ["S_$(i)" for i in 1:length(b)];
     
-    # LaTeX output konfiguration
-    output_latex = false;
+    # Output konfiguration
     output_terminal = true;
-    print_tableaux_iterationer = false;
+    output_fil = true;
+    print_tableaux_iterationer = true;
     output_base_sti = ""  # tom streng -> samme mappe som koden
     output_mappe_navn = "Output"
     if output_base_sti == ""
@@ -30,7 +29,7 @@ function simplex_skabelon()
     if !isdir(output_mappe)
         mkpath(output_mappe)
     end
-    output_latex_navn = joinpath(output_mappe, "simplex_u1_o4_b.tex")
+    output_fil_navn = joinpath(output_mappe, "opg_5_u2.txt")
     return (
         c = c, 
         x_navne = x_navne, 
@@ -38,13 +37,13 @@ function simplex_skabelon()
         b = b, 
         b_navne = b_navne,
         S_navne = S_navne,
-        output_latex = output_latex,
+        output_fil = output_fil,
         output_terminal = output_terminal,
         print_tableaux_iterationer = print_tableaux_iterationer,
         output_base_sti = output_base_sti,
         output_mappe_navn = output_mappe_navn,
         output_mappe = output_mappe,
-        output_latex_navn = output_latex_navn
+        output_fil_navn = output_fil_navn
         )
     end
     

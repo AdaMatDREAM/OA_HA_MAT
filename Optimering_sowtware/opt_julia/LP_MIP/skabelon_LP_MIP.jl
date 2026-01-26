@@ -2,14 +2,13 @@ function LP_MIP_model_skabelon()
 # Type af model: LP eller MIP
 model_type = "LP";
 # True hvis du også vil have dualt program
-dual_defined = false;
+dual_defined = true;
 
 # Objektiv MAX eller MIN
-obj = MOI.MAX_SENSE;
+obj = :MAX;  # eller :MIN for minimering
 
 # Objektivcoefficienter og variabelnavne
-# Simpelt MIP testproblem med binære og heltalsvariable
-c = [5, 3, 2];
+c = [42, 60, 18];
 x_navne = ["x_1", "x_2", "x_3"];
 # Fortegnskrav 
 # :R -> ]-inf, inf[
@@ -32,11 +31,10 @@ for i in eachindex(fortegn)
 end
 
 # Begrænsninger og kapaciteter
-A = [1 1 1;
-     2 1 0;
-     1 2 1];
+A = [2 3 1;
+     3 4 1];
 
-b = [10, 8, 12];
+b = [5, 7];
 # Retningen af begrænsningerne kan skiftes mellem :<=, :>= og :(==)
 b_dir = [:<=, :<=, :<=];
 b_navne = ["B1", "B2", "B3"];
@@ -54,8 +52,8 @@ tol = 1e-9;
 
 # Output af resultater i terminal eller fil
 output_terminal = true;
-output_fil = false;
-output_latex = false;
+output_fil = true;
+###### HUSK AT FILNAVN FOR CONVERT DUAL PROGRAMMET VÆLGES I RUN_CONVERT_DUAL.JL ######
 
 # Output mappe konfiguration
 # Du kan enten bruge en absolut sti eller en relativ sti
@@ -79,10 +77,7 @@ end
 
 # Filnavn til output (defineres altid)
 output_fil_navn = joinpath(output_mappe, "test_primal_2.txt")
-output_latex_navn = joinpath(output_mappe, "test_primal_4.tex")
-
 output_fil_navn_D = joinpath(output_mappe, "test_dual_2.txt")
-output_latex_navn_D = joinpath(output_mappe, "test_dual_3.tex")
 
 # Returner som NamedTuple for bedre læsbarhed
 return (
@@ -103,13 +98,10 @@ return (
     tol = tol,
     output_terminal = output_terminal,
     output_fil = output_fil,
-    output_latex = output_latex,
     output_base_sti = output_base_sti,
     output_mappe_navn = output_mappe_navn,
     output_mappe = output_mappe,
     output_fil_navn = output_fil_navn,
-    output_latex_navn = output_latex_navn,
-    output_fil_navn_D = output_fil_navn_D,
-    output_latex_navn_D = output_latex_navn_D
+    output_fil_navn_D = output_fil_navn_D
 )
 end

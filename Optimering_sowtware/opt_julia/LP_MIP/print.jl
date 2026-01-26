@@ -19,6 +19,7 @@ function print_slack_shadow_price(M, constraints, b_navne, b, b_dir, dec=2, tol=
     
     # Hent objektivets retning
     obj_sense = objective_sense(M)
+    obj_sense_str = string(obj_sense)
     
     for i in eachindex(constraints)
         lhs = value(constraints[i])
@@ -40,7 +41,8 @@ function print_slack_shadow_price(M, constraints, b_navne, b, b_dir, dec=2, tol=
         #         for MAX problemer returnerer dual() negativ værdi for ≤ begrænsninger
         # Skyggeprisen skal altid være den marginale værdi af at øge RHS
         dual_val = dual(constraints[i])
-        if obj_sense == MOI.MIN_SENSE
+        # objective_sense returnerer MOI enum, konverter til string for sammenligning
+        if obj_sense_str == "MIN_SENSE"
             # For MIN: dual() returnerer allerede korrekt fortegn
             shadow_price = dual_val
         else  # MAX_SENSE
@@ -95,138 +97,8 @@ function full_report_LP(M, report, x, x_navne, c, constraints, b, b_dir, b_navne
 end
 
 ##########################################################
-function full_report_LP_latex(output_latex_navn, M, report, x, x_navne, c, A, obj, constraints, b, b_dir, b_navne, dec=2, tol=1e-9, x_type=nothing, fortegn=nothing)
-open(output_latex_navn, "w") do file
-    # Skriv LaTeX header
-    println(file, "\\documentclass{article}")
-    println(file, "\\usepackage[utf8]{inputenc}")
-    println(file, "\\usepackage{amsmath,amssymb}")
-    println(file, "\\usepackage{booktabs}")
-    println(file, "\\begin{document}")
-    println(file, "\\begin{flushleft}")
-    println(file, "")
-    print_problem_latex_LP_MIP(file, obj, c, A, b, b_dir, x_navne, fortegn, x_type)
-    println(file, "")
-    println(file, "\\section*{Resultater fra optimering}")
-    println(file, "")
-    
-    # Objektiv værdi
-    println(file, "\\textbf{Type:} Standard LP")
-    println(file, "")
-    println(file, "\\textbf{Objektivfunktionens værdi:} ", 
-    round(objective_value(M), digits=dec))
-    println(file, "")
-    
-    # Variabel værdier som tabel (med type)
-    println(file, "\\subsection*{Optimale variabelværdier}")
-    println(file, "\\begin{tabular}{ccc}")
-    println(file, "\\toprule")
-    println(file, "Variabelnavn & Variabeltype & Værdi \\\\")
-    println(file, "\\midrule")
-    for i in eachindex(x)
-        # Håndter x_type: hvis ikke givet, brug "Continuous" som standard
-        if x_type === nothing
-            type_str = "Continuous"
-        else
-            # Konverter symbol til string hvis nødvendigt
-            type_str = string(x_type[i])
-        end
-        println(file, x_navne[i], " & ", type_str, " & ", round(value(x[i]), digits=dec), " \\\\")
-    end
-    println(file, "\\bottomrule")
-    println(file, "\\end{tabular}")
-    println(file, "")
-    
-    # Slack og skyggepris tabel
-    println(file, "\\subsection*{Slack og Skyggepriser}")
-    println(file, "\\begin{tabular}{cccccc}")
-    println(file, "\\toprule")
-    println(file, "Begrænsning & LHS & RHS & Slack & Skyggepris & Status \\\\")
-    println(file, "\\midrule")
-    
-    # Hent objektivets retning
-    obj_sense = objective_sense(M)
-    
-    for i in eachindex(constraints)
-        lhs = value(constraints[i])
-        if b_dir[i] == :<=
-            slack = b[i] - lhs
-        elseif b_dir[i] == :>=
-            slack = lhs - b[i]
-        else
-            slack = b[i] - lhs
-        end
-        bindende = abs(slack) <= tol ? "Bindende" : "Ikke-bindende"
-        
-        # Beregn skyggepris korrekt baseret på objektivets retning
-        dual_val = dual(constraints[i])
-        if obj_sense == MOI.MIN_SENSE
-            shadow_price = dual_val
-        else  # MAX_SENSE
-            shadow_price = -dual_val
-        end
-        
-        println(file, b_navne[i], " & ", 
-                round(lhs, digits=dec), " & ",
-                round(b[i], digits=dec), " & ",
-                round(slack, digits=dec), " & ",
-                round(shadow_price, digits=dec), " & ",
-                bindende, " \\\\")
-    end
-    println(file, "\\bottomrule")
-    println(file, "\\end{tabular}")
-    println(file, "")
-    
-    # Sensitivitetsrapport for objektivkoefficienter
-    println(file, "\\subsection*{Sensitivitetsrapport for Objektivkoefficienter}")
-    println(file, "\\begin{tabular}{ccccc}")
-    println(file, "\\toprule")
-    println(file, "Variabelnavn & Koefficientværdi & Maksimalt fald & Maksimal stigning & Reduced costs \\\\")
-    println(file, "\\midrule")
-    for i in eachindex(x)
-        limits = report[x[i]]
-        # Håndter Inf værdier
-        nedre_gr = isinf(limits[1]) ? raw"$-\infty$" : string(round(limits[1], digits=dec))
-        øvre_gr = isinf(limits[2]) ? raw"$\infty$" : string(round(limits[2], digits=dec))
-        println(file, x_navne[i], " & ", 
-                round(c[i], digits=dec), " & ",
-                nedre_gr, " & ",
-                øvre_gr, " & ",
-                round(reduced_cost(x[i]), digits=dec), " \\\\")
-    end
-    println(file, "\\bottomrule")
-    println(file, "\\end{tabular}")
-    println(file, "")
-    
-    # Sensitivitetsrapport for RHS (kapacitet)
-    println(file, "\\subsection*{Sensitivitetsrapport for RHS (Kapacitet)}")
-    println(file, "\\begin{tabular}{cccc}")
-    println(file, "\\toprule")
-    println(file, "Begrænsning & RHS (nu) & Maksimalt fald & Maksimal stigning \\\\")
-    println(file, "\\midrule")
-    for i in eachindex(constraints)
-        limits = report[constraints[i]]
-        # Håndter Inf værdier
-        nedre_gr = isinf(limits[1]) ? raw"$-\infty$" : string(round(limits[1], digits=dec))
-        øvre_gr = isinf(limits[2]) ? raw"$\infty$" : string(round(limits[2], digits=dec))
-        println(file, b_navne[i], " & ", 
-                round(b[i], digits=dec), " & ",
-                nedre_gr, " & ",
-                øvre_gr, " \\\\")
-    end
-    println(file, "\\bottomrule")
-    println(file, "\\end{tabular}")
-    println(file, "")
-    
-    # LaTeX footer
-    println(file, "\\end{flushleft}")
-    println(file, "\\end{document}")
-end
-end
-
-##########################################################
 function standard_LP_output(M, x, x_navne, c, A, obj, constraints, b, b_dir, b_navne, dec=2, tol=1e-9, output_terminal=true,
-     output_fil=false, output_latex=false, output_fil_navn="output.txt", output_latex_navn="output.tex", model_type="LP", x_type=nothing, fortegn=nothing)
+     output_fil=false, output_fil_navn="output.txt", model_type="LP", x_type=nothing, fortegn=nothing)
 
 if model_type != "LP"
     println("Fejl: Modeltype er ikke LP. Benyt anden output funktion.")
@@ -237,14 +109,15 @@ println("Output i LP format begynder nu\n")
     # Optimer modellen, hent sensitivitetsrapport og status
 optimize!(M)
 status = termination_status(M)
+status_str = string(status)
 report = lp_sensitivity_report(M)
 
 
     # Resultat ved standard LP-solver (HiGHS)
 # Statusser der har en løsning at udskrive
-if status == MOI.OPTIMAL || status == MOI.ALMOST_OPTIMAL
+if status_str == "OPTIMAL" || status_str == "ALMOST_OPTIMAL"
     # Bestem status-tekst baseret på hvilken status
-    if status == MOI.OPTIMAL
+    if status_str == "OPTIMAL"
         status_tekst = "OPTIMAL - Optimal løsning fundet"
     else
         status_tekst = "ALMOST_OPTIMAL - Næsten optimal løsning fundet (inden for tolerance)"
@@ -265,30 +138,25 @@ if output_fil
     println("Output er gemt i .txt filen: ", output_fil_navn)
 end
 
-if output_latex
-    full_report_LP_latex(output_latex_navn, M, report, x, x_navne, c, A, obj, constraints, b, b_dir, b_navne, dec, tol, x_type, fortegn)
-    println("Output er gemt i .tex filen: ", output_latex_navn)
-end
-
 # Statusser uden løsning (kun statusbesked)
-elseif status == MOI.INFEASIBLE
+elseif status_str == "INFEASIBLE"
     println("\nINFEASIBLE - Ingen løsning: begrænsningerne er modstridende")
-elseif status == MOI.DUAL_INFEASIBLE
+elseif status_str == "DUAL_INFEASIBLE"
     println("\nDUAL_INFEASIBLE (UNBOUNDED) - Problemet er ubegrænset, objektivfunktionen kan vokse uendeligt")
-elseif status == MOI.INFEASIBLE_OR_UNBOUNDED
+elseif status_str == "INFEASIBLE_OR_UNBOUNDED"
     println("\nINFEASIBLE_OR_UNBOUNDED - Enten infeasible eller unbounded (solver kan ikke skelne)")
-elseif status == MOI.LOCALLY_SOLVED
+elseif status_str == "LOCALLY_SOLVED"
     println("\nLOCALLY_SOLVED - Lokal optimal løsning fundet (for ikke-lineære problemer)")
-elseif status == MOI.ITERATION_LIMIT
+elseif status_str == "ITERATION_LIMIT"
     println("\nITERATION_LIMIT - Maksimalt antal iterationer nået før optimal løsning")
-elseif status == MOI.TIME_LIMIT
+elseif status_str == "TIME_LIMIT"
     println("\nTIME_LIMIT - Tidsgrænse nået før optimal løsning")
-elseif status == MOI.NUMERICAL_ERROR
+elseif status_str == "NUMERICAL_ERROR"
     println("\nNUMERICAL_ERROR - Numerisk fejl opstod under løsning")
-elseif status == MOI.OTHER_ERROR
+elseif status_str == "OTHER_ERROR"
     println("\nOTHER_ERROR - Anden fejl opstod")
 else
-    println("\nUKENDT STATUS: ", status)
+    println("\nUKENDT STATUS: ", status_str)
 end
 
 end
@@ -327,155 +195,13 @@ function full_report_MIP(M, x, x_navne, x_type, constraints, b, b_dir, b_navne, 
 end
 ##########################################################
 
-function latex_var_domæner(x_navne, fortegn, x_type)
-    latex_tekst = String[]
-    for i in eachindex(x_navne)
-        if x_type[i] == :Binary
-            push!(latex_tekst, x_navne[i] * " \\in \\{0,1\\}")
-        elseif x_type[i] == :Integer
-            if fortegn[i] == :>=
-                push!(latex_tekst, x_navne[i] * " \\in \\mathbb{Z}, " * x_navne[i] * " \\geq 0")
-            elseif fortegn[i] == :<=
-                push!(latex_tekst, x_navne[i] * " \\in \\mathbb{Z}, " * x_navne[i] * " \\leq 0")
-            else
-                push!(latex_tekst, x_navne[i] * " \\in \\mathbb{Z}")
-            end
-        elseif x_type[i] == :Continuous
-            if fortegn[i] == :R
-                push!(latex_tekst, x_navne[i] * " \\in \\mathbb{R}")
-            elseif fortegn[i] == :<=
-                push!(latex_tekst, x_navne[i] * " \\leq 0")
-            elseif fortegn[i] == :>=
-                push!(latex_tekst, x_navne[i] * " \\geq 0")
-            end
-        end
-    end
-    return join(latex_tekst, ", ")
-end
-
-##########################################################
-function print_problem_latex_LP_MIP(file, obj, c, A, b, b_dir, x_navne, fortegn, x_type)
-    sense = obj == MOI.MAX_SENSE ? "\\max " : "\\min "
-
-    obj_funktion = String[]
-    for i in eachindex(c)
-        coef = c[i]
-        if coef == 0; continue; end
-
-        fortegn_str = coef < 0 ? " -" : (isempty(obj_funktion) ? "" : " +")
-        abscoef = abs(coef)
-        coef_tekst = abscoef == 1 ? "" : string(abscoef) * " "
-
-        push!(obj_funktion, fortegn_str * coef_tekst * x_navne[i])
-    end
-
-    println(file, "\\subsection*{Problemformulering}")
-    println(file, "\\[")
-    println(file, "\\begin{aligned}")
-    println(file, sense, " \\;& ", join(obj_funktion, " "))
-
-    println(file, "\\\\ \\text{u.b.b. } \\;& ")
-    for i in 1:size(A, 1)
-        row_terms = String[]
-        for j in 1:size(A, 2)
-            a = A[i, j]
-            if a == 0; continue; end
-
-            fortegn_str = a < 0 ? " -" : (isempty(row_terms) ? "" : " +")
-            abs_a = abs(a)
-            coef_tekst = abs_a == 1 ? "" : string(abs_a) * " "
-
-            push!(row_terms, fortegn_str * coef_tekst * x_navne[j])
-        end
-
-        dir = b_dir[i] == :<= ? "\\le" : (b_dir[i] == :>= ? "\\ge" : "=")
-        println(file, (i == 1 ? "" : "\\\\ & "), join(row_terms, " "), " ", dir, " ", b[i])
-    end
-
-    dom = latex_var_domæner(x_navne, fortegn, x_type)
-    if !isempty(dom)
-        println(file, "\\\\ \\text{Samt fortegnskrav: } \\;& ", dom)
-    end
-    println(file, "\\end{aligned}")
-    println(file, "\\]")
-end
 
 
 
-
-
-##########################################################
-function full_report_MIP_latex(output_latex_navn, M, x, x_navne, x_type, c, A, obj, constraints, b, b_dir, b_navne, dec=2, tol=1e-9, fortegn=nothing)
-open(output_latex_navn, "w") do file
-    # Skriv LaTeX header
-    println(file, "\\documentclass{article}")
-    println(file, "\\usepackage[utf8]{inputenc}")
-    println(file, "\\usepackage{amsmath,amssymb}")
-    println(file, "\\usepackage{booktabs}")
-    println(file, "\\begin{document}")
-    println(file, "\\begin{flushleft}")
-    println(file, "")
-    print_problem_latex_LP_MIP(file, obj, c, A, b, b_dir, x_navne, fortegn, x_type)
-    println(file, "")
-    println(file, "\\section*{Resultater fra optimering}")
-    println(file, "\\textbf{Type:} MIP")
-    println(file, "")
-    
-    # Objektiv værdi
-    println(file, "\\textbf{Objektivfunktionens værdi:} ", 
-    round(objective_value(M), digits=dec))
-    println(file, "")
-    
-    # Variabel værdier som tabel (med type)
-    println(file, "\\subsection*{Optimale variabelværdier}")
-    println(file, "\\begin{tabular}{ccc}")
-    println(file, "\\toprule")
-    println(file, "Variabelnavn & Variabeltype & Værdi \\\\")
-    println(file, "\\midrule")
-    for i in eachindex(x)
-        # Konverter symbol til string hvis nødvendigt
-        type_str = string(x_type[i])
-        println(file, x_navne[i], " & ", type_str, " & ", round(value(x[i]), digits=dec), " \\\\")
-    end
-    println(file, "\\bottomrule")
-    println(file, "\\end{tabular}")
-    println(file, "")
-    
-    # Slack tabel (uden skyggepris for MIP)
-    println(file, "\\subsection*{Slack}")
-    println(file, "\\begin{tabular}{ccccc}")
-    println(file, "\\toprule")
-    println(file, "Begrænsning & LHS & RHS & Slack & Status \\\\")
-    println(file, "\\midrule")
-    for i in eachindex(constraints)
-        lhs = value(constraints[i])
-        if b_dir[i] == :<=
-            slack = b[i] - lhs
-        elseif b_dir[i] == :>=
-            slack = lhs - b[i]
-        else
-            slack = b[i] - lhs
-        end
-        bindende = abs(slack) <= tol ? "Bindende" : "Ikke-bindende"
-        println(file, b_navne[i], " & ", 
-                round(lhs, digits=dec), " & ",
-                round(b[i], digits=dec), " & ",
-                round(slack, digits=dec), " & ",
-                bindende, " \\\\")
-    end
-    println(file, "\\bottomrule")
-    println(file, "\\end{tabular}")
-    println(file, "")
-    
-    # LaTeX footer
-    println(file, "\\end{flushleft}")
-    println(file, "\\end{document}")
-end
-end
 
 ##########################################################
 function standard_MIP_output(M, x, x_navne, x_type, c, A, obj, constraints, b, b_dir, b_navne, dec=2, tol=1e-9, output_terminal=true,
-     output_fil=false, output_latex=false, output_fil_navn="output.txt", output_latex_navn="output.tex", model_type="MIP", fortegn=nothing)
+     output_fil=false, output_fil_navn="output.txt", model_type="MIP", fortegn=nothing)
 
 if model_type != "MIP"
     println("Fejl: Modeltype er ikke MIP. Benyt anden output funktion.")
@@ -487,12 +213,13 @@ println("Output i MIP format begynder nu\n")
     # Optimer modellen og hent status
 optimize!(M)
 status = termination_status(M)
+status_str = string(status)
 
     # Resultat ved MIP-solver (HiGHS)
 # Statusser der har en løsning at udskrive
-if status == MOI.OPTIMAL || status == MOI.ALMOST_OPTIMAL
+if status_str == "OPTIMAL" || status_str == "ALMOST_OPTIMAL"
     # Bestem status-tekst baseret på hvilken status
-    if status == MOI.OPTIMAL
+    if status_str == "OPTIMAL"
         status_tekst = "OPTIMAL - Optimal løsning fundet"
     else
         status_tekst = "ALMOST_OPTIMAL - Næsten optimal løsning fundet (inden for tolerance)"
@@ -513,30 +240,25 @@ if output_fil
     println("Output er gemt i .txt filen: ", output_fil_navn)
 end
 
-if output_latex
-    full_report_MIP_latex(output_latex_navn, M, x, x_navne, x_type, c, A, obj, constraints, b, b_dir, b_navne, dec, tol, fortegn)
-    println("Output er gemt i .tex filen: ", output_latex_navn)
-end
-
 # Statusser uden løsning (kun statusbesked)
-elseif status == MOI.INFEASIBLE
+elseif status_str == "INFEASIBLE"
     println("\nINFEASIBLE - Ingen løsning: begrænsningerne er modstridende")
-elseif status == MOI.DUAL_INFEASIBLE
+elseif status_str == "DUAL_INFEASIBLE"
     println("\nDUAL_INFEASIBLE (UNBOUNDED) - Problemet er ubegrænset, objektivfunktionen kan vokse uendeligt")
-elseif status == MOI.INFEASIBLE_OR_UNBOUNDED
+elseif status_str == "INFEASIBLE_OR_UNBOUNDED"
     println("\nINFEASIBLE_OR_UNBOUNDED - Enten infeasible eller unbounded (solver kan ikke skelne)")
-elseif status == MOI.LOCALLY_SOLVED
+elseif status_str == "LOCALLY_SOLVED"
     println("\nLOCALLY_SOLVED - Lokal optimal løsning fundet (for ikke-lineære problemer)")
-elseif status == MOI.ITERATION_LIMIT
+elseif status_str == "ITERATION_LIMIT"
     println("\nITERATION_LIMIT - Maksimalt antal iterationer nået før optimal løsning")
-elseif status == MOI.TIME_LIMIT
+elseif status_str == "TIME_LIMIT"
     println("\nTIME_LIMIT - Tidsgrænse nået før optimal løsning")
-elseif status == MOI.NUMERICAL_ERROR
+elseif status_str == "NUMERICAL_ERROR"
     println("\nNUMERICAL_ERROR - Numerisk fejl opstod under løsning")
-elseif status == MOI.OTHER_ERROR
+elseif status_str == "OTHER_ERROR"
     println("\nOTHER_ERROR - Anden fejl opstod")
 else
-    println("\nUKENDT STATUS: ", status)
+    println("\nUKENDT STATUS: ", status_str)
 end
 
 end

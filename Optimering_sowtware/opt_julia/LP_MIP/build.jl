@@ -1,6 +1,4 @@
 using HiGHS, JuMP;
-using MathOptInterface
-const MOI = MathOptInterface
 
 # Funktion til at bygge en LP/MIP-model
 function build_matrix_notation(obj, c, A, b, b_dir, nedre_grænse, øvre_grænse, x_type=fill(:Continuous, length(c)))
@@ -43,7 +41,14 @@ for i in eachindex(b)
 end
 
 # Tilføjer objektivet
-@objective(M, obj, sum(c[i] * x[i] for i in eachindex(c)));
+# Konverter symbol til JuMP objektiv retning
+if obj == :MAX
+    @objective(M, Max, sum(c[i] * x[i] for i in eachindex(c)))
+elseif obj == :MIN
+    @objective(M, Min, sum(c[i] * x[i] for i in eachindex(c)))
+else
+    error("Ukendt objektiv retning: $obj. Brug :MAX eller :MIN")
+end
 
 return M, x, constraints
 end
@@ -58,9 +63,9 @@ function reset_model_variables()
         :model_type, :obj, :c, :x_navne, :nedre_grænse, :øvre_grænse,
         :A, :b, :b_dir, :b_navne, :x_type,
         :dec, :tol,
-        :output_terminal, :output_fil, :output_latex,
+        :output_terminal, :output_fil,
         :output_base_sti, :output_mappe_navn, :output_mappe,
-        :output_fil_navn, :output_latex_navn,
+        :output_fil_navn,
         :M, :x, :constraints
     ]
     # Slet alle variable hvis de er defineret

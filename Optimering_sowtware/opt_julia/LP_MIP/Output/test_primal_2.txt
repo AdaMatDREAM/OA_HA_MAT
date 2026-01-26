@@ -1,0 +1,43 @@
+
+OPTIMAL - Optimal løsning fundet
+----------------------------------------------------------------------------------------------------
+Værdi af objektivfunktionen:
+ -> 102.00
+
+
+Variabelnavn                   |Variabeltype                   |Værdi                         
+-------------------------------------------------------------------------------------
+x_1                            |Continuous                     |2.00                          
+x_2                            |Continuous                     |0.00                          
+x_3                            |Continuous                     |1.00                          
+
+
+Slack og skyggepris: 
+
+Begrænsningnavn |LHS             |RHS             |Slack           |Skyggepris      |Bindende status
+----------------------------------------------------------------------------------------------------
+B1              |5.00            |5.00            |0.00            |12.00           |Bindende       
+B2              |7.00            |7.00            |0.00            |6.00            |Bindende       
+
+
+
+Sensitivitetsrapport for objektivkoefficienter: 
+
+Variabelnavn       |Koefficientværdi   |Maksimalt fald     |Maksimal stigning  |Reduced costs     
+---------------------------------------------------------------------------------------------------
+x_1                |42.00              |-0.00              |12.00              |-0.00             
+x_2                |60.00              |-Inf               |0.00               |-0.00             
+x_3                |18.00              |-0.00              |3.00               |-0.00             
+---------------------------------------------------------------------------------------------------
+
+
+
+Sensitivitetsrapport for RHS (kapacitet): 
+
+Begrænsningnavn      |RHS (nu)             |Maksimalt fald       |Maksimal stigning   
+--------------------------------------------------------------------------------------
+B1                   |5.00                 |-0.33                |2.00                
+B2                   |7.00                 |-2.00                |0.50                
+--------------------------------------------------------------------------------------
+
+

@@ -1,210 +1,208 @@
-function print_tableau(P_tableau)
-    println("\nSimplex-tableau:")
-    @printf("%-8s", "")
-    for name in P_tableau.x_S_navne
-        @printf("%-12s", name)
-    end
-    println()
-
-    for i in 1:size(P_tableau.T, 1)
-        @printf("%-8s", P_tableau.basis_navne[i])
-        for j in 1:size(P_tableau.T, 2)
-            @printf("%-12.2f", P_tableau.T[i, j])
+function print_tableau(P_tableau; ratios=nothing, ratio_position=:right, dec=2)
+    T = P_tableau.T
+    x_S_navne = P_tableau.x_S_navne
+    basis_navne = P_tableau.basis_navne
+    
+    # Find antal strukturelle variable (p)
+    # x_S_navne indeholder: strukturelle, slack, "b"
+    # basis_navne indeholder: slack variabler, "Z"
+    p = length(x_S_navne[1:end-1]) - length(basis_navne[1:end-1])
+    num_cols = size(T, 2)
+    num_rows = size(T, 1)
+    
+    # Kolonnebredder
+    col_width = 12
+    basis_width = 8
+    ratio_width = 12
+    
+    # Funktion til at printe vandret linje med alle separators
+    function print_horizontal_line()
+        # Basis kolonne
+        print("-"^basis_width)
+        # Lodret linje efter basis
+        print("-")
+        # Strukturelle variable
+        for j in 1:p
+            print("-"^col_width)
+        end
+        # Slack variable
+        num_slack = num_cols - p - 1  # -1 fordi b kolonne er sidst
+        for j in 1:num_slack
+            print("-"^col_width)
+        end
+        # b kolonne
+        print("-"^col_width)
+        # Ratio kolonne (hvis ratio_position == :right)
+        if ratios !== nothing && ratio_position == :right
+            print("-"^ratio_width)
         end
         println()
     end
-end
-
-##########################################################
-
-# Formatterer tal til LaTeX-venlig tekst
-function format_num(x; dec=2)
-    r = round(x, digits=dec)
-    if r == -0.0
-        r = 0.0
+    
+    println("\nSimplex-tableau:")
+    
+    # Top linje
+    print_horizontal_line()
+    
+    # Header række
+    @printf("|%-*s", basis_width-1, "Basis")
+    print("|")  # Lodret linje efter basis
+    for j in 1:p
+        var_name = x_S_navne[j]
+        @printf("%-*s|", col_width-1, var_name)
     end
-    return string(r)
-end
-
-##########################################################
-
-# Skriver tableau som LaTeX-tabular
-# ratio_position = :right (ratio-kolonne) eller :bottom (ratio-række)
-function tableau_to_latex(P_tableau; ratios=nothing, highlight_col=nothing, highlight_row=nothing, ratio_position=:right, dec=2, fit_width=true)
-    T = P_tableau.T
-    vars = P_tableau.x_S_navne
-    basis = P_tableau.basis_navne
-    vars_no_b = vars[1:end-1]
-
-    io = IOBuffer()
-    if fit_width
-        println(io, "\\fitTableau{")
+    # Ingen ekstra linje - sidste strukturelle har allerede | i slutningen
+    for j in (p+1):(num_cols-1)
+        var_name = x_S_navne[j]
+        @printf("%-*s|", col_width-1, var_name)
     end
-    println(io, "\\begin{tabular}{", latex_colspec(vars_no_b, highlight_col, ratio_position, ratios), "}")
-    println(io, "\\textbf{Basis} & ", join(["\$" * v * "\$" for v in vars_no_b], " & "),
-            " & \$b_i\$",
-            (ratio_position == :right && ratios !== nothing ? " & \\textbf{Ratio}" : ""),
-            " \\\\ \\hline")
-
-    for i in 1:size(T, 1)
-        if highlight_row !== nothing && i == highlight_row
-            print(io, "\\rowcolor{green!15} ")
+    # Ingen ekstra linje - sidste slack har allerede | i slutningen
+    var_name = x_S_navne[num_cols]
+    @printf("%-*s", col_width-1, var_name)
+    # Ratio kolonne header (hvis ratio_position == :right)
+    if ratios !== nothing && ratio_position == :right
+        @printf("|%-*s", ratio_width-1, "Ratio")
+    end
+    println("|")
+    
+    # Vandret linje efter header
+    print_horizontal_line()
+    
+    # Data rækker (alle undtagen Z)
+    for i in 1:(num_rows-1)
+        @printf("|%-*s", basis_width-1, basis_navne[i])
+        print("|")  # Lodret linje efter basis
+        for j in 1:p
+            @printf("%*.*f|", col_width-1, dec, T[i, j])
         end
-        row_vals = [format_num(T[i, j], dec=dec) for j in 1:length(vars_no_b)]
-        rhs_val = format_num(T[i, end], dec=dec)
-
-        if ratio_position == :right && ratios !== nothing && i <= length(ratios)
+        # Ingen ekstra linje - sidste strukturelle har allerede | i slutningen
+        for j in (p+1):(num_cols-1)
+            @printf("%*.*f|", col_width-1, dec, T[i, j])
+        end
+        # Ingen ekstra linje - sidste slack har allerede | i slutningen
+        @printf("%*.*f", col_width-1, dec, T[i, num_cols])
+        # Ratio værdi (hvis ratio_position == :right og ratio findes for denne række)
+        if ratios !== nothing && ratio_position == :right && i <= length(ratios)
             if isinf(ratios[i])
-                ratio_val = ""
+                @printf("|%-*s", ratio_width-1, "")
             else
-                ratio_val = format_num(ratios[i], dec=dec)
+                @printf("|%*.*f", ratio_width-1, dec, ratios[i])
             end
-        else
-            ratio_val = ""
         end
-
-        println(io, "\$" * string(basis[i]) * "\$", " & ", join(row_vals, " & "), " & ", rhs_val,
-                (ratio_position == :right && ratios !== nothing ? " & " * ratio_val : ""),
-                " \\\\")
+        println("|")
     end
-
-    if ratio_position == :bottom && ratios !== nothing
-        ratio_vals = [isinf(r) ? "" : format_num(r, dec=dec) for r in ratios]
-        println(io, "\\hline")
-        println(io, "\\textbf{Ratio} & ", join(ratio_vals, " & "), " &  \\\\")
+    
+    # Vandret linje før Z-rækken
+    print_horizontal_line()
+    
+    # Z-rækken (sidste række)
+    @printf("|%-*s", basis_width-1, basis_navne[num_rows])
+    print("|")  # Lodret linje efter basis
+    for j in 1:p
+        @printf("%*.*f|", col_width-1, dec, T[num_rows, j])
     end
-
-    println(io, "\\end{tabular}")
-    if fit_width
-        println(io, "}")
+    # Ingen ekstra linje - sidste strukturelle har allerede | i slutningen
+    for j in (p+1):(num_cols-1)
+        @printf("%*.*f|", col_width-1, dec, T[num_rows, j])
     end
-    return String(take!(io))
-end
-
-
-##########################################################
-
-
-function latex_colspec(vars_no_b, highlight_col, ratio_position, ratios)
-    cols = String[]
-    push!(cols, "c|")
-    for j in 1:length(vars_no_b)
-        if highlight_col !== nothing && j == highlight_col
-            push!(cols, ">{\\columncolor{green!15}}c")
-        else
-            push!(cols, "c")
-        end
+    # Ingen ekstra linje - sidste slack har allerede | i slutningen
+    @printf("%*.*f", col_width-1, dec, T[num_rows, num_cols])
+    # Ratio kolonne (tom for Z-rækken)
+    if ratios !== nothing && ratio_position == :right
+        @printf("|%-*s", ratio_width-1, "")
     end
-    push!(cols, "|c")
-    if ratio_position == :right && ratios !== nothing
-        push!(cols, "|c")
-    end
-    return join(cols, "")
-end
-
-
-##########################################################
-
-
-# Skriver LaTeX-tableau direkte til fil
-function write_tableau_latex(file, P_tableau; ratios=nothing, highlight_col=nothing, highlight_row=nothing, ratio_position=:right, dec=2, fit_width=true)
-    latex = tableau_to_latex(P_tableau;
-        ratios=ratios,
-        highlight_col=highlight_col,
-        highlight_row=highlight_row,
-        ratio_position=ratio_position,
-        dec=dec,
-        fit_width=fit_width
-    )
-    println(file, latex)
-end
-
-##########################################################
-
-##########################################################
-function simplex_solve_latex(P_tableau, output_latex_navn; max_iter_dual=50, max_iter_primal=50)
-    open(output_latex_navn, "w") do file
-        println(file, "\\documentclass{article}")
-        println(file, "\\usepackage[table]{xcolor}")
-        println(file, "\\usepackage{float}")
-        println(file, "\\usepackage{graphicx}")
-        println(file, "\\usepackage[margin=1.5cm]{geometry}")
-        println(file, "\\newsavebox{\\tableauBox}")
-        println(file, "\\newcommand{\\fitTableau}[1]{%")
-        println(file, "\\sbox{\\tableauBox}{#1}%")
-        println(file, "\\ifdim\\wd\\tableauBox>\\textwidth")
-        println(file, "\\resizebox{\\textwidth}{!}{\\usebox{\\tableauBox}}%")
-        println(file, "\\else")
-        println(file, "\\usebox{\\tableauBox}%")
-        println(file, "\\fi}")
-        println(file, "\\begin{document}")
-        println(file, "\\begin{table}[H]")
-        println(file, "\\centering")
-        println(file, "\\renewcommand{\\arraystretch}{1.2}")
-        println(file, "\\setlength{\\tabcolsep}{6pt}")
-
-        # Initialt tableau
-        write_tableau_latex(file, P_tableau)
-        println(file, "\\vspace{1em}")
-
-        # Dual simplex loop (kør indtil BFS)
-        for k in 1:max_iter_dual
-            P_tableau, stop, pivot_søjle, pivot_række, ratios = dual_simplex_iteration(P_tableau)
-            if stop
-                println(file, "\\par\\medskip")
-                println(file, "\\textit{Dual simplex stoppes, fordi alle }\$b_i \\ge 0\$ (basis er nu feasible).")
-                println(file, "\\par\\medskip")
-                break
+    println("|")
+    
+    # Ratio række (hvis ratio_position == :bottom)
+    if ratios !== nothing && ratio_position == :bottom
+        print_horizontal_line()
+        @printf("|%-*s", basis_width-1, "Ratio")
+        print("|")  # Lodret linje efter basis
+        for j in 1:p
+            if j <= length(ratios)
+                if isinf(ratios[j])
+                    @printf("%-*s|", col_width-1, "")
+                else
+                    @printf("%*.*f|", col_width-1, dec, ratios[j])
+                end
+            else
+                @printf("%-*s|", col_width-1, "")
             end
-            write_tableau_latex(file, P_tableau;
-                ratios=ratios,
-                highlight_col=pivot_søjle,
-                highlight_row=pivot_række,
-                ratio_position=:bottom
-            )
-            println(file, "\\vspace{1em}")
         end
-
-        # Primal simplex loop (kør indtil optimal)
-        println(file, "\\par\\medskip")
-        println(file, "\\textit{Skifter til primal simplex, fordi basis er feasible, og vi nu optimerer objektivet.}")
-        println(file, "\\par\\medskip")
-        for k in 1:max_iter_primal
-            P_tableau, stop, pivot_søjle, pivot_række, ratios = simplex_iteration(P_tableau)
-            if stop
-                println(file, "\\par\\medskip")
-                println(file, "\\textit{Primal simplex stoppes, fordi z-rækken ikke har negative værdier (optimal løsning).}")
-                println(file, "\\par\\medskip")
-                break
+        for j in (p+1):(num_cols-1)
+            if j <= length(ratios)
+                if isinf(ratios[j])
+                    @printf("%-*s|", col_width-1, "")
+                else
+                    @printf("%*.*f|", col_width-1, dec, ratios[j])
+                end
+            else
+                @printf("%-*s|", col_width-1, "")
             end
-            write_tableau_latex(file, P_tableau;
-                ratios=ratios,
-                highlight_col=pivot_søjle,
-                highlight_row=pivot_række,
-                ratio_position=:right
-            )
-            println(file, "\\vspace{1em}")
         end
-
-        # Løsningstableau uden farver og ratios
-        write_tableau_latex(file, P_tableau; ratios=nothing, highlight_col=nothing, highlight_row=nothing)
-
-        println(file, "\\caption{Simplex-tableauer}")
-        println(file, "\\end{table}")
-        println(file, "\\end{document}")
+        # Tom for b kolonne
+        @printf("%-*s", col_width-1, "")
+        println("|")
     end
-
-    return P_tableau
+    
+    # Bottom linje
+    print_horizontal_line()
+    println()
 end
+
+##########################################################
 
 
 ##########################################################
+
+# Print information om flere optimale løsninger
+function print_multiple_solutions_info(result)
+    info = result.multiple_solutions_info
+    
+    if info.has_multiple
+        println("="^100)
+        println("DER ER FLERE OPTIMALE LØSNINGER")
+        println("="^100)
+        
+        # Begrundelse
+        println("\nBegrundelse:")
+        println("Løsningen er optimal, fordi:")
+        println("  • Z-rækken har ikke-negative værdier for alle non-basic variabler")
+        println("  • Alle b-værdier er ikke-negative (feasible løsning)")
+        
+        println("\nDer er flere optimale løsninger, fordi:")
+        if length(info.non_basic_zero_rc) > 0
+            println("  • Non-basic variabel(er) med reduced cost = 0:")
+            for var in info.non_basic_zero_rc
+                println("    - ", var, " kan indgå i basisen uden at ændre objektivværdien")
+            end
+            println("  • Dette betyder at der findes alternative optimale basisløsninger")
+            println("  • Alle disse løsninger har samme objektivværdi")
+        end
+        
+        if info.is_degenerate
+            println("\nYderligere observation:")
+            println("  • Degenerering er til stede (basisvariabel(er) med værdi 0):")
+            for var in info.degenerate_vars
+                println("    - ", var, " = 0")
+            end
+            println("  • Dette kan føre til flere optimale tableaux")
+        end
+        
+        println("\n" * "="^100)
+        println()
+    end
+end
 
 # Print optimal løsning
 function print_optimal_solution_simplex(result, x_S_navne, dec=2)
     println("-"^100)
     @printf("Værdi af objektivfunktionen:\n -> %.*f\n", dec, result.z_opt)
     println("\n")
+    
+    # Print information om flere løsninger hvis relevant
+    print_multiple_solutions_info(result)
+    
     @printf("%-30s |%-30s\n", "Variabelnavn", "Værdi")
     println("-"^65)
     for i in 1:length(x_S_navne[1:end-1])
