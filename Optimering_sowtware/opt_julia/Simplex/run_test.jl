@@ -7,15 +7,10 @@ include("Skabelon_simplex.jl")
 include("Primal_Dual_simplex_alg.jl")
 include("Print_tableau.jl")
 
-println("Ny kørsel")
+println("Test kørsel")
 
 P = simplex_skabelon()
 P_tableau = simplex_tableau_BFS(P.c, P.x_navne, P.A, P.b, P.S_navne)
-
-
-if P.output_latex
-    P_tableau = simplex_solve_latex(P_tableau, P.output_latex_navn)
-end
 
 if P.output_terminal
     P_tableau = simplex_solve(P_tableau; print_tableaux_iterationer=P.print_tableaux_iterationer)
@@ -23,6 +18,11 @@ end
 
 # Beregn sensitivitet
 result = optimal_tableau(P_tableau)
+
+# Print resultater
+println("\n" * "="^60)
+println("SENSITIVITETSANALYSE - TEST")
+println("="^60)
 
 # Antal decimaler i output
 dec = 2

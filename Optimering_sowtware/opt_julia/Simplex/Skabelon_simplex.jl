@@ -1,15 +1,16 @@
 function simplex_skabelon()
 
     # Objektivcoefficienter og variabelnavne
-    c = [4, 2, 5];
+    c = [5, 3, 2];
     x_navne = ["x_1", "x_2", "x_3"];
     
     # Begr??nsningskoefficienter og kapaciteter
-    A = [5 4 3;
-         -2 -1 -3;
-         2 1 3];
+    A = [1 1 1;
+         2 1 0;
+         1 2 1];
     
-    b = [11, -8, 8];
+    b = [10, 8, 12];
+    b_navne = ["B1", "B2", "B3"];
     
     # Danner slackvariable
     # S_navne = ["S_1", "S_2", "S_3"];
@@ -18,7 +19,7 @@ function simplex_skabelon()
     # LaTeX output konfiguration
     output_latex = false;
     output_terminal = true;
-    print_tableaux_iterationer = true;
+    print_tableaux_iterationer = false;
     output_base_sti = ""  # tom streng -> samme mappe som koden
     output_mappe_navn = "Output"
     if output_base_sti == ""
@@ -35,6 +36,7 @@ function simplex_skabelon()
         x_navne = x_navne, 
         A = A, 
         b = b, 
+        b_navne = b_navne,
         S_navne = S_navne,
         output_latex = output_latex,
         output_terminal = output_terminal,

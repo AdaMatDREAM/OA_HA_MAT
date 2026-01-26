@@ -9,7 +9,7 @@ obj = MOI.MAX_SENSE;
 
 # Objektivcoefficienter og variabelnavne
 # Simpelt MIP testproblem med binære og heltalsvariable
-c = [4, 2, 5];
+c = [5, 3, 2];
 x_navne = ["x_1", "x_2", "x_3"];
 # Fortegnskrav 
 # :R -> ]-inf, inf[
@@ -32,11 +32,11 @@ for i in eachindex(fortegn)
 end
 
 # Begrænsninger og kapaciteter
-A = [5 4 3;
-     -2 -1 -3;
-     2 1 3];
+A = [1 1 1;
+     2 1 0;
+     1 2 1];
 
-b = [11, -8, 8];
+b = [10, 8, 12];
 # Retningen af begrænsningerne kan skiftes mellem :<=, :>= og :(==)
 b_dir = [:<=, :<=, :<=];
 b_navne = ["B1", "B2", "B3"];

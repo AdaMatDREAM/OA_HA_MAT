@@ -200,6 +200,135 @@ end
 
 ##########################################################
 
+# Print optimal løsning
+function print_optimal_solution_simplex(result, x_S_navne, dec=2)
+    println("-"^100)
+    @printf("Værdi af objektivfunktionen:\n -> %.*f\n", dec, result.z_opt)
+    println("\n")
+    @printf("%-30s |%-30s\n", "Variabelnavn", "Værdi")
+    println("-"^65)
+    for i in 1:length(x_S_navne[1:end-1])
+        var = x_S_navne[i]
+        val = result.x_S_opt[i]
+            @printf("%-30s |%-30.*f\n", var, dec, val)
+    end
+    println("\n")
+end
+
+##########################################################
+
+# Print slack og skyggepriser
+function print_slack_shadow_price_simplex(result, x_S_navne, b, b_navne, dec=2, tol=1e-9)
+    println("Slack og skyggepris: \n")
+    @printf("%-15s |%-15s |%-15s |%-15s |%-15s |%-15s\n", 
+            "Begrænsningnavn", "LHS", "RHS", "Slack", "Skyggepris", "Bindende status")
+    println("-"^100)
+    
+    # Find slack-variabler og deres værdier
+    for i in 1:length(x_S_navne[1:end-1])
+        var = x_S_navne[i]
+        if startswith(var, "S_")
+            idx = parse(Int, var[3:end])
+            if idx <= length(b)
+                # Slack-værdi er i x_S_opt
+                slack_val = result.x_S_opt[i]
+                # LHS = RHS - Slack (for <= constraints)
+                lhs = b[idx] - slack_val
+                # Skyggepris er i skyggepriser array
+                shadow_price = result.skyggepriser[i]
+                # Bindende hvis slack er tæt på 0
+                bindende = abs(slack_val) <= tol ? "Bindende" : "Ikke-bindende"
+                
+                @printf("%-15s |%-15.*f |%-15.*f |%-15.*f |%-15.*f |%-15s\n", 
+                        b_navne[idx], dec, lhs, dec, b[idx], dec, slack_val, dec, shadow_price, bindende)
+            end
+        end
+    end
+    println("\n")
+end
+
+##########################################################
+
+# Print sensitivitet for objektivkoefficienter
+function print_sensitivity_objective_coefficients_simplex(result, x_S_navne, c, x_navne, dec=2)
+    println("\nSensitivitetsrapport for objektivkoefficienter: \n")
+    
+    @printf("%-18s |%-18s |%-18s |%-18s |%-18s\n", "Variabelnavn", "Koefficientværdi",
+            "Maksimalt fald", "Maksimal stigning", "Reduced costs")
+    println("-"^(18*5+9))
+    
+    # Hjælpefunktion til at finde original c-værdi
+    function find_c_original(var, x_navne, c)
+        idx = findfirst(==(var), x_navne)
+        if idx !== nothing
+            return c[idx]
+        elseif startswith(var, "S_")
+            return 0.0
+        else
+            return 0.0
+        end
+    end
+    
+    for i in 1:length(x_S_navne[1:end-1])
+        var = x_S_navne[i]
+        c_orig = find_c_original(var, x_navne, c)
+        c_minus = result.c_sens_lower[i]
+        c_plus = result.c_sens_upper[i]
+        
+        # Reduced cost: fra z-rækken (allerede i skyggepriser, men med modsat fortegn for non-basic)
+        # For non-basic variabler: reduced cost = -skyggepris (fordi z-rækken er -c^*)
+        # For basic variabler: reduced cost = 0
+        reduced_cost_tableau = result.skyggepriser[i]  # Dette er -c^* i tableauet
+        reduced_cost_actual = -reduced_cost_tableau  # Faktisk reduced cost
+        
+        # Formatér Inf værdier
+        c_minus_str = isinf(c_minus) ? "-∞" : Printf.@sprintf("%.*f", dec, c_minus)
+        c_plus_str = isinf(c_plus) ? "∞" : Printf.@sprintf("%.*f", dec, c_plus)
+        
+        @printf("%-18s |%-18.*f |%-18s |%-18s |%-18.*f\n", 
+                var, dec, c_orig, c_minus_str, c_plus_str, dec, reduced_cost_actual)
+    end
+    println("-"^(18*5+9))
+    println("\n")
+end
+
+##########################################################
+
+# Print sensitivitet for RHS
+function print_sensitivity_RHS_simplex(result, b, b_navne, dec=2)
+    println("\nSensitivitetsrapport for RHS (kapacitet): \n")
+    
+    @printf("%-20s |%-20s |%-20s |%-20s\n", "Begrænsningnavn", "RHS (nu)",
+            "Maksimalt fald", "Maksimal stigning")
+    println("-"^(20*4+6))
+    
+    for i in 1:length(result.b_sens_lower)
+        b_minus = result.b_sens_lower[i]
+        b_plus = result.b_sens_upper[i]
+        
+        # Formatér Inf værdier
+        b_minus_str = isinf(b_minus) ? "∞" : Printf.@sprintf("%.*f", dec, b_minus)
+        b_plus_str = isinf(b_plus) ? "∞" : Printf.@sprintf("%.*f", dec, b_plus)
+        
+        @printf("%-20s |%-20.*f |%-20s |%-20s\n", 
+                b_navne[i], dec, b[i], b_minus_str, b_plus_str)
+    end
+    println("-"^(20*4+6))
+    println("\n")
+end
+
+##########################################################
+
+# Fuld rapport for simplex sensitivitetsanalyse
+function full_report_simplex_sensitivity(result, x_S_navne, x_navne, c, b, b_navne, dec=2, tol=1e-9)
+    print_optimal_solution_simplex(result, x_S_navne, dec)
+    print_slack_shadow_price_simplex(result, x_S_navne, b, b_navne, dec, tol)
+    print_sensitivity_objective_coefficients_simplex(result, x_S_navne, c, x_navne, dec)
+    print_sensitivity_RHS_simplex(result, b, b_navne, dec)
+end
+
+##########################################################
+
 
 
 

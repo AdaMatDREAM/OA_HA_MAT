@@ -222,10 +222,140 @@ function simplex_solve(P_tableau; max_iter_dual=50, max_iter_primal=50, print_ta
     return P_tableau
 end
 
+function optimal_tableau(P_tableau)
+    # Vi definerer lokale variable
+    T = P_tableau.T;
+    x_S_navne = P_tableau.x_S_navne;
+    basis_navne = P_tableau.basis_navne;
+    # Objektivfunktionens værdi
+    z_opt = T[end, end];
+    # Variabelværdier i løsningen
+    x_S_opt = zeros(length(x_S_navne));
+    b_opt = T[1:end-1, end];
+    for i in eachindex(x_S_navne)
+        if x_S_navne[i] in basis_navne
+            idx = findfirst(==(x_S_navne[i]), basis_navne[1:end-1])
+            if idx !== nothing
+                x_S_opt[i] = b_opt[idx]
+            end
+        end
+    end
+# skyggepriser
+# I tableauet er z-rækken -c^*, så skyggepriserne er direkte fra tableauet
+skyggepriser = T[end, 1:end-1]
+# slackværdier kendes allerede fra tableau
 
+# Sensitivitetsanalyse for objektivkoefficienter
+c_sens_lower = zeros(length(x_S_navne[1:end-1]));
+c_sens_upper = zeros(length(x_S_navne[1:end-1]));
+for k in eachindex(x_S_navne[1:end-1])
+    # Definer variablenavn
+    var_k = x_S_navne[k]
+    # Tjek om variablenavnet er i basisnavnene
+    if var_k in basis_navne[1:end-1]
+        # Finder rækken ved brug af index for variablenavnet i basisnavnene
+        idx = findfirst(==(var_k), basis_navne[1:end-1])
+        # Finder rækken i tableauet ved brug af index
+        row = T[idx, 1:end-1];
+        # Definer c i optimal løsning
+        c_opt = T[end, 1:end-1];
+        # Finder først C_k^-
+        # Hjælpevariabel til at finde C_k^-
+        c_minus = Inf;
+        # Tjek om alle elementer i rækken er <= 0
+        if all(row[j] <= 0 for j in eachindex(row) if j != k)
+            c_sens_lower[k] = Inf;
+        else
+            # Hvis ikke så finder vi mindste ratio for at finde C_k^-
+            for j in eachindex(row)
+                if j != k && row[j] > 0
+                    ratio = c_opt[j] / row[j]
+                    if ratio <= c_minus
+                        c_minus = ratio;
+                    end
+                end
+            end
+            c_sens_lower[k] = c_minus;
+        end
+        # Finder C_k^+
+        # Hjælpevariabel til at finde C_k^+
+        c_plus = Inf;
+        # Tjek om alle elementer i rækken er >= 0
+        if all(row[j] >= 0 for j in eachindex(row) if j != k)
+            c_sens_upper[k] = Inf;
+        else
+            # Hvis ikke så finder vi mindste ratio for at finde C_k^+
+            for j in eachindex(row)
+                if j != k && row[j] < 0
+                    ratio = - c_opt[j] / row[j]
+                    if ratio <= c_plus
+                        c_plus = ratio;
+                    end
+                end
+            end
+            c_sens_upper[k] = c_plus;
+        end
+    else
+        c_sens_lower[k] = Inf;
+        c_sens_upper[k] = T[end, k];
+    end
+end
 
+# Sensitivitetsanalyse for begrænsninger
+# Vi har b_opt fra tidligere
+b_sens_lower = zeros(length(b_opt));
+b_sens_upper = zeros(length(b_opt));
+# Antal strukturelle variable
+p = length(x_S_navne[1:end-1]) - length(basis_navne[1:end-1])
+for k in eachindex(b_opt)
+    # Find den tilhørende slack-variabel
+    S_q = x_S_navne[p + k]
+    if S_q in basis_navne[1:end-1]
+        b_sens_lower[k] = x_S_opt[p + k]
+        b_sens_upper[k] = Inf;
+    else
+        # Søjlen i tableauet for den tilhørende slack-variabel
+        col = T[1:end-1, p + k];
+        if all(col[j] <= 0 for j in eachindex(col))
+            b_sens_lower[k] = Inf;
+        else
+            b_minus = Inf;
+            for j in eachindex(col)
+                if col[j] > 0
+                    ratio = b_opt[j] / col[j]
+                    if ratio <= b_minus
+                        b_minus = ratio;
+                    end
+                end
+            end
+            b_sens_lower[k] = b_minus;
+        end
+        # Finder b_k^+
+        b_plus = Inf;
+        if all(col[j] >= 0 for j in eachindex(col))
+            b_sens_upper[k] = Inf;
+        else
+            for j in eachindex(col)
+                if col[j] < 0
+                    ratio = - b_opt[j] / col[j]
+                    if ratio <= b_plus
+                        b_plus = ratio;
+                    end
+                end
+            end
+            b_sens_upper[k] = b_plus;
+        end
+    end
+end
+return (
+    z_opt = z_opt,
+    x_S_opt = x_S_opt,
+    skyggepriser = skyggepriser,
+    c_sens_lower = c_sens_lower,
+    c_sens_upper = c_sens_upper,
+    b_sens_lower = b_sens_lower,
+    b_sens_upper = b_sens_upper
+)
 
-
-
-
+end
 
