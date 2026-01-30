@@ -1,14 +1,14 @@
 function LP_MIP_model_skabelon()
 # Type af model: LP eller MIP
-model_type = "LP";
+model_type = "MIP";
 # True hvis du også vil have dualt program
-dual_defined = true;
+dual_defined = false;
 
 # Objektiv MAX eller MIN
 obj = :MAX;  # eller :MIN for minimering
 
 # Objektivcoefficienter og variabelnavne
-c = [42, 60, 18];
+c = [120, 200, 260];
 x_navne = ["x_1", "x_2", "x_3"];
 # Fortegnskrav 
 # :R -> ]-inf, inf[
@@ -31,17 +31,19 @@ for i in eachindex(fortegn)
 end
 
 # Begrænsninger og kapaciteter
-A = [2 3 1;
-     3 4 1];
+A = [1  1  1;
+     30 15 45;
+     40 80 120];
 
-b = [5, 7];
+b = [11,  300,  820];
+b_navne = ["B1", "B2", "B3"];
 # Retningen af begrænsningerne kan skiftes mellem :<=, :>= og :(==)
 b_dir = [:<=, :<=, :<=];
 b_navne = ["B1", "B2", "B3"];
 
 if model_type == "MIP"
     # vælg variabeltyper hved MIP problemer. Du kan vælge mellem :Integer, :Binary og :Continuous.
-    x_type = [:Binary, :Integer, :Binary];
+    x_type = [:Integer, :Integer, :Integer];
 elseif model_type == "LP"
     x_type = fill(:Continuous, length(c));
 end
@@ -76,8 +78,8 @@ if !isdir(output_mappe)
 end
 
 # Filnavn til output (defineres altid)
-output_fil_navn = joinpath(output_mappe, "test_primal_2.txt")
-output_fil_navn_D = joinpath(output_mappe, "test_dual_2.txt")
+output_fil_navn = joinpath(output_mappe, "Output_LP_MIP_Primal.txt")
+output_fil_navn_D = joinpath(output_mappe, "Output_LP_MIP_Dual.txt")
 
 # Returner som NamedTuple for bedre læsbarhed
 return (

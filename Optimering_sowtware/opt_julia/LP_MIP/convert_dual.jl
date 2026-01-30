@@ -220,7 +220,7 @@ function write_problem_file(file, obj, c, A, b, b_dir, x_navne, fortegn, x_type)
     end
     
     if !isempty(dom_terms)
-        println(file, "\nSamt fortegnskrav:")
+        println(file, "\nSamt:")
         println(file, "  ", join(dom_terms, ", "))
     end
     println(file, "="^100)

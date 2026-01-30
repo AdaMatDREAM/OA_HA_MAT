@@ -317,6 +317,116 @@ end
 
 ##########################################################
 
+# Funktion til at printe problemformulering til terminal
+function print_problem_terminal_simplex(c, x_navne, A, b, b_navne, obj_sense=:MAX)
+    sense = obj_sense == :MAX ? "Maksimer" : "Minimer"
+    
+    # Objektivfunktion
+    obj_funktion = String[]
+    for i in eachindex(c)
+        coef = c[i]
+        if coef == 0; continue; end
+        
+        fortegn_str = coef < 0 ? " - " : (isempty(obj_funktion) ? "" : " + ")
+        abscoef = abs(coef)
+        coef_tekst = abscoef == 1 ? "" : string(abscoef)
+        
+        push!(obj_funktion, fortegn_str * coef_tekst * x_navne[i])
+    end
+    
+    println("\n" * "="^100)
+    println("PROBLEMFORMULERING")
+    println("="^100)
+    println(sense, " Z = ", join(obj_funktion, ""))
+    println("\nu.b.b.:")
+    
+    # Begrænsninger (alle er <= i standard simplex form)
+    for i in 1:size(A, 1)
+        row_terms = String[]
+        for j in 1:size(A, 2)
+            a = A[i, j]
+            if a == 0; continue; end
+            
+            fortegn_str = a < 0 ? " - " : (isempty(row_terms) ? "" : " + ")
+            abs_a = abs(a)
+            coef_tekst = abs_a == 1 ? "" : string(abs_a)
+            
+            push!(row_terms, fortegn_str * coef_tekst * x_navne[j])
+        end
+        
+        println("  ", b_navne[i], ": ", join(row_terms, ""), " <= ", b[i])
+    end
+    
+    # Fortegnskrav (alle variable er >= 0 i standard simplex)
+    dom_terms = String[]
+    for i in eachindex(x_navne)
+        push!(dom_terms, x_navne[i] * " >= 0")
+    end
+    
+    if !isempty(dom_terms)
+        println("\nSamt fortegnskrav:")
+        println("  ", join(dom_terms, ", "))
+    end
+    println("="^100)
+    println()
+end
+
+# Funktion til at skrive problemformulering til fil
+function write_problem_file_simplex(file, c, x_navne, A, b, b_navne, obj_sense=:MAX)
+    sense = obj_sense == :MAX ? "Maksimer" : "Minimer"
+    
+    # Objektivfunktion
+    obj_funktion = String[]
+    for i in eachindex(c)
+        coef = c[i]
+        if coef == 0; continue; end
+        
+        fortegn_str = coef < 0 ? " - " : (isempty(obj_funktion) ? "" : " + ")
+        abscoef = abs(coef)
+        coef_tekst = abscoef == 1 ? "" : string(abscoef)
+        
+        push!(obj_funktion, fortegn_str * coef_tekst * x_navne[i])
+    end
+    
+    println(file, "\n" * "="^100)
+    println(file, "PROBLEMFORMULERING")
+    println(file, "="^100)
+    println(file, sense, " Z = ", join(obj_funktion, ""))
+    println(file, "\nu.b.b.:")
+    
+    # Begrænsninger (alle er <= i standard simplex form)
+    for i in 1:size(A, 1)
+        row_terms = String[]
+        for j in 1:size(A, 2)
+            a = A[i, j]
+            if a == 0; continue; end
+            
+            fortegn_str = a < 0 ? " - " : (isempty(row_terms) ? "" : " + ")
+            abs_a = abs(a)
+            coef_tekst = abs_a == 1 ? "" : string(abs_a)
+            
+            push!(row_terms, fortegn_str * coef_tekst * x_navne[j])
+        end
+        
+        println(file, "  ", b_navne[i], ": ", join(row_terms, ""), " <= ", b[i])
+    end
+    
+    # Fortegnskrav (alle variable er >= 0 i standard simplex)
+    dom_terms = String[]
+    for i in eachindex(x_navne)
+        push!(dom_terms, x_navne[i] * " >= 0")
+    end
+    
+    if !isempty(dom_terms)
+        println(file, "\nSamt fortegnskrav:")
+        println(file, "  ", join(dom_terms, ", "))
+    end
+    println(file, "="^100)
+    println(file)
+end
+
+##########################################################
+
 # Fuld rapport for simplex sensitivitetsanalyse
 function full_report_simplex_sensitivity(result, x_S_navne, x_navne, c, b, b_navne, dec=2, tol=1e-9)
     print_optimal_solution_simplex(result, x_S_navne, dec)

@@ -1,0 +1,23 @@
+
+OPTIMAL - Optimal løsning fundet
+----------------------------------------------------------------------------------------------------
+Værdi af objektivfunktionen:
+ -> 2040.00
+
+
+Variabelnavn                   |Variabeltype                   |Værdi                         
+-------------------------------------------------------------------------------------
+x_1                            |Integer                        |2.00                          
+x_2                            |Integer                        |9.00                          
+x_3                            |Integer                        |0.00                          
+
+
+Slack: 
+
+Begrænsningnavn |LHS             |RHS             |Slack           |Bindende status
+-------------------------------------------------------------------------------------
+B1              |11.00           |11.00           |0.00            |Bindende       
+B2              |195.00          |300.00          |105.00          |Ikke-bindende  
+B3              |800.00          |820.00          |20.00           |Ikke-bindende  
+
+
