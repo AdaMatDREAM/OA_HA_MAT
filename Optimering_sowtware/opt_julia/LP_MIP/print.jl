@@ -86,15 +86,36 @@ end
 function print_sensitivity_objective_coefficients(M, report, x, x_navne, c, dec=2)
     println("\nSensitivitetsrapport for objektivkoefficienter: \n")
     
-    @printf("%-18s |%-18s |%-18s |%-18s |%-18s\n", "Variabelnavn", "Koefficientværdi",
-            "Maksimalt fald", "Maksimal stigning", "Reduced costs")
-    println("-"^(18*5+9))
+    # Find maksimal længde af variabelnavne, men begræns til maksimum 40 tegn
+    max_name_length = min(40, maximum([length(s) for s in x_navne]))
+    name_width = max(18, max_name_length + 2)
+    
+    # Standard bredde for numeriske kolonner
+    num_width = 18
+    
+    # Beregn total bredde for separator
+    total_width = name_width + num_width * 4 + 9  # 4 numeriske kolonner + 4 separators + 1
+    
+    @printf("%-*s |%-*s |%-*s |%-*s |%-*s\n", 
+            name_width, "Variabelnavn", 
+            num_width, "Koefficientværdi",
+            num_width, "Maksimalt fald", 
+            num_width, "Maksimal stigning", 
+            num_width, "Reduced costs")
+    println("-"^total_width)
+    
     for i in eachindex(x)
         limits = report[x[i]]
-        @printf("%-18s |%-18.*f |%-18.*f |%-18.*f |%-18.*f\n", 
-                x_navne[i], dec, c[i], dec, limits[1], dec, limits[2], dec, reduced_cost(x[i]))
+        # Afkort navn hvis det er for langt
+        navn = length(x_navne[i]) > max_name_length ? x_navne[i][1:max_name_length] : x_navne[i]
+        @printf("%-*s |%-*.*f |%-*.*f |%-*.*f |%-*.*f\n", 
+                name_width, navn, 
+                num_width, dec, c[i], 
+                num_width, dec, limits[1], 
+                num_width, dec, limits[2], 
+                num_width, dec, reduced_cost(x[i]))
     end
-    println("-"^(18*5+9))
+    println("-"^total_width)
     println("\n")
 end
 
@@ -928,7 +949,7 @@ function print_shortest_path_algorithm(path, edge_weights, source_node, sink_nod
     println("\n" * "─"^100)
     println("OPSUMMERING:")
     println("─"^100)
-    @printf("  %-25s %.*f\n", "Total vægt af sti:", dec, total_weight)
+        @printf("  %-25s %.*f\n", "Total vægt af sti:", dec, total_weight)
     if length(path) > 1
         @printf("  %-25s %d\n", "Antal kanter i sti:", length(path) - 1)
         @printf("  %-25s %d\n", "Antal noder i sti:", length(path))
@@ -936,5 +957,165 @@ function print_shortest_path_algorithm(path, edge_weights, source_node, sink_nod
     end
     println("─"^100)
     
+    println("\n" * "="^100)
+end
+
+##########################################################
+# Funktion til at printe max flow løsning
+function print_max_flow(M, x, x_navne, kanter, source_node, sink_node, kapaciteter, dec=2)
+    println("\n" * "="^100)
+    println("MAXIMUM FLOW - LØSNING")
+    println("="^100)
+    
+    # Beregn total flow (sum af flow fra source)
+    total_flow = 0.0
+    active_flows = Dict{Tuple{String, String}, Float64}()  # Mapping fra (from, to) til flow værdi
+    
+    # Opret mapping fra variabelnavn til (from, to) par og find flow værdier
+    for (idx, var_name) in enumerate(x_navne)
+        val = value(x[idx])
+        if val > 1e-6  # Hvis der er flow gennem denne kant
+            # Parse variabelnavn: x_from_to
+            parts = split(var_name, "_")
+            if length(parts) >= 3
+                from_node = parts[2]
+                to_node = parts[3]
+                
+                active_flows[(from_node, to_node)] = val
+                
+                # Hvis det er en kant fra source, tilføj til total flow
+                if from_node == source_node
+                    total_flow += val
+                end
+            end
+        end
+    end
+    
+    # Print resultater
+    println("\n" * "─"^100)
+    println("FLOW RESULTATER:")
+    println("─"^100)
+    @printf("Source node: %s\n", source_node)
+    @printf("Sink node: %s\n", sink_node)
+    @printf("Maksimal flow: %.*f\n\n", dec, total_flow)
+    
+    # Print flow gennem hver kant
+    println("Flow gennem kanter:")
+    println("─"^100)
+    @printf("%-20s | %-20s | %-15s | %-15s | %-15s\n", "Fra node", "Til node", "Flow", "Kapacitet", "Utilisering")
+    println("─"^100)
+    
+    # Sorter kanter for bedre læsbarhed
+    sorted_edges = sort(collect(keys(active_flows)), by = x -> (x[1], x[2]))
+    
+    for (from_node, to_node) in sorted_edges
+        flow_val = active_flows[(from_node, to_node)]
+        # Find kapacitet for denne kant
+        capacity = 0.0
+        for (idx, kant) in enumerate(kanter)
+            if length(kant) >= 3
+                if kant[1] == from_node && kant[2] == to_node
+                    capacity = Float64(kant[3])
+                    break
+                end
+            end
+        end
+        utilization = capacity > 0 ? (flow_val / capacity) * 100 : 0.0
+        @printf("%-20s | %-20s | %-15.*f | %-15.*f | %-15.*f%%\n", 
+                from_node, to_node, dec, flow_val, dec, capacity, dec, utilization)
+    end
+    
+    println("─"^100)
+    println("\n" * "─"^100)
+    println("OPSUMMERING:")
+    println("─"^100)
+    @printf("  %-30s %.*f\n", "Maksimal flow værdi:", dec, total_flow)
+    @printf("  %-30s %d\n", "Antal aktive kanter:", length(active_flows))
+    println("─"^100)
+    
+    # Print flow netværk-struktur (visuel repræsentation)
+    println("\n" * "─"^100)
+    println("FLOW NETVÆRK (visuel repræsentation):")
+    println("─"^100)
+    
+    # Opret en mapping fra node til dens udgående kanter (med flow værdier)
+    node_outgoing = Dict{String, Vector{Tuple{String, Float64}}}()  # Mapping fra node til [(to_node, flow), ...]
+    
+    for ((from_node, to_node), flow_val) in active_flows
+        if flow_val > 1e-6  # Kun kanter med flow
+            if !haskey(node_outgoing, from_node)
+                node_outgoing[from_node] = []
+            end
+            push!(node_outgoing[from_node], (to_node, flow_val))
+        end
+    end
+    
+    # Vis flow-netværket grupperet efter hver node's udgående flow
+    # Start med source node og vis alle noder i en logisk rækkefølge
+    visited = Set{String}()
+    nodes_to_process = [source_node]
+    
+    println()
+    while !isempty(nodes_to_process)
+        current_node = popfirst!(nodes_to_process)
+        if current_node in visited
+            continue
+        end
+        push!(visited, current_node)
+        
+        if haskey(node_outgoing, current_node)
+            # Vis node header
+            if current_node == source_node
+                println("  $(current_node) (SOURCE)")
+            elseif current_node == sink_node
+                println("  $(current_node) (SINK)")
+            else
+                println("  $(current_node)")
+            end
+            
+            # Vis alle udgående kanter fra denne node
+            for (to_node, flow_val) in node_outgoing[current_node]
+                # Find kapacitet for denne kant
+                capacity = 0.0
+                for (idx, kant) in enumerate(kanter)
+                    # Kant er en tuple: (from_node, to_node, kapacitet)
+                    if length(kant) >= 2 && kant[1] == current_node && kant[2] == to_node
+                        if length(kant) >= 3
+                            # Kapacitet er i tredje element af tuple
+                            capacity = Float64(kant[3])
+                        elseif idx <= length(kapaciteter)
+                            # Eller brug kapaciteter array
+                            capacity = kapaciteter[idx]
+                        end
+                        break
+                    end
+                end
+                
+                utilization = capacity > 0 ? (flow_val / capacity) * 100 : 0.0
+                
+                # Vis kant med flow og kapacitet
+                if capacity > 0
+                    arrow = " ──[flow: $(round(flow_val, digits=dec)) / cap: $(round(capacity, digits=dec))]──> "
+                else
+                    arrow = " ──[flow: $(round(flow_val, digits=dec))]──> "
+                end
+                @printf("    %s%s", arrow, to_node)
+                
+                if to_node == sink_node
+                    println(" (SINK)")
+                else
+                    println()
+                end
+                
+                # Tilføj destination node til køen hvis den ikke er besøgt
+                if !(to_node in visited) && haskey(node_outgoing, to_node)
+                    push!(nodes_to_process, to_node)
+                end
+            end
+            println()
+        end
+    end
+    
+    println("─"^100)
     println("\n" * "="^100)
 end

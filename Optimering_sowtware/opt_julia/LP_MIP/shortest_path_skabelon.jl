@@ -116,8 +116,22 @@ for node in noder
     push!(b_navne_flow, constraint_name);
 end
 
-    # 2. Upper bound constraints: x_ij <= 1 (håndteres via øvre_grænse, men vi kan også tilføje dem eksplicit hvis ønsket)
-    # Vi håndterer dem via øvre_grænse (som i MST), men de vil blive vist i problemformuleringen (tror jeg)
+    # 2. Upper bound constraints: x_ij <= 1 (tilføjes eksplicit til A-matricen så de vises i problemformuleringen)
+    A_upper_rows = Vector{Vector{Float64}}();
+    b_upper = Float64[];
+    b_dir_upper = Symbol[];
+    b_navne_upper = String[];
+    
+    # Opret x_navne først (hvis de ikke allerede er oprettet)
+    # x_navne er allerede oprettet tidligere i koden
+    for i in 1:num_kanter
+        A_row = zeros(num_kanter);
+        A_row[i] = 1.0;  # Kun denne variabel
+        push!(A_upper_rows, A_row);
+        push!(b_upper, 1.0);
+        push!(b_dir_upper, :<=);
+        push!(b_navne_upper, string("Upper_bound_", x_navne[i]));
+    end
 
     # Vi sammensætter alle constraints
     num_flow_constraints = length(A_flow_rows);
@@ -125,10 +139,18 @@ end
     for i in 1:num_flow_constraints
         A_flow[i, :] = A_flow_rows[i];
     end
-    A = A_flow;
-    b = b_flow;
-    b_dir = b_dir_flow;
-    b_navne = b_navne_flow;
+    
+    num_upper_constraints = length(A_upper_rows);
+    A_upper = zeros(num_upper_constraints, num_kanter);
+    for i in 1:num_upper_constraints
+        A_upper[i, :] = A_upper_rows[i];
+    end
+    
+    # Kombiner flow balance og upper bound constraints
+    A = vcat(A_flow, A_upper);
+    b = vcat(b_flow, b_upper);
+    b_dir = vcat(b_dir_flow, b_dir_upper);
+    b_navne = vcat(b_navne_flow, b_navne_upper);
 
     # Variabeltyper og GRÆNSER
     fortegn = fill(:>=, num_kanter);

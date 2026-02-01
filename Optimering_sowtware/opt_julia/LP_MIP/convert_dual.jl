@@ -118,7 +118,7 @@ function print_problem_terminal(obj, c, A, b, b_dir, x_navne, fortegn, x_type)
             push!(row_terms, fortegn_str * coef_tekst * x_navne[j])
         end
         
-        dir = b_dir[i] == :<= ? "<=" : (b_dir[i] == :>= ? ">=" : "=")
+        dir = b_dir[i] == :<= ? "≤" : (b_dir[i] == :>= ? "≥" : "=")
         println("  ", join(row_terms, ""), " ", dir, " ", b[i])
     end
     
@@ -191,7 +191,7 @@ function write_problem_file(file, obj, c, A, b, b_dir, x_navne, fortegn, x_type)
             push!(row_terms, fortegn_str * coef_tekst * x_navne[j])
         end
         
-        dir = b_dir[i] == :<= ? "<=" : (b_dir[i] == :>= ? ">=" : "=")
+        dir = b_dir[i] == :<= ? "≤" : (b_dir[i] == :>= ? "≥" : "=")
         println(file, "  ", join(row_terms, ""), " ", dir, " ", b[i])
     end
     

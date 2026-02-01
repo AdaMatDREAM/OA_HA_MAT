@@ -131,6 +131,10 @@ for i in 1:num_subtour
     A_subtour[i, :] = A_subtour_rows[i];
 end
 
+# Note: Upper bound constraints (x_ij <= 1) er allerede inkluderet i subtour constraints for subsets af størrelse 2
+# For eksempel: subtour constraint for subset {i,j} giver x_ij <= 1, hvilket er præcis samme som upper bound constraint
+# Derfor tilføjer vi dem ikke eksplicit her, da de ville være duplikater
+
 # Nu kombineres alle begrænsningerne til A matricen og b vektoren
 A = vcat(A_b1, A_subtour);
 b = vcat(b_b1, b_subtour);

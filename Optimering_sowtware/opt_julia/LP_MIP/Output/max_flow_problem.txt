@@ -1,0 +1,226 @@
+Running HiGHS 1.12.0 (git hash: 755a8e027): Copyright (c) 2025 HiGHS under MIT licence terms
+LP has 20 rows; 13 cols; 32 nonzeros
+Coefficient ranges:
+  Matrix  [1e+00, 1e+00]
+  Cost    [1e+00, 1e+00]
+  Bound   [1e+00, 5e+00]
+  RHS     [1e+00, 5e+00]
+Presolving model
+3 rows, 9 cols, 11 nonzeros  0s
+2 rows, 5 cols, 6 nonzeros  0s
+Dependent equations search running on 2 equations with time limit of 1000.00s
+Dependent equations search removed 0 rows and 0 nonzeros in 0.00s (limit = 1000.00s)
+2 rows, 5 cols, 6 nonzeros  0s
+Presolve reductions: rows 2(-18); columns 5(-8); nonzeros 6(-26) 
+Solving the presolved LP
+Using EKK dual simplex solver - serial
+  Iteration        Objective     Infeasibilities num(sum)
+          0     0.0000000000e+00 Ph1: 0(0) 0s
+          2    -9.0000000000e+00 Pr: 0(0) 0s
+
+Performed postsolve
+Solving the original LP from the solution after postsolve
+
+Model status        : Optimal
+Simplex   iterations: 2
+Objective value     :  9.0000000000e+00
+P-D objective error :  0.0000000000e+00
+HiGHS run time      :          0.00
+
+====================================================================================================
+PROBLEMFORMULERING
+====================================================================================================
+Maksimer Z = x_Start_SoveLænge_VilFlyve + x_Start_SoveLænge_VilIkkeFlyve + x_Start_IkkeSoveLænge
+
+u.b.b.:
+  x_Start_SoveLænge_VilFlyve - x_SoveLænge_VilFlyve_Bus_10:00 - x_SoveLænge_VilFlyve_Fly = 0.0
+  x_Start_SoveLænge_VilIkkeFlyve - x_SoveLænge_VilIkkeFlyve_Bus_10:00 = 0.0
+  x_Start_IkkeSoveLænge - x_IkkeSoveLænge_Bus_06:00 - x_IkkeSoveLænge_Bus_08:00 - x_IkkeSoveLænge_Bus_10:00 = 0.0
+  x_IkkeSoveLænge_Bus_06:00 - x_Bus_06:00_Bornholm = 0.0
+  x_IkkeSoveLænge_Bus_08:00 - x_Bus_08:00_Bornholm = 0.0
+  x_SoveLænge_VilFlyve_Bus_10:00 + x_SoveLænge_VilIkkeFlyve_Bus_10:00 + x_IkkeSoveLænge_Bus_10:00 - x_Bus_10:00_Bornholm = 0.0
+  x_SoveLænge_VilFlyve_Fly - x_Fly_Bornholm = 0.0
+  x_Start_SoveLænge_VilFlyve ≤ 3.0
+  x_Start_SoveLænge_VilIkkeFlyve ≤ 1.0
+  x_Start_IkkeSoveLænge ≤ 5.0
+  x_SoveLænge_VilFlyve_Bus_10:00 ≤ 3.0
+  x_SoveLænge_VilFlyve_Fly ≤ 3.0
+  x_SoveLænge_VilIkkeFlyve_Bus_10:00 ≤ 1.0
+  x_IkkeSoveLænge_Bus_06:00 ≤ 1.0
+  x_IkkeSoveLænge_Bus_08:00 ≤ 1.0
+  x_IkkeSoveLænge_Bus_10:00 ≤ 4.0
+  x_Bus_06:00_Bornholm ≤ 1.0
+  x_Bus_08:00_Bornholm ≤ 1.0
+  x_Bus_10:00_Bornholm ≤ 4.0
+  x_Fly_Bornholm ≤ 5.0
+
+Samt:
+  x_Start_SoveLænge_VilFlyve ≥ 0, x_Start_SoveLænge_VilIkkeFlyve ≥ 0, x_Start_IkkeSoveLænge ≥ 0, x_SoveLænge_VilFlyve_Bus_10:00 ≥ 0, x_SoveLænge_VilFlyve_Fly ≥ 0, x_SoveLænge_VilIkkeFlyve_Bus_10:00 ≥ 0, x_IkkeSoveLænge_Bus_06:00 ≥ 0, x_IkkeSoveLænge_Bus_08:00 ≥ 0, x_IkkeSoveLænge_Bus_10:00 ≥ 0, x_Bus_06:00_Bornholm ≥ 0, x_Bus_08:00_Bornholm ≥ 0, x_Bus_10:00_Bornholm ≥ 0, x_Fly_Bornholm ≥ 0
+====================================================================================================
+
+Output i LP format begynder nu
+
+
+OPTIMAL - Optimal løsning fundet
+----------------------------------------------------------------------------------------------------
+Værdi af objektivfunktionen:
+ -> 9.00
+
+
+Variabelnavn                   |Variabeltype                   |Værdi                         
+-------------------------------------------------------------------------------------
+x_Start_SoveLænge_VilFlyve     |Continuous                     |3.00                          
+x_Start_SoveLænge_VilIkkeFlyve |Continuous                     |1.00                          
+x_Start_IkkeSoveLænge          |Continuous                     |5.00                          
+x_SoveLænge_VilFlyve_Bus_10:00 |Continuous                     |0.00                          
+x_SoveLænge_VilFlyve_Fly       |Continuous                     |3.00                          
+x_SoveLænge_VilIkkeFlyve_Bus_10:00 |Continuous                     |1.00                          
+x_IkkeSoveLænge_Bus_06:00      |Continuous                     |1.00                          
+x_IkkeSoveLænge_Bus_08:00      |Continuous                     |1.00                          
+x_IkkeSoveLænge_Bus_10:00      |Continuous                     |3.00                          
+x_Bus_06:00_Bornholm           |Continuous                     |1.00                          
+x_Bus_08:00_Bornholm           |Continuous                     |1.00                          
+x_Bus_10:00_Bornholm           |Continuous                     |4.00                          
+x_Fly_Bornholm                 |Continuous                     |3.00                          
+
+
+Slack og skyggepris: 
+
+Begrænsningnavn                  |LHS             |RHS             |Slack           |Skyggepris      |Bindende status
+----------------------------------------------------------------------------------------------------------------
+Flow_balance_SoveLænge_VilFly    |0.00            |0.00            |0.00            |0.00            |Bindende       
+Flow_balance_SoveLænge_VilIkk    |0.00            |0.00            |0.00            |1.00            |Bindende       
+Flow_balance_IkkeSoveLænge       |0.00            |0.00            |0.00            |0.00            |Bindende       
+Flow_balance_Bus_06:00           |0.00            |0.00            |0.00            |0.00            |Bindende       
+Flow_balance_Bus_08:00           |0.00            |0.00            |0.00            |0.00            |Bindende       
+Flow_balance_Bus_10:00           |0.00            |0.00            |0.00            |0.00            |Bindende       
+Flow_balance_Fly                 |0.00            |0.00            |0.00            |0.00            |Bindende       
+Capacity_x_Start_SoveLænge_Vi    |3.00            |3.00            |0.00            |-0.00           |Bindende       
+Capacity_x_Start_SoveLænge_Vi    |1.00            |1.00            |0.00            |-0.00           |Bindende       
+Capacity_x_Start_IkkeSoveLænge   |5.00            |5.00            |0.00            |-0.00           |Bindende       
+Capacity_x_SoveLænge_VilFlyve    |0.00            |3.00            |3.00            |-0.00           |Ikke-bindende  
+Capacity_x_SoveLænge_VilFlyve    |3.00            |3.00            |0.00            |-0.00           |Bindende       
+Capacity_x_SoveLænge_VilIkkeF    |1.00            |1.00            |0.00            |-0.00           |Bindende       
+Capacity_x_IkkeSoveLænge_Bus_    |1.00            |1.00            |0.00            |-0.00           |Bindende       
+Capacity_x_IkkeSoveLænge_Bus_    |1.00            |1.00            |0.00            |-0.00           |Bindende       
+Capacity_x_IkkeSoveLænge_Bus_    |3.00            |4.00            |1.00            |-0.00           |Ikke-bindende  
+Capacity_x_Bus_06:00_Bornholm    |1.00            |1.00            |0.00            |-0.00           |Bindende       
+Capacity_x_Bus_08:00_Bornholm    |1.00            |1.00            |0.00            |-0.00           |Bindende       
+Capacity_x_Bus_10:00_Bornholm    |4.00            |4.00            |0.00            |-0.00           |Bindende       
+Capacity_x_Fly_Bornholm          |3.00            |5.00            |2.00            |-0.00           |Ikke-bindende  
+
+
+
+Sensitivitetsrapport for objektivkoefficienter: 
+
+Variabelnavn                         |Koefficientværdi   |Maksimalt fald     |Maksimal stigning  |Reduced costs     
+---------------------------------------------------------------------------------------------------------------------
+x_Start_SoveLænge_VilFlyve           |1.00               |-1.00              |Inf                |1.00              
+x_Start_SoveLænge_VilIkkeFlyve       |1.00               |-1.00              |Inf                |-0.00             
+x_Start_IkkeSoveLænge                |1.00               |-1.00              |Inf                |1.00              
+x_SoveLænge_VilFlyve_Bus_10:00       |0.00               |-Inf               |0.00               |-0.00             
+x_SoveLænge_VilFlyve_Fly             |0.00               |-0.00              |Inf                |-0.00             
+x_SoveLænge_VilIkkeFlyve_Bus_10:00   |0.00               |-1.00              |Inf                |1.00              
+x_IkkeSoveLænge_Bus_06:00            |0.00               |0.00               |Inf                |-0.00             
+x_IkkeSoveLænge_Bus_08:00            |0.00               |0.00               |Inf                |-0.00             
+x_IkkeSoveLænge_Bus_10:00            |0.00               |-1.00              |-0.00              |-0.00             
+x_Bus_06:00_Bornholm                 |0.00               |0.00               |Inf                |-0.00             
+x_Bus_08:00_Bornholm                 |0.00               |0.00               |Inf                |-0.00             
+x_Bus_10:00_Bornholm                 |0.00               |-1.00              |-0.00              |-0.00             
+x_Fly_Bornholm                       |0.00               |-0.00              |Inf                |-0.00             
+---------------------------------------------------------------------------------------------------------------------
+
+
+
+Sensitivitetsrapport for RHS (kapacitet): 
+
+Begrænsningnavn                  |RHS (nu)             |Maksimalt fald       |Maksimal stigning   
+-----------------------------------------------------------------------------------------------
+Flow_balance_SoveLænge_VilFly    |0.00                 |-0.00                |3.00                
+Flow_balance_SoveLænge_VilIkk    |0.00                 |-1.00                |0.00                
+Flow_balance_IkkeSoveLænge       |0.00                 |-0.00                |3.00                
+Flow_balance_Bus_06:00           |0.00                 |-0.00                |1.00                
+Flow_balance_Bus_08:00           |0.00                 |-0.00                |1.00                
+Flow_balance_Bus_10:00           |0.00                 |-0.00                |4.00                
+Flow_balance_Fly                 |0.00                 |-2.00                |3.00                
+Capacity_x_Start_SoveLænge_Vi    |3.00                 |0.00                 |Inf                 
+Capacity_x_Start_SoveLænge_Vi    |1.00                 |0.00                 |Inf                 
+Capacity_x_Start_IkkeSoveLænge   |5.00                 |0.00                 |Inf                 
+Capacity_x_SoveLænge_VilFlyve    |3.00                 |-3.00                |Inf                 
+Capacity_x_SoveLænge_VilFlyve    |3.00                 |0.00                 |Inf                 
+Capacity_x_SoveLænge_VilIkkeF    |1.00                 |0.00                 |Inf                 
+Capacity_x_IkkeSoveLænge_Bus_    |1.00                 |0.00                 |Inf                 
+Capacity_x_IkkeSoveLænge_Bus_    |1.00                 |0.00                 |Inf                 
+Capacity_x_IkkeSoveLænge_Bus_    |4.00                 |-1.00                |Inf                 
+Capacity_x_Bus_06:00_Bornholm    |1.00                 |0.00                 |Inf                 
+Capacity_x_Bus_08:00_Bornholm    |1.00                 |0.00                 |Inf                 
+Capacity_x_Bus_10:00_Bornholm    |4.00                 |0.00                 |Inf                 
+Capacity_x_Fly_Bornholm          |5.00                 |-2.00                |Inf                 
+-----------------------------------------------------------------------------------------------
+
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+TJEK FOR HELTALLIG LØSNING (UNIMODULARITET):
+────────────────────────────────────────────────────────────────────────────────────────────────────
+   Success: Alle løsningsværdier er heltallige
+   Dette bekræfter at constraint-matricen er totally unimodular.
+   LP-relaxation giver samme resultat som MIP!
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+====================================================================================================
+MAXIMUM FLOW - LØSNING
+====================================================================================================
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+FLOW RESULTATER:
+────────────────────────────────────────────────────────────────────────────────────────────────────
+Source node: Start
+Sink node: Bornholm
+Maksimal flow: 9.00
+
+Flow gennem kanter:
+────────────────────────────────────────────────────────────────────────────────────────────────────
+Fra node             | Til node             | Flow            | Kapacitet       | Utilisering    
+────────────────────────────────────────────────────────────────────────────────────────────────────
+Bus                  | 06:00                | 1.00            | 0.00            | 0.00           %
+Bus                  | 08:00                | 1.00            | 0.00            | 0.00           %
+Bus                  | 10:00                | 4.00            | 0.00            | 0.00           %
+Fly                  | Bornholm             | 3.00            | 5.00            | 60.00          %
+IkkeSoveLænge        | Bus                  | 3.00            | 0.00            | 0.00           %
+SoveLænge            | VilFlyve             | 3.00            | 0.00            | 0.00           %
+SoveLænge            | VilIkkeFlyve         | 1.00            | 0.00            | 0.00           %
+Start                | IkkeSoveLænge        | 5.00            | 5.00            | 100.00         %
+Start                | SoveLænge            | 1.00            | 0.00            | 0.00           %
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+OPSUMMERING:
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  Maksimal flow værdi:           9.00
+  Antal aktive kanter:           9
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+FLOW NETVÆRK (visuel repræsentation):
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  Start (SOURCE)
+     ──[flow: 5.0 / cap: 5.0]──> IkkeSoveLænge
+     ──[flow: 1.0]──> SoveLænge
+
+  IkkeSoveLænge
+     ──[flow: 3.0]──> Bus
+
+  SoveLænge
+     ──[flow: 3.0]──> VilFlyve
+     ──[flow: 1.0]──> VilIkkeFlyve
+
+  Bus
+     ──[flow: 1.0]──> 06:00
+     ──[flow: 4.0]──> 10:00
+     ──[flow: 1.0]──> 08:00
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+====================================================================================================
