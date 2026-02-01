@@ -74,3 +74,80 @@ function reset_model_variables()
     end
 end
 
+
+##########################################################
+# Funktion til at konstruere directed graph og distance matrix fra shortest path skabelon
+# Returnerer: G (SimpleDiGraph), DistanceMatrix, node_to_int, int_to_node
+# Kræver: using Graphs (skal være inkluderet i filen der kalder funktionen)
+function build_shortest_path_graph(noder, kanter)
+    num_nodes = length(noder)
+    G = SimpleDiGraph(num_nodes)  # Directed graph for shortest path
+    
+    # Mapping fra nodenavn til integer index (og omvendt)
+    node_to_int = Dict(noder[i] => i for i in 1:num_nodes)
+    int_to_node = Dict(i => noder[i] for i in 1:num_nodes)
+    
+    # Opret distance matrix (start med Inf)
+    DistanceMatrix = fill(Inf, num_nodes, num_nodes)
+    
+    # Tilføj kanter til grafen og distance matrix
+    for (from_node, to_node, weight, direction) in kanter
+        i = node_to_int[from_node]
+        j = node_to_int[to_node]
+        
+        if direction == "D"
+            # Directed edge: kun én retning
+            add_edge!(G, i, j)
+            DistanceMatrix[i, j] = weight
+        else
+            # Undirected edge: begge retninger
+            add_edge!(G, i, j)
+            add_edge!(G, j, i)
+            DistanceMatrix[i, j] = weight
+            DistanceMatrix[j, i] = weight
+        end
+    end
+    
+    # Sæt diagonal til 0
+    for i in 1:num_nodes
+        DistanceMatrix[i, i] = 0
+    end
+    
+    return G, DistanceMatrix, node_to_int, int_to_node
+end
+
+
+##########################################################
+# Funktion til at konstruere undirected graph og distance matrix fra MST skabelon
+# Returnerer: G (SimpleGraph), DistanceMatrix, node_to_int, int_to_node
+# Kræver: using Graphs (skal være inkluderet i filen der kalder funktionen)
+function build_MST_graph(noder, kanter)
+    num_nodes = length(noder)
+    G = SimpleGraph(num_nodes)  # Undirected graph for MST
+    
+    # Mapping fra nodenavn til integer index (og omvendt)
+    node_to_int = Dict(noder[i] => i for i in 1:num_nodes)
+    int_to_node = Dict(i => noder[i] for i in 1:num_nodes)
+    
+    # Opret distance matrix (start med Inf)
+    DistanceMatrix = fill(Inf, num_nodes, num_nodes)
+    
+    # Tilføj kanter til grafen og distance matrix
+    for (node1, node2, weight) in kanter
+        i = node_to_int[node1]
+        j = node_to_int[node2]
+        
+        # Undirected graph: tilføj edge og begge retninger i distance matrix
+        add_edge!(G, i, j)
+        DistanceMatrix[i, j] = weight
+        DistanceMatrix[j, i] = weight  # Symmetric for undirected graph
+    end
+    
+    # Sæt diagonal til 0
+    for i in 1:num_nodes
+        DistanceMatrix[i, i] = 0
+    end
+    
+    return G, DistanceMatrix, node_to_int, int_to_node
+end
+

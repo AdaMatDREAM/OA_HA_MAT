@@ -1,0 +1,140 @@
+Running HiGHS 1.12.0 (git hash: 755a8e027): Copyright (c) 2025 HiGHS under MIT licence terms
+MIP has 10 rows; 25 cols; 50 nonzeros; 25 integer variables (25 binary)
+Coefficient ranges:
+  Matrix  [1e+00, 1e+00]
+  Cost    [9e+00, 2e+01]
+  Bound   [1e+00, 1e+00]
+  RHS     [1e+00, 1e+00]
+Presolving model
+10 rows, 25 cols, 50 nonzeros  0s
+10 rows, 25 cols, 50 nonzeros  0s
+Presolve reductions: rows 10(-0); columns 25(-0); nonzeros 50(-0) - Not reduced
+Objective function is integral with scale 1
+
+Solving MIP model with:
+   10 rows
+   25 cols (25 binary, 0 integer, 0 implied int., 0 continuous, 0 domain fixed)
+   50 nonzeros
+
+Src: B => Branching; C => Central rounding; F => Feasibility pump; H => Heuristic;
+     I => Shifting; J => Feasibility jump; L => Sub-MIP; P => Empty MIP; R => Randomized rounding;
+     S => Solve LP; T => Evaluate node; U => Unbounded; X => User solution; Y => HiGHS solution;
+     Z => ZI Round; l => Trivial lower; p => Trivial point; u => Trivial upper; z => Trivial zero
+
+        Nodes      |    B&B Tree     |            Objective Bounds              |  Dynamic Constraints |       Work      
+Src  Proc. InQueue |  Leaves   Expl. | BestBound       BestSol              Gap |   Cuts   InLp Confl. | LpIters     Time
+
+ J       0       0         0   0.00%   -inf            68                 Large        0      0      0         0     0.0s
+ T       0       0         0   0.00%   0               52               100.00%        0      0      0         9     0.0s
+         1       0         1 100.00%   52              52                 0.00%        0      0      0         9     0.0s
+
+Solving report
+  Status            Optimal
+  Primal bound      52
+  Dual bound        52
+  Gap               0% (tolerance: 0.01%)
+  P-D integral      0.0013370513916
+  Solution status   feasible
+                    52 (objective)
+                    0 (bound viol.)
+                    0 (int. viol.)
+                    0 (row viol.)
+  Timing            0.01
+  Max sub-MIP depth 0
+  Nodes             1
+  Repair LPs        0
+  LP iterations     9
+                    0 (strong br.)
+                    0 (separation)
+                    0 (heuristics)
+
+====================================================================================================
+PROBLEMFORMULERING
+====================================================================================================
+Minimer Z = 12x_J_1 + 14x_J_2 + 9x_J_3 + 13x_J_4 + 10x_J_5 + 11x_K_1 + 13x_K_2 + 15x_K_3 + 17x_K_4 + 13x_K_5 + 9x_H_1 + 15x_H_2 + 9x_H_3 + 14x_H_4 + 12x_H_5 + 10x_MA_1 + 12x_MA_2 + 11x_MA_3 + 13x_MA_4 + 14x_MA_5 + 13x_MI_1 + 10x_MI_2 + 15x_MI_3 + 10x_MI_4 + 16x_MI_5
+
+u.b.b.:
+  x_J_1 + x_J_2 + x_J_3 + x_J_4 + x_J_5 = 1.0
+  x_K_1 + x_K_2 + x_K_3 + x_K_4 + x_K_5 = 1.0
+  x_H_1 + x_H_2 + x_H_3 + x_H_4 + x_H_5 = 1.0
+  x_MA_1 + x_MA_2 + x_MA_3 + x_MA_4 + x_MA_5 = 1.0
+  x_MI_1 + x_MI_2 + x_MI_3 + x_MI_4 + x_MI_5 = 1.0
+  x_J_1 + x_K_1 + x_H_1 + x_MA_1 + x_MI_1 = 1.0
+  x_J_2 + x_K_2 + x_H_2 + x_MA_2 + x_MI_2 = 1.0
+  x_J_3 + x_K_3 + x_H_3 + x_MA_3 + x_MI_3 = 1.0
+  x_J_4 + x_K_4 + x_H_4 + x_MA_4 + x_MI_4 = 1.0
+  x_J_5 + x_K_5 + x_H_5 + x_MA_5 + x_MI_5 = 1.0
+
+Samt:
+  x_J_1 ∈ {0,1}, x_J_2 ∈ {0,1}, x_J_3 ∈ {0,1}, x_J_4 ∈ {0,1}, x_J_5 ∈ {0,1}, x_K_1 ∈ {0,1}, x_K_2 ∈ {0,1}, x_K_3 ∈ {0,1}, x_K_4 ∈ {0,1}, x_K_5 ∈ {0,1}, x_H_1 ∈ {0,1}, x_H_2 ∈ {0,1}, x_H_3 ∈ {0,1}, x_H_4 ∈ {0,1}, x_H_5 ∈ {0,1}, x_MA_1 ∈ {0,1}, x_MA_2 ∈ {0,1}, x_MA_3 ∈ {0,1}, x_MA_4 ∈ {0,1}, x_MA_5 ∈ {0,1}, x_MI_1 ∈ {0,1}, x_MI_2 ∈ {0,1}, x_MI_3 ∈ {0,1}, x_MI_4 ∈ {0,1}, x_MI_5 ∈ {0,1}
+====================================================================================================
+
+Output i MIP format begynder nu
+
+
+OPTIMAL - Optimal løsning fundet
+----------------------------------------------------------------------------------------------------
+Værdi af objektivfunktionen:
+ -> 52.00
+
+
+Variabelnavn                   |Variabeltype                   |Værdi                         
+-------------------------------------------------------------------------------------
+x_J_1                          |Binary                         |0.00                          
+x_J_2                          |Binary                         |0.00                          
+x_J_3                          |Binary                         |-0.00                         
+x_J_4                          |Binary                         |0.00                          
+x_J_5                          |Binary                         |1.00                          
+x_K_1                          |Binary                         |1.00                          
+x_K_2                          |Binary                         |0.00                          
+x_K_3                          |Binary                         |0.00                          
+x_K_4                          |Binary                         |0.00                          
+x_K_5                          |Binary                         |0.00                          
+x_H_1                          |Binary                         |-0.00                         
+x_H_2                          |Binary                         |0.00                          
+x_H_3                          |Binary                         |1.00                          
+x_H_4                          |Binary                         |0.00                          
+x_H_5                          |Binary                         |0.00                          
+x_MA_1                         |Binary                         |-0.00                         
+x_MA_2                         |Binary                         |1.00                          
+x_MA_3                         |Binary                         |0.00                          
+x_MA_4                         |Binary                         |-0.00                         
+x_MA_5                         |Binary                         |0.00                          
+x_MI_1                         |Binary                         |0.00                          
+x_MI_2                         |Binary                         |0.00                          
+x_MI_3                         |Binary                         |0.00                          
+x_MI_4                         |Binary                         |1.00                          
+x_MI_5                         |Binary                         |0.00                          
+
+
+Slack: 
+
+Begrænsningnavn |LHS             |RHS             |Slack           |Bindende status
+-------------------------------------------------------------------------------
+Worker_J        |1.00            |1.00            |0.00            |Bindende       
+Worker_K        |1.00            |1.00            |0.00            |Bindende       
+Worker_H        |1.00            |1.00            |0.00            |Bindende       
+Worker_MA       |1.00            |1.00            |0.00            |Bindende       
+Worker_MI       |1.00            |1.00            |0.00            |Bindende       
+Task_1          |1.00            |1.00            |0.00            |Bindende       
+Task_2          |1.00            |1.00            |0.00            |Bindende       
+Task_3          |1.00            |1.00            |0.00            |Bindende       
+Task_4          |1.00            |1.00            |0.00            |Bindende       
+Task_5          |1.00            |1.00            |0.00            |Bindende       
+
+
+
+====================================================================================================
+TRANSPORTATION/ASSIGNMENT MATRIX
+====================================================================================================
+        |1       |2       |3       |4       |5       |Sum     
+--------------------------------------------------------------
+J       |    0.00|    0.00|   -0.00|    0.00|    1.00|    1.00
+K       |    1.00|    0.00|    0.00|    0.00|    0.00|    1.00
+H       |   -0.00|    0.00|    1.00|    0.00|    0.00|    1.00
+MA      |   -0.00|    1.00|    0.00|   -0.00|    0.00|    1.00
+MI      |    0.00|    0.00|    0.00|    1.00|    0.00|    1.00
+--------------------------------------------------------------
+Sum     |    1.00|    1.00|    1.00|    1.00|    1.00|    5.00
+====================================================================================================
+

@@ -8,10 +8,11 @@ function Assignment_problem_skabelon()
     obj = :MIN; 
     
     # Omkostningsmatrix (n×n)
-    c_matrix = [8  6  5  7;
-                6  5  3  4;
-                7  8  5  6;
-                6  7  5  6];
+    c_matrix = [12  14  9   13  10;
+                11  13  15  17  13;
+                9   15  9   14  12;
+                10  12  11  13  14;
+                13  10  15  10  16];
     m, n = size(c_matrix);
     m != n ? error("c_matrix skal være en kvadratisk matrix") : nothing;
 
@@ -23,8 +24,8 @@ function Assignment_problem_skabelon()
     c = vec(c_matrix');  # Flatten matrixen (row-major: række 1, række 2, ...)
     
     # Navne på workers og tasks
-    supply_navne = ["A", "B", "C", "D"];
-    demand_navne = ["A", "B", "C", "D"];
+    supply_navne = ["J", "K", "H", "MA", "MI"];
+    demand_navne = ["1", "2", "3", "4", "5"];
 
     # Opret variabelnavne som vektor (samme rækkefølge som c)
     x_navne = [string("x_", supply_navne[i], "_", demand_navne[j]) for i in 1:m for j in 1:n];
@@ -75,7 +76,7 @@ function Assignment_problem_skabelon()
     tol = 1e-9;
     
     # Output af resultater i terminal eller fil
-    output_terminal = true;
+    output_terminal = false;
     output_fil = true;
     
     # Output mappe konfiguration
@@ -99,7 +100,7 @@ function Assignment_problem_skabelon()
     end
     
     # Filnavn til output (defineres altid)
-    output_fil_navn = joinpath(output_mappe, "Assignment_problem2.txt")
+    output_fil_navn = joinpath(output_mappe, "Assignment_problem.txt")
     output_fil_navn_D = joinpath(output_mappe, "Output_LP_MIP_Dual.txt") # benyttes ikke i virkeligheden, da dual problemet ikke er defineret
     
     # Returner som NamedTuple for bedre læsbarhed

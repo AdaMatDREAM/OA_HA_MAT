@@ -1,0 +1,801 @@
+Running HiGHS 1.12.0 (git hash: 755a8e027): Copyright (c) 2025 HiGHS under MIT licence terms
+LP has 216 rows; 15 cols; 940 nonzeros
+Coefficient ranges:
+  Matrix  [1e+00, 1e+00]
+  Cost    [1e+00, 6e+00]
+  Bound   [1e+00, 1e+00]
+  RHS     [1e+00, 7e+00]
+Presolving model
+110 rows, 15 cols, 700 nonzeros  0s
+Dependent equations search running on 1 equations with time limit of 1000.00s
+Dependent equations search removed 0 rows and 0 nonzeros in 0.00s (limit = 1000.00s)
+108 rows, 15 cols, 690 nonzeros  0s
+Presolve reductions: rows 108(-108); columns 15(-0); nonzeros 690(-250) 
+Solving the presolved LP
+Using EKK dual simplex solver - serial
+  Iteration        Objective     Infeasibilities num(sum)
+          0     0.0000000000e+00 Pr: 1(7) 0s
+          3     1.8000000000e+01 Pr: 0(0) 0s
+
+Performed postsolve
+Solving the original LP from the solution after postsolve
+
+Model status        : Optimal
+Simplex   iterations: 3
+Objective value     :  1.8000000000e+01
+P-D objective error :  0.0000000000e+00
+HiGHS run time      :          0.07
+
+====================================================================================================
+PROBLEMFORMULERING
+====================================================================================================
+Minimer Z = 2x_A_B + 4x_A_C + 5x_A_D + x_B_C + 4x_B_E + 3x_C_E + 5x_C_F + 4x_C_G + 3x_C_D + 6x_D_G + 2x_E_H + 4x_E_F + 5x_F_G + 3x_F_H + 4x_G_H
+
+u.b.b.:
+  x_A_B + x_A_C + x_A_D + x_B_C + x_B_E + x_C_E + x_C_F + x_C_G + x_C_D + x_D_G + x_E_H + x_E_F + x_F_G + x_F_H + x_G_H = 7.0
+  x_A_B <= 1.0
+  x_A_C <= 1.0
+  x_A_D <= 1.0
+  x_B_C <= 1.0
+  x_B_E <= 1.0
+  x_C_D <= 1.0
+  x_C_E <= 1.0
+  x_C_F <= 1.0
+  x_C_G <= 1.0
+  x_D_G <= 1.0
+  x_E_F <= 1.0
+  x_E_H <= 1.0
+  x_F_G <= 1.0
+  x_F_H <= 1.0
+  x_G_H <= 1.0
+  x_A_B + x_A_C + x_B_C <= 2.0
+  x_A_B + x_A_D <= 2.0
+  x_A_B + x_B_E <= 2.0
+  x_A_B <= 2.0
+  x_A_C + x_A_D + x_C_D <= 2.0
+  x_A_C + x_C_E <= 2.0
+  x_A_C + x_C_F <= 2.0
+  x_A_C + x_C_G <= 2.0
+  x_A_C <= 2.0
+  x_A_D <= 2.0
+  x_A_D + x_D_G <= 2.0
+  x_E_F <= 2.0
+  x_E_H <= 2.0
+  x_F_G <= 2.0
+  x_F_H <= 2.0
+  x_G_H <= 2.0
+  x_B_C + x_C_D <= 2.0
+  x_B_C + x_B_E + x_C_E <= 2.0
+  x_B_C + x_C_F <= 2.0
+  x_B_C + x_C_G <= 2.0
+  x_B_C <= 2.0
+  x_B_E <= 2.0
+  x_D_G <= 2.0
+  x_B_E + x_E_F <= 2.0
+  x_B_E + x_E_H <= 2.0
+  x_C_E + x_C_D <= 2.0
+  x_C_F + x_C_D <= 2.0
+  x_C_G + x_C_D + x_D_G <= 2.0
+  x_C_D <= 2.0
+  x_C_E + x_C_F + x_E_F <= 2.0
+  x_C_E + x_C_G <= 2.0
+  x_C_E + x_E_H <= 2.0
+  x_C_F + x_C_G + x_F_G <= 2.0
+  x_C_F + x_F_H <= 2.0
+  x_C_G + x_G_H <= 2.0
+  x_D_G + x_F_G <= 2.0
+  x_D_G + x_G_H <= 2.0
+  x_E_F + x_F_G <= 2.0
+  x_E_H + x_E_F + x_F_H <= 2.0
+  x_E_H + x_G_H <= 2.0
+  x_F_G + x_F_H + x_G_H <= 2.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_C_D <= 3.0
+  x_A_B + x_A_C + x_B_C + x_B_E + x_C_E <= 3.0
+  x_A_B + x_A_C + x_B_C + x_C_F <= 3.0
+  x_A_B + x_A_C + x_B_C + x_C_G <= 3.0
+  x_A_B + x_A_C + x_B_C <= 3.0
+  x_A_B + x_A_D + x_B_E <= 3.0
+  x_A_B + x_A_D <= 3.0
+  x_A_B + x_A_D + x_D_G <= 3.0
+  x_A_B + x_B_E + x_E_F <= 3.0
+  x_A_B + x_B_E <= 3.0
+  x_A_B + x_B_E + x_E_H <= 3.0
+  x_A_B + x_F_G <= 3.0
+  x_A_B + x_F_H <= 3.0
+  x_A_B + x_G_H <= 3.0
+  x_A_C + x_A_D + x_C_E + x_C_D <= 3.0
+  x_A_C + x_A_D + x_C_F + x_C_D <= 3.0
+  x_A_C + x_A_D + x_C_G + x_C_D + x_D_G <= 3.0
+  x_A_C + x_A_D + x_C_D <= 3.0
+  x_A_C + x_C_E + x_C_F + x_E_F <= 3.0
+  x_A_C + x_C_E + x_C_G <= 3.0
+  x_A_C + x_C_E + x_E_H <= 3.0
+  x_A_C + x_C_F + x_C_G + x_F_G <= 3.0
+  x_A_C + x_C_F + x_F_H <= 3.0
+  x_A_C + x_C_G + x_G_H <= 3.0
+  x_A_D + x_E_F <= 3.0
+  x_A_D + x_D_G <= 3.0
+  x_A_D + x_E_H <= 3.0
+  x_A_D + x_D_G + x_F_G <= 3.0
+  x_A_D + x_F_H <= 3.0
+  x_A_D + x_D_G + x_G_H <= 3.0
+  x_E_F + x_F_G <= 3.0
+  x_E_H + x_E_F + x_F_H <= 3.0
+  x_E_H + x_G_H <= 3.0
+  x_F_G + x_F_H + x_G_H <= 3.0
+  x_B_C + x_B_E + x_C_E + x_C_D <= 3.0
+  x_B_C + x_C_F + x_C_D <= 3.0
+  x_B_C + x_C_G + x_C_D + x_D_G <= 3.0
+  x_B_C + x_C_D <= 3.0
+  x_B_C + x_B_E + x_C_E + x_C_F + x_E_F <= 3.0
+  x_B_C + x_B_E + x_C_E + x_C_G <= 3.0
+  x_B_C + x_B_E + x_C_E + x_E_H <= 3.0
+  x_B_C + x_C_F + x_C_G + x_F_G <= 3.0
+  x_B_C + x_C_F + x_F_H <= 3.0
+  x_B_C + x_C_G + x_G_H <= 3.0
+  x_B_E + x_E_F <= 3.0
+  x_B_E + x_D_G <= 3.0
+  x_B_E + x_E_H <= 3.0
+  x_D_G + x_F_G <= 3.0
+  x_F_H <= 3.0
+  x_D_G + x_G_H <= 3.0
+  x_B_E + x_E_F + x_F_G <= 3.0
+  x_B_E + x_E_H + x_E_F + x_F_H <= 3.0
+  x_B_E + x_E_H + x_G_H <= 3.0
+  x_C_E + x_C_F + x_C_D + x_E_F <= 3.0
+  x_C_E + x_C_G + x_C_D + x_D_G <= 3.0
+  x_C_E + x_C_D + x_E_H <= 3.0
+  x_C_F + x_C_G + x_C_D + x_D_G + x_F_G <= 3.0
+  x_C_F + x_C_D + x_F_H <= 3.0
+  x_C_G + x_C_D + x_D_G + x_G_H <= 3.0
+  x_C_E + x_C_F + x_C_G + x_E_F + x_F_G <= 3.0
+  x_C_E + x_C_F + x_E_H + x_E_F + x_F_H <= 3.0
+  x_C_E + x_C_G + x_E_H + x_G_H <= 3.0
+  x_C_F + x_C_G + x_F_G + x_F_H + x_G_H <= 3.0
+  x_D_G + x_E_F + x_F_G <= 3.0
+  x_D_G + x_E_H + x_G_H <= 3.0
+  x_D_G + x_F_G + x_F_H + x_G_H <= 3.0
+  x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 3.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_B_E + x_C_E + x_C_D <= 4.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_C_F + x_C_D <= 4.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_C_G + x_C_D + x_D_G <= 4.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_C_D <= 4.0
+  x_A_B + x_A_C + x_B_C + x_B_E + x_C_E + x_C_F + x_E_F <= 4.0
+  x_A_B + x_A_C + x_B_C + x_B_E + x_C_E + x_C_G <= 4.0
+  x_A_B + x_A_C + x_B_C + x_B_E + x_C_E + x_E_H <= 4.0
+  x_A_B + x_A_C + x_B_C + x_C_F + x_C_G + x_F_G <= 4.0
+  x_A_B + x_A_C + x_B_C + x_C_F + x_F_H <= 4.0
+  x_A_B + x_A_C + x_B_C + x_C_G + x_G_H <= 4.0
+  x_A_B + x_A_D + x_B_E + x_E_F <= 4.0
+  x_A_B + x_A_D + x_B_E + x_D_G <= 4.0
+  x_A_B + x_A_D + x_B_E + x_E_H <= 4.0
+  x_A_B + x_A_D + x_D_G + x_F_G <= 4.0
+  x_A_B + x_A_D + x_F_H <= 4.0
+  x_A_B + x_A_D + x_D_G + x_G_H <= 4.0
+  x_A_B + x_B_E + x_E_F + x_F_G <= 4.0
+  x_A_B + x_B_E + x_E_H + x_E_F + x_F_H <= 4.0
+  x_A_B + x_B_E + x_E_H + x_G_H <= 4.0
+  x_A_B + x_F_G + x_F_H + x_G_H <= 4.0
+  x_A_C + x_A_D + x_C_E + x_C_F + x_C_D + x_E_F <= 4.0
+  x_A_C + x_A_D + x_C_E + x_C_G + x_C_D + x_D_G <= 4.0
+  x_A_C + x_A_D + x_C_E + x_C_D + x_E_H <= 4.0
+  x_A_C + x_A_D + x_C_F + x_C_G + x_C_D + x_D_G + x_F_G <= 4.0
+  x_A_C + x_A_D + x_C_F + x_C_D + x_F_H <= 4.0
+  x_A_C + x_A_D + x_C_G + x_C_D + x_D_G + x_G_H <= 4.0
+  x_A_C + x_C_E + x_C_F + x_C_G + x_E_F + x_F_G <= 4.0
+  x_A_C + x_C_E + x_C_F + x_E_H + x_E_F + x_F_H <= 4.0
+  x_A_C + x_C_E + x_C_G + x_E_H + x_G_H <= 4.0
+  x_A_C + x_C_F + x_C_G + x_F_G + x_F_H + x_G_H <= 4.0
+  x_A_D + x_D_G + x_E_F + x_F_G <= 4.0
+  x_A_D + x_E_H + x_E_F + x_F_H <= 4.0
+  x_A_D + x_D_G + x_E_H + x_G_H <= 4.0
+  x_A_D + x_D_G + x_F_G + x_F_H + x_G_H <= 4.0
+  x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 4.0
+  x_B_C + x_B_E + x_C_E + x_C_F + x_C_D + x_E_F <= 4.0
+  x_B_C + x_B_E + x_C_E + x_C_G + x_C_D + x_D_G <= 4.0
+  x_B_C + x_B_E + x_C_E + x_C_D + x_E_H <= 4.0
+  x_B_C + x_C_F + x_C_G + x_C_D + x_D_G + x_F_G <= 4.0
+  x_B_C + x_C_F + x_C_D + x_F_H <= 4.0
+  x_B_C + x_C_G + x_C_D + x_D_G + x_G_H <= 4.0
+  x_B_C + x_B_E + x_C_E + x_C_F + x_C_G + x_E_F + x_F_G <= 4.0
+  x_B_C + x_B_E + x_C_E + x_C_F + x_E_H + x_E_F + x_F_H <= 4.0
+  x_B_C + x_B_E + x_C_E + x_C_G + x_E_H + x_G_H <= 4.0
+  x_B_C + x_C_F + x_C_G + x_F_G + x_F_H + x_G_H <= 4.0
+  x_B_E + x_D_G + x_E_F + x_F_G <= 4.0
+  x_B_E + x_E_H + x_E_F + x_F_H <= 4.0
+  x_B_E + x_D_G + x_E_H + x_G_H <= 4.0
+  x_D_G + x_F_G + x_F_H + x_G_H <= 4.0
+  x_B_E + x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 4.0
+  x_C_E + x_C_F + x_C_G + x_C_D + x_D_G + x_E_F + x_F_G <= 4.0
+  x_C_E + x_C_F + x_C_D + x_E_H + x_E_F + x_F_H <= 4.0
+  x_C_E + x_C_G + x_C_D + x_D_G + x_E_H + x_G_H <= 4.0
+  x_C_F + x_C_G + x_C_D + x_D_G + x_F_G + x_F_H + x_G_H <= 4.0
+  x_C_E + x_C_F + x_C_G + x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 4.0
+  x_D_G + x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 4.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_B_E + x_C_E + x_C_F + x_C_D + x_E_F <= 5.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_B_E + x_C_E + x_C_G + x_C_D + x_D_G <= 5.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_B_E + x_C_E + x_C_D + x_E_H <= 5.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_C_F + x_C_G + x_C_D + x_D_G + x_F_G <= 5.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_C_F + x_C_D + x_F_H <= 5.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_C_G + x_C_D + x_D_G + x_G_H <= 5.0
+  x_A_B + x_A_C + x_B_C + x_B_E + x_C_E + x_C_F + x_C_G + x_E_F + x_F_G <= 5.0
+  x_A_B + x_A_C + x_B_C + x_B_E + x_C_E + x_C_F + x_E_H + x_E_F + x_F_H <= 5.0
+  x_A_B + x_A_C + x_B_C + x_B_E + x_C_E + x_C_G + x_E_H + x_G_H <= 5.0
+  x_A_B + x_A_C + x_B_C + x_C_F + x_C_G + x_F_G + x_F_H + x_G_H <= 5.0
+  x_A_B + x_A_D + x_B_E + x_D_G + x_E_F + x_F_G <= 5.0
+  x_A_B + x_A_D + x_B_E + x_E_H + x_E_F + x_F_H <= 5.0
+  x_A_B + x_A_D + x_B_E + x_D_G + x_E_H + x_G_H <= 5.0
+  x_A_B + x_A_D + x_D_G + x_F_G + x_F_H + x_G_H <= 5.0
+  x_A_B + x_B_E + x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 5.0
+  x_A_C + x_A_D + x_C_E + x_C_F + x_C_G + x_C_D + x_D_G + x_E_F + x_F_G <= 5.0
+  x_A_C + x_A_D + x_C_E + x_C_F + x_C_D + x_E_H + x_E_F + x_F_H <= 5.0
+  x_A_C + x_A_D + x_C_E + x_C_G + x_C_D + x_D_G + x_E_H + x_G_H <= 5.0
+  x_A_C + x_A_D + x_C_F + x_C_G + x_C_D + x_D_G + x_F_G + x_F_H + x_G_H <= 5.0
+  x_A_C + x_C_E + x_C_F + x_C_G + x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 5.0
+  x_A_D + x_D_G + x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 5.0
+  x_B_C + x_B_E + x_C_E + x_C_F + x_C_G + x_C_D + x_D_G + x_E_F + x_F_G <= 5.0
+  x_B_C + x_B_E + x_C_E + x_C_F + x_C_D + x_E_H + x_E_F + x_F_H <= 5.0
+  x_B_C + x_B_E + x_C_E + x_C_G + x_C_D + x_D_G + x_E_H + x_G_H <= 5.0
+  x_B_C + x_C_F + x_C_G + x_C_D + x_D_G + x_F_G + x_F_H + x_G_H <= 5.0
+  x_B_C + x_B_E + x_C_E + x_C_F + x_C_G + x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 5.0
+  x_B_E + x_D_G + x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 5.0
+  x_C_E + x_C_F + x_C_G + x_C_D + x_D_G + x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 5.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_B_E + x_C_E + x_C_F + x_C_G + x_C_D + x_D_G + x_E_F + x_F_G <= 6.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_B_E + x_C_E + x_C_F + x_C_D + x_E_H + x_E_F + x_F_H <= 6.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_B_E + x_C_E + x_C_G + x_C_D + x_D_G + x_E_H + x_G_H <= 6.0
+  x_A_B + x_A_C + x_A_D + x_B_C + x_C_F + x_C_G + x_C_D + x_D_G + x_F_G + x_F_H + x_G_H <= 6.0
+  x_A_B + x_A_C + x_B_C + x_B_E + x_C_E + x_C_F + x_C_G + x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 6.0
+  x_A_B + x_A_D + x_B_E + x_D_G + x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 6.0
+  x_A_C + x_A_D + x_C_E + x_C_F + x_C_G + x_C_D + x_D_G + x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 6.0
+  x_B_C + x_B_E + x_C_E + x_C_F + x_C_G + x_C_D + x_D_G + x_E_H + x_E_F + x_F_G + x_F_H + x_G_H <= 6.0
+
+Samt:
+  x_A_B ≥ 0, x_A_C ≥ 0, x_A_D ≥ 0, x_B_C ≥ 0, x_B_E ≥ 0, x_C_E ≥ 0, x_C_F ≥ 0, x_C_G ≥ 0, x_C_D ≥ 0, x_D_G ≥ 0, x_E_H ≥ 0, x_E_F ≥ 0, x_F_G ≥ 0, x_F_H ≥ 0, x_G_H ≥ 0
+====================================================================================================
+
+Output i LP format begynder nu
+
+
+OPTIMAL - Optimal løsning fundet
+----------------------------------------------------------------------------------------------------
+Værdi af objektivfunktionen:
+ -> 18.00
+
+
+Variabelnavn                   |Variabeltype                   |Værdi                         
+-------------------------------------------------------------------------------------
+x_A_B                          |Continuous                     |1.00                          
+x_A_C                          |Continuous                     |-0.00                         
+x_A_D                          |Continuous                     |0.00                          
+x_B_C                          |Continuous                     |1.00                          
+x_B_E                          |Continuous                     |-0.00                         
+x_C_E                          |Continuous                     |1.00                          
+x_C_F                          |Continuous                     |0.00                          
+x_C_G                          |Continuous                     |1.00                          
+x_C_D                          |Continuous                     |1.00                          
+x_D_G                          |Continuous                     |0.00                          
+x_E_H                          |Continuous                     |1.00                          
+x_E_F                          |Continuous                     |0.00                          
+x_F_G                          |Continuous                     |0.00                          
+x_F_H                          |Continuous                     |1.00                          
+x_G_H                          |Continuous                     |0.00                          
+
+
+Slack og skyggepris: 
+
+Begrænsningnavn       |LHS             |RHS             |Slack           |Skyggepris      |Bindende status
+-----------------------------------------------------------------------------------------------------
+Antal_aktive_kanter   |7.00            |7.00            |0.00            |4.00            |Bindende       
+Subtour_1             |1.00            |1.00            |0.00            |0.00            |Bindende       
+Subtour_2             |0.00            |1.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_3             |0.00            |1.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_4             |1.00            |1.00            |0.00            |0.00            |Bindende       
+Subtour_5             |0.00            |1.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_6             |1.00            |1.00            |0.00            |0.00            |Bindende       
+Subtour_7             |1.00            |1.00            |0.00            |0.00            |Bindende       
+Subtour_8             |0.00            |1.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_9             |1.00            |1.00            |0.00            |0.00            |Bindende       
+Subtour_10            |0.00            |1.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_11            |0.00            |1.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_12            |1.00            |1.00            |0.00            |0.00            |Bindende       
+Subtour_13            |0.00            |1.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_14            |1.00            |1.00            |0.00            |0.00            |Bindende       
+Subtour_15            |0.00            |1.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_16            |2.00            |2.00            |0.00            |0.00            |Bindende       
+Subtour_17            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_18            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_19            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_20            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_21            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_22            |0.00            |2.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_23            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_24            |0.00            |2.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_25            |0.00            |2.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_26            |0.00            |2.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_27            |0.00            |2.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_28            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_29            |0.00            |2.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_30            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_31            |0.00            |2.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_32            |2.00            |2.00            |0.00            |0.00            |Bindende       
+Subtour_33            |2.00            |2.00            |0.00            |0.00            |Bindende       
+Subtour_34            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_35            |2.00            |2.00            |0.00            |0.00            |Bindende       
+Subtour_36            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_37            |0.00            |2.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_38            |0.00            |2.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_39            |0.00            |2.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_40            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_41            |2.00            |2.00            |0.00            |0.00            |Bindende       
+Subtour_42            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_43            |2.00            |2.00            |0.00            |0.00            |Bindende       
+Subtour_44            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_45            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_46            |2.00            |2.00            |0.00            |0.00            |Bindende       
+Subtour_47            |2.00            |2.00            |0.00            |0.00            |Bindende       
+Subtour_48            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_49            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_50            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_51            |0.00            |2.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_52            |0.00            |2.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_53            |0.00            |2.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_54            |2.00            |2.00            |0.00            |0.00            |Bindende       
+Subtour_55            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_56            |1.00            |2.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_57            |3.00            |3.00            |0.00            |0.00            |Bindende       
+Subtour_58            |3.00            |3.00            |0.00            |0.00            |Bindende       
+Subtour_59            |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_60            |3.00            |3.00            |0.00            |0.00            |Bindende       
+Subtour_61            |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_62            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_63            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_64            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_65            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_66            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_67            |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_68            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_69            |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_70            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_71            |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_72            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_73            |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_74            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_75            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_76            |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_77            |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_78            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_79            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_80            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_81            |0.00            |3.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_82            |0.00            |3.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_83            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_84            |0.00            |3.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_85            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_86            |0.00            |3.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_87            |0.00            |3.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_88            |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_89            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_90            |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_91            |3.00            |3.00            |0.00            |0.00            |Bindende       
+Subtour_92            |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_93            |3.00            |3.00            |0.00            |0.00            |Bindende       
+Subtour_94            |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_95            |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_96            |3.00            |3.00            |0.00            |0.00            |Bindende       
+Subtour_97            |3.00            |3.00            |0.00            |0.00            |Bindende       
+Subtour_98            |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_99            |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_100           |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_101           |0.00            |3.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_102           |0.00            |3.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_103           |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_104           |0.00            |3.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_105           |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_106           |0.00            |3.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_107           |0.00            |3.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_108           |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_109           |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_110           |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_111           |3.00            |3.00            |0.00            |0.00            |Bindende       
+Subtour_112           |3.00            |3.00            |0.00            |0.00            |Bindende       
+Subtour_113           |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_114           |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_115           |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_116           |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_117           |3.00            |3.00            |0.00            |0.00            |Bindende       
+Subtour_118           |3.00            |3.00            |0.00            |0.00            |Bindende       
+Subtour_119           |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_120           |0.00            |3.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_121           |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_122           |1.00            |3.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_123           |2.00            |3.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_124           |4.00            |4.00            |0.00            |0.00            |Bindende       
+Subtour_125           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_126           |4.00            |4.00            |0.00            |0.00            |Bindende       
+Subtour_127           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_128           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_129           |4.00            |4.00            |0.00            |0.00            |Bindende       
+Subtour_130           |4.00            |4.00            |0.00            |0.00            |Bindende       
+Subtour_131           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_132           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_133           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_134           |1.00            |4.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_135           |1.00            |4.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_136           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_137           |1.00            |4.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_138           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_139           |1.00            |4.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_140           |1.00            |4.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_141           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_142           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_143           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_144           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_145           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_146           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_147           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_148           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_149           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_150           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_151           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_152           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_153           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_154           |0.00            |4.00            |4.00            |0.00            |Ikke-bindende  
+Subtour_155           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_156           |1.00            |4.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_157           |1.00            |4.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_158           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_159           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_160           |4.00            |4.00            |0.00            |0.00            |Bindende       
+Subtour_161           |4.00            |4.00            |0.00            |0.00            |Bindende       
+Subtour_162           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_163           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_164           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_165           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_166           |4.00            |4.00            |0.00            |-0.00           |Bindende       
+Subtour_167           |4.00            |4.00            |0.00            |0.00            |Bindende       
+Subtour_168           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_169           |0.00            |4.00            |4.00            |0.00            |Ikke-bindende  
+Subtour_170           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_171           |1.00            |4.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_172           |1.00            |4.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_173           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_174           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_175           |4.00            |4.00            |0.00            |0.00            |Bindende       
+Subtour_176           |4.00            |4.00            |0.00            |0.00            |Bindende       
+Subtour_177           |3.00            |4.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_178           |4.00            |4.00            |0.00            |0.00            |Bindende       
+Subtour_179           |2.00            |4.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_180           |4.00            |5.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_181           |5.00            |5.00            |0.00            |0.00            |Bindende       
+Subtour_182           |5.00            |5.00            |0.00            |0.00            |Bindende       
+Subtour_183           |4.00            |5.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_184           |4.00            |5.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_185           |4.00            |5.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_186           |4.00            |5.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_187           |5.00            |5.00            |0.00            |0.00            |Bindende       
+Subtour_188           |5.00            |5.00            |0.00            |0.00            |Bindende       
+Subtour_189           |4.00            |5.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_190           |1.00            |5.00            |4.00            |0.00            |Ikke-bindende  
+Subtour_191           |3.00            |5.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_192           |2.00            |5.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_193           |2.00            |5.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_194           |3.00            |5.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_195           |3.00            |5.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_196           |4.00            |5.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_197           |4.00            |5.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_198           |3.00            |5.00            |2.00            |0.00            |Ikke-bindende  
+Subtour_199           |4.00            |5.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_200           |2.00            |5.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_201           |4.00            |5.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_202           |5.00            |5.00            |0.00            |0.00            |Bindende       
+Subtour_203           |5.00            |5.00            |0.00            |0.00            |Bindende       
+Subtour_204           |4.00            |5.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_205           |5.00            |5.00            |0.00            |0.00            |Bindende       
+Subtour_206           |2.00            |5.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_207           |5.00            |5.00            |0.00            |0.00            |Bindende       
+Subtour_208           |5.00            |6.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_209           |6.00            |6.00            |0.00            |-0.00           |Bindende       
+Subtour_210           |6.00            |6.00            |0.00            |0.00            |Bindende       
+Subtour_211           |5.00            |6.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_212           |6.00            |6.00            |0.00            |0.00            |Bindende       
+Subtour_213           |3.00            |6.00            |3.00            |0.00            |Ikke-bindende  
+Subtour_214           |5.00            |6.00            |1.00            |0.00            |Ikke-bindende  
+Subtour_215           |6.00            |6.00            |0.00            |0.00            |Bindende       
+
+
+
+Sensitivitetsrapport for objektivkoefficienter: 
+
+Variabelnavn       |Koefficientværdi   |Maksimalt fald     |Maksimal stigning  |Reduced costs     
+---------------------------------------------------------------------------------------------------
+x_A_B              |2.00               |-Inf               |2.00               |-2.00             
+x_A_C              |4.00               |-0.00              |0.00               |0.00              
+x_A_D              |5.00               |-1.00              |Inf                |1.00              
+x_B_C              |1.00               |-Inf               |3.00               |-3.00             
+x_B_E              |4.00               |-1.00              |0.00               |0.00              
+x_C_E              |3.00               |-Inf               |1.00               |-1.00             
+x_C_F              |5.00               |-1.00              |Inf                |1.00              
+x_C_G              |4.00               |-0.00              |0.00               |0.00              
+x_C_D              |3.00               |-Inf               |1.00               |-1.00             
+x_D_G              |6.00               |-2.00              |Inf                |2.00              
+x_E_H              |2.00               |-Inf               |2.00               |-2.00             
+x_E_F              |4.00               |-0.00              |Inf                |0.00              
+x_F_G              |5.00               |-1.00              |Inf                |1.00              
+x_F_H              |3.00               |-Inf               |1.00               |-1.00             
+x_G_H              |4.00               |-0.00              |Inf                |0.00              
+---------------------------------------------------------------------------------------------------
+
+
+
+Sensitivitetsrapport for RHS (kapacitet): 
+
+Begrænsningnavn       |RHS (nu)             |Maksimalt fald       |Maksimal stigning   
+------------------------------------------------------------------------------------
+Antal_aktive_kanter   |7.00                 |-1.00                |0.00                
+Subtour_1             |1.00                 |0.00                 |Inf                 
+Subtour_2             |1.00                 |-1.00                |Inf                 
+Subtour_3             |1.00                 |-1.00                |Inf                 
+Subtour_4             |1.00                 |0.00                 |Inf                 
+Subtour_5             |1.00                 |-1.00                |Inf                 
+Subtour_6             |1.00                 |0.00                 |Inf                 
+Subtour_7             |1.00                 |0.00                 |Inf                 
+Subtour_8             |1.00                 |-1.00                |Inf                 
+Subtour_9             |1.00                 |0.00                 |Inf                 
+Subtour_10            |1.00                 |-1.00                |Inf                 
+Subtour_11            |1.00                 |-1.00                |Inf                 
+Subtour_12            |1.00                 |0.00                 |Inf                 
+Subtour_13            |1.00                 |-1.00                |Inf                 
+Subtour_14            |1.00                 |0.00                 |Inf                 
+Subtour_15            |1.00                 |-1.00                |Inf                 
+Subtour_16            |2.00                 |0.00                 |Inf                 
+Subtour_17            |2.00                 |-1.00                |Inf                 
+Subtour_18            |2.00                 |-1.00                |Inf                 
+Subtour_19            |2.00                 |-1.00                |Inf                 
+Subtour_20            |2.00                 |-1.00                |Inf                 
+Subtour_21            |2.00                 |-1.00                |Inf                 
+Subtour_22            |2.00                 |-2.00                |Inf                 
+Subtour_23            |2.00                 |-1.00                |Inf                 
+Subtour_24            |2.00                 |-2.00                |Inf                 
+Subtour_25            |2.00                 |-2.00                |Inf                 
+Subtour_26            |2.00                 |-2.00                |Inf                 
+Subtour_27            |2.00                 |-2.00                |Inf                 
+Subtour_28            |2.00                 |-1.00                |Inf                 
+Subtour_29            |2.00                 |-2.00                |Inf                 
+Subtour_30            |2.00                 |-1.00                |Inf                 
+Subtour_31            |2.00                 |-2.00                |Inf                 
+Subtour_32            |2.00                 |0.00                 |Inf                 
+Subtour_33            |2.00                 |0.00                 |Inf                 
+Subtour_34            |2.00                 |-1.00                |Inf                 
+Subtour_35            |2.00                 |0.00                 |Inf                 
+Subtour_36            |2.00                 |-1.00                |Inf                 
+Subtour_37            |2.00                 |-2.00                |Inf                 
+Subtour_38            |2.00                 |-2.00                |Inf                 
+Subtour_39            |2.00                 |-2.00                |Inf                 
+Subtour_40            |2.00                 |-1.00                |Inf                 
+Subtour_41            |2.00                 |0.00                 |Inf                 
+Subtour_42            |2.00                 |-1.00                |Inf                 
+Subtour_43            |2.00                 |0.00                 |Inf                 
+Subtour_44            |2.00                 |-1.00                |Inf                 
+Subtour_45            |2.00                 |-1.00                |Inf                 
+Subtour_46            |2.00                 |0.00                 |Inf                 
+Subtour_47            |2.00                 |0.00                 |Inf                 
+Subtour_48            |2.00                 |-1.00                |Inf                 
+Subtour_49            |2.00                 |-1.00                |Inf                 
+Subtour_50            |2.00                 |-1.00                |Inf                 
+Subtour_51            |2.00                 |-2.00                |Inf                 
+Subtour_52            |2.00                 |-2.00                |Inf                 
+Subtour_53            |2.00                 |-2.00                |Inf                 
+Subtour_54            |2.00                 |0.00                 |Inf                 
+Subtour_55            |2.00                 |-1.00                |Inf                 
+Subtour_56            |2.00                 |-1.00                |Inf                 
+Subtour_57            |3.00                 |0.00                 |Inf                 
+Subtour_58            |3.00                 |0.00                 |Inf                 
+Subtour_59            |3.00                 |-1.00                |Inf                 
+Subtour_60            |3.00                 |0.00                 |Inf                 
+Subtour_61            |3.00                 |-1.00                |Inf                 
+Subtour_62            |3.00                 |-2.00                |Inf                 
+Subtour_63            |3.00                 |-2.00                |Inf                 
+Subtour_64            |3.00                 |-2.00                |Inf                 
+Subtour_65            |3.00                 |-2.00                |Inf                 
+Subtour_66            |3.00                 |-2.00                |Inf                 
+Subtour_67            |3.00                 |-1.00                |Inf                 
+Subtour_68            |3.00                 |-2.00                |Inf                 
+Subtour_69            |3.00                 |-1.00                |Inf                 
+Subtour_70            |3.00                 |-2.00                |Inf                 
+Subtour_71            |3.00                 |-1.00                |Inf                 
+Subtour_72            |3.00                 |-2.00                |Inf                 
+Subtour_73            |3.00                 |-1.00                |Inf                 
+Subtour_74            |3.00                 |-2.00                |Inf                 
+Subtour_75            |3.00                 |-2.00                |Inf                 
+Subtour_76            |3.00                 |-1.00                |Inf                 
+Subtour_77            |3.00                 |-1.00                |Inf                 
+Subtour_78            |3.00                 |-2.00                |Inf                 
+Subtour_79            |3.00                 |-2.00                |Inf                 
+Subtour_80            |3.00                 |-2.00                |Inf                 
+Subtour_81            |3.00                 |-3.00                |Inf                 
+Subtour_82            |3.00                 |-3.00                |Inf                 
+Subtour_83            |3.00                 |-2.00                |Inf                 
+Subtour_84            |3.00                 |-3.00                |Inf                 
+Subtour_85            |3.00                 |-2.00                |Inf                 
+Subtour_86            |3.00                 |-3.00                |Inf                 
+Subtour_87            |3.00                 |-3.00                |Inf                 
+Subtour_88            |3.00                 |-1.00                |Inf                 
+Subtour_89            |3.00                 |-2.00                |Inf                 
+Subtour_90            |3.00                 |-2.00                |Inf                 
+Subtour_91            |3.00                 |0.00                 |Inf                 
+Subtour_92            |3.00                 |-1.00                |Inf                 
+Subtour_93            |3.00                 |0.00                 |Inf                 
+Subtour_94            |3.00                 |-1.00                |Inf                 
+Subtour_95            |3.00                 |-1.00                |Inf                 
+Subtour_96            |3.00                 |0.00                 |Inf                 
+Subtour_97            |3.00                 |0.00                 |Inf                 
+Subtour_98            |3.00                 |-1.00                |Inf                 
+Subtour_99            |3.00                 |-1.00                |Inf                 
+Subtour_100           |3.00                 |-1.00                |Inf                 
+Subtour_101           |3.00                 |-3.00                |Inf                 
+Subtour_102           |3.00                 |-3.00                |Inf                 
+Subtour_103           |3.00                 |-2.00                |Inf                 
+Subtour_104           |3.00                 |-3.00                |Inf                 
+Subtour_105           |3.00                 |-2.00                |Inf                 
+Subtour_106           |3.00                 |-3.00                |Inf                 
+Subtour_107           |3.00                 |-3.00                |Inf                 
+Subtour_108           |3.00                 |-1.00                |Inf                 
+Subtour_109           |3.00                 |-2.00                |Inf                 
+Subtour_110           |3.00                 |-1.00                |Inf                 
+Subtour_111           |3.00                 |0.00                 |Inf                 
+Subtour_112           |3.00                 |0.00                 |Inf                 
+Subtour_113           |3.00                 |-1.00                |Inf                 
+Subtour_114           |3.00                 |-1.00                |Inf                 
+Subtour_115           |3.00                 |-1.00                |Inf                 
+Subtour_116           |3.00                 |-1.00                |Inf                 
+Subtour_117           |3.00                 |0.00                 |Inf                 
+Subtour_118           |3.00                 |0.00                 |Inf                 
+Subtour_119           |3.00                 |-1.00                |Inf                 
+Subtour_120           |3.00                 |-3.00                |Inf                 
+Subtour_121           |3.00                 |-2.00                |Inf                 
+Subtour_122           |3.00                 |-2.00                |Inf                 
+Subtour_123           |3.00                 |-1.00                |Inf                 
+Subtour_124           |4.00                 |0.00                 |Inf                 
+Subtour_125           |4.00                 |-1.00                |Inf                 
+Subtour_126           |4.00                 |0.00                 |Inf                 
+Subtour_127           |4.00                 |-1.00                |Inf                 
+Subtour_128           |4.00                 |-1.00                |Inf                 
+Subtour_129           |4.00                 |0.00                 |Inf                 
+Subtour_130           |4.00                 |0.00                 |Inf                 
+Subtour_131           |4.00                 |-1.00                |Inf                 
+Subtour_132           |4.00                 |-1.00                |Inf                 
+Subtour_133           |4.00                 |-1.00                |Inf                 
+Subtour_134           |4.00                 |-3.00                |Inf                 
+Subtour_135           |4.00                 |-3.00                |Inf                 
+Subtour_136           |4.00                 |-2.00                |Inf                 
+Subtour_137           |4.00                 |-3.00                |Inf                 
+Subtour_138           |4.00                 |-2.00                |Inf                 
+Subtour_139           |4.00                 |-3.00                |Inf                 
+Subtour_140           |4.00                 |-3.00                |Inf                 
+Subtour_141           |4.00                 |-1.00                |Inf                 
+Subtour_142           |4.00                 |-2.00                |Inf                 
+Subtour_143           |4.00                 |-2.00                |Inf                 
+Subtour_144           |4.00                 |-2.00                |Inf                 
+Subtour_145           |4.00                 |-1.00                |Inf                 
+Subtour_146           |4.00                 |-1.00                |Inf                 
+Subtour_147           |4.00                 |-2.00                |Inf                 
+Subtour_148           |4.00                 |-2.00                |Inf                 
+Subtour_149           |4.00                 |-2.00                |Inf                 
+Subtour_150           |4.00                 |-2.00                |Inf                 
+Subtour_151           |4.00                 |-1.00                |Inf                 
+Subtour_152           |4.00                 |-1.00                |Inf                 
+Subtour_153           |4.00                 |-2.00                |Inf                 
+Subtour_154           |4.00                 |-4.00                |Inf                 
+Subtour_155           |4.00                 |-2.00                |Inf                 
+Subtour_156           |4.00                 |-3.00                |Inf                 
+Subtour_157           |4.00                 |-3.00                |Inf                 
+Subtour_158           |4.00                 |-2.00                |Inf                 
+Subtour_159           |4.00                 |-1.00                |Inf                 
+Subtour_160           |4.00                 |0.00                 |Inf                 
+Subtour_161           |4.00                 |0.00                 |Inf                 
+Subtour_162           |4.00                 |-1.00                |Inf                 
+Subtour_163           |4.00                 |-1.00                |Inf                 
+Subtour_164           |4.00                 |-1.00                |Inf                 
+Subtour_165           |4.00                 |-1.00                |Inf                 
+Subtour_166           |4.00                 |0.00                 |-0.00               
+Subtour_167           |4.00                 |0.00                 |Inf                 
+Subtour_168           |4.00                 |-1.00                |Inf                 
+Subtour_169           |4.00                 |-4.00                |Inf                 
+Subtour_170           |4.00                 |-2.00                |Inf                 
+Subtour_171           |4.00                 |-3.00                |Inf                 
+Subtour_172           |4.00                 |-3.00                |Inf                 
+Subtour_173           |4.00                 |-2.00                |Inf                 
+Subtour_174           |4.00                 |-1.00                |Inf                 
+Subtour_175           |4.00                 |0.00                 |Inf                 
+Subtour_176           |4.00                 |0.00                 |Inf                 
+Subtour_177           |4.00                 |-1.00                |Inf                 
+Subtour_178           |4.00                 |0.00                 |Inf                 
+Subtour_179           |4.00                 |-2.00                |Inf                 
+Subtour_180           |5.00                 |-1.00                |Inf                 
+Subtour_181           |5.00                 |0.00                 |Inf                 
+Subtour_182           |5.00                 |0.00                 |Inf                 
+Subtour_183           |5.00                 |-1.00                |Inf                 
+Subtour_184           |5.00                 |-1.00                |Inf                 
+Subtour_185           |5.00                 |-1.00                |Inf                 
+Subtour_186           |5.00                 |-1.00                |Inf                 
+Subtour_187           |5.00                 |0.00                 |Inf                 
+Subtour_188           |5.00                 |0.00                 |Inf                 
+Subtour_189           |5.00                 |-1.00                |Inf                 
+Subtour_190           |5.00                 |-4.00                |Inf                 
+Subtour_191           |5.00                 |-2.00                |Inf                 
+Subtour_192           |5.00                 |-3.00                |Inf                 
+Subtour_193           |5.00                 |-3.00                |Inf                 
+Subtour_194           |5.00                 |-2.00                |Inf                 
+Subtour_195           |5.00                 |-2.00                |Inf                 
+Subtour_196           |5.00                 |-1.00                |Inf                 
+Subtour_197           |5.00                 |-1.00                |Inf                 
+Subtour_198           |5.00                 |-2.00                |Inf                 
+Subtour_199           |5.00                 |-1.00                |Inf                 
+Subtour_200           |5.00                 |-3.00                |Inf                 
+Subtour_201           |5.00                 |-1.00                |Inf                 
+Subtour_202           |5.00                 |0.00                 |Inf                 
+Subtour_203           |5.00                 |0.00                 |Inf                 
+Subtour_204           |5.00                 |-1.00                |Inf                 
+Subtour_205           |5.00                 |0.00                 |Inf                 
+Subtour_206           |5.00                 |-3.00                |Inf                 
+Subtour_207           |5.00                 |0.00                 |Inf                 
+Subtour_208           |6.00                 |-1.00                |Inf                 
+Subtour_209           |6.00                 |0.00                 |0.00                
+Subtour_210           |6.00                 |0.00                 |Inf                 
+Subtour_211           |6.00                 |-1.00                |Inf                 
+Subtour_212           |6.00                 |0.00                 |Inf                 
+Subtour_213           |6.00                 |-3.00                |Inf                 
+Subtour_214           |6.00                 |-1.00                |Inf                 
+Subtour_215           |6.00                 |0.00                 |Inf                 
+------------------------------------------------------------------------------------
+
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+TJEK FOR HELTALLIG LØSNING (UNIMODULARITET):
+────────────────────────────────────────────────────────────────────────────────────────────────────
+   Success: Alle løsningsværdier er heltallige (0 eller 1)
+   Dette bekræfter at constraint-matricen er totally unimodular.
+   LP-relaxation giver samme resultat som MIP!
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+====================================================================================================
+MINIMUM SPANNING TREE - VALGTE KANTER
+====================================================================================================
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+VALGTE KANTER I MINIMUM SPANNING TREE:
+────────────────────────────────────────────────────────────────────────────────────────────────────
+Nr.  | Fra node        | Til node        | Vægt         | Værdi       
+────────────────────────────────────────────────────────────────────────────────────────────────────
+1    | A               | B               | 2.00         | 1.00        
+2    | B               | C               | 1.00         | 1.00        
+3    | C               | D               | 3.00         | 1.00        
+4    | C               | E               | 3.00         | 1.00        
+5    | C               | G               | 4.00         | 1.00        
+6    | E               | H               | 2.00         | 1.00        
+7    | F               | H               | 3.00         | 1.00        
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+OPSUMMERING:
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  Total vægt af MST:        18.00
+  Antal kanter i MST:       7
+  Antal noder:              8
+  Gennemsnitlig kantvægt:   2.57
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+TRÆ-STRUKTUR (visuel repræsentation):
+────────────────────────────────────────────────────────────────────────────────────────────────────
+└── A
+    └── B
+        └── C
+            ├── D
+            ├── E
+            │   └── H
+            │       └── F
+            └── G
+
+====================================================================================================

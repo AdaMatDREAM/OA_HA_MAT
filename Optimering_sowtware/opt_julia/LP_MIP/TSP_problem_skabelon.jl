@@ -14,11 +14,11 @@ function TSP_problem_skabelon()
     # Eksempel problem: 5 byer (Odense, Nyborg, København, Holbæk, Næstved)
     # Omkostningsmatrix baseret på regneark eksempel
     # Byer: 1=Odense, 2=Nyborg, 3=København, 4=Holbæk, 5=Næstved
-    c_matrix = [L    27   240  190  180;
-                27   L    220  175  165;
-                240  220   L    55   75;
-                190  175  55    L    60;
-                180  165  75  60    L];
+    c_matrix = [L   16   10   12 11.5;
+                12  L    10   12 10.5;
+                12  10   L    8   7.5;
+                16  12   10   L   8.5;
+                13.5 10.5 5.5 9.5  L];
     n, m = size(c_matrix);
     n != m ? error("c_matrix skal være en kvadratisk matrix") : nothing;
     
@@ -29,16 +29,10 @@ function TSP_problem_skabelon()
         end
     end
     
-    # Flatten omkostningsmatrixen til vektor (transponeret for at matche Assignment problem struktur)
-    # c skal matche rækkefølgen i x_navne: x_1_1, x_1_2, x_1_3, ..., x_2_1, ...
-    # x_navne er konstrueret som: x_i_j for i=1..n, j=1..n (row-major)
-    # c_matrix[i, j] skal svare til omkostningen for node i → node j
-    # BEMÆRK: Selvom c transponeres, bruger vi row-major for x_navne (som Assignment problemet)
     c = vec(c_matrix');  # Flatten matrixen (transponeret)
     
     # Navne på noder/byer (bruges kun til output, ikke i variabelnavne)
-    # For eksempel problemet: 1=Odense, 2=Nyborg, 3=København, 4=Holbæk, 5=Næstved
-    node_navne = ["Odense", "Nyborg", "København", "Holbæk", "Næstved"];  # Opdateret til 5 byer
+    node_navne = ["ca", "wh", "ta", "kr", "cr"];  
     
     # Tjek om antal node navne matcher matrix dimension
     if length(node_navne) != n
@@ -57,11 +51,7 @@ function TSP_problem_skabelon()
     # Start med assignment constraints (2n constraints)
     A_assignment = zeros(2*n, n*n);
     
-    # Første n rækker: hver node (i) har præcis én udgående kant
-    # Brug samme struktur som Assignment problemet
-    # x_navne er i row-major: x_1_1, x_1_2, ..., x_1_n, x_2_1, ...
-    # c er transponeret, så c[k] hvor k = (i-1)*n + j skal matche c_matrix[i,j]
-    # Men Assignment bruger (i-1)*n + j for position, så vi følger samme struktur
+
     for i in 1:n
         for j in 1:n
             # Variabel x_ij er på position (i-1)*n + j (row-major)

@@ -1,0 +1,167 @@
+Running HiGHS 1.12.0 (git hash: 755a8e027): Copyright (c) 2025 HiGHS under MIT licence terms
+LP has 8 rows; 17 cols; 34 nonzeros
+Coefficient ranges:
+  Matrix  [1e+00, 1e+00]
+  Cost    [1e+00, 9e+00]
+  Bound   [1e+00, 1e+00]
+  RHS     [1e+00, 1e+00]
+Presolving model
+8 rows, 17 cols, 34 nonzeros  0s
+Dependent equations search running on 8 equations with time limit of 1000.00s
+Dependent equations search removed 1 rows and 3 nonzeros in 0.00s (limit = 1000.00s)
+7 rows, 17 cols, 31 nonzeros  0s
+Presolve reductions: rows 7(-1); columns 17(-0); nonzeros 31(-3) 
+Solving the presolved LP
+Using EKK dual simplex solver - serial
+  Iteration        Objective     Infeasibilities num(sum)
+          0     0.0000000000e+00 Pr: 1(1) 0s
+          7     1.3000000000e+01 Pr: 0(0) 0s
+
+Performed postsolve
+Solving the original LP from the solution after postsolve
+
+Model status        : Optimal
+Simplex   iterations: 7
+Objective value     :  1.3000000000e+01
+P-D objective error :  0.0000000000e+00
+HiGHS run time      :          0.00
+
+====================================================================================================
+PROBLEMFORMULERING
+====================================================================================================
+Minimer Z = 6.0x_r_p + 4.0x_r_q + 9.0x_r_a + 2.0x_p_q + 3.0x_p_b + x_q_p + 2.0x_q_b + 6.0x_q_d + 8.0x_a_c + x_a_d + x_b_a + 8.0x_b_s + x_c_q + 2.0x_c_b + 4.0x_c_s + x_d_c + 6.0x_d_s
+
+u.b.b.:
+   - x_r_p - x_r_q - x_r_a = -1.0
+  x_r_p - x_p_q - x_p_b + x_q_p = 0.0
+  x_r_q + x_p_q - x_q_p - x_q_b - x_q_d + x_c_q = 0.0
+  x_r_a - x_a_c - x_a_d + x_b_a = 0.0
+  x_p_b + x_q_b - x_b_a - x_b_s + x_c_b = 0.0
+  x_a_c - x_c_q - x_c_b - x_c_s + x_d_c = 0.0
+  x_q_d + x_a_d - x_d_c - x_d_s = 0.0
+  x_b_s + x_c_s + x_d_s = 1.0
+
+Samt:
+  x_r_p ≥ 0, x_r_q ≥ 0, x_r_a ≥ 0, x_p_q ≥ 0, x_p_b ≥ 0, x_q_p ≥ 0, x_q_b ≥ 0, x_q_d ≥ 0, x_a_c ≥ 0, x_a_d ≥ 0, x_b_a ≥ 0, x_b_s ≥ 0, x_c_q ≥ 0, x_c_b ≥ 0, x_c_s ≥ 0, x_d_c ≥ 0, x_d_s ≥ 0
+====================================================================================================
+
+Output i LP format begynder nu
+
+
+OPTIMAL - Optimal løsning fundet
+----------------------------------------------------------------------------------------------------
+Værdi af objektivfunktionen:
+ -> 13.00
+
+
+Variabelnavn                   |Variabeltype                   |Værdi                         
+-------------------------------------------------------------------------------------
+x_r_p                          |Continuous                     |0.00                          
+x_r_q                          |Continuous                     |1.00                          
+x_r_a                          |Continuous                     |0.00                          
+x_p_q                          |Continuous                     |0.00                          
+x_p_b                          |Continuous                     |0.00                          
+x_q_p                          |Continuous                     |-0.00                         
+x_q_b                          |Continuous                     |1.00                          
+x_q_d                          |Continuous                     |0.00                          
+x_a_c                          |Continuous                     |0.00                          
+x_a_d                          |Continuous                     |1.00                          
+x_b_a                          |Continuous                     |1.00                          
+x_b_s                          |Continuous                     |0.00                          
+x_c_q                          |Continuous                     |0.00                          
+x_c_b                          |Continuous                     |0.00                          
+x_c_s                          |Continuous                     |1.00                          
+x_d_c                          |Continuous                     |1.00                          
+x_d_s                          |Continuous                     |0.00                          
+
+
+Slack og skyggepris: 
+
+Begrænsningnavn         |LHS             |RHS             |Slack           |Skyggepris      |Bindende status
+-------------------------------------------------------------------------------------------------------
+Flow_balance_source_r   |-1.00           |-1.00           |0.00            |-13.00          |Bindende       
+Flow_balance_node_p     |0.00            |0.00            |0.00            |-8.00           |Bindende       
+Flow_balance_node_q     |0.00            |0.00            |0.00            |-9.00           |Bindende       
+Flow_balance_node_a     |0.00            |0.00            |0.00            |-6.00           |Bindende       
+Flow_balance_node_b     |0.00            |0.00            |0.00            |-7.00           |Bindende       
+Flow_balance_node_c     |0.00            |0.00            |0.00            |-4.00           |Bindende       
+Flow_balance_node_d     |0.00            |0.00            |0.00            |-5.00           |Bindende       
+Flow_balance_sink_s     |1.00            |1.00            |0.00            |-0.00           |Bindende       
+
+
+
+Sensitivitetsrapport for objektivkoefficienter: 
+
+Variabelnavn       |Koefficientværdi   |Maksimalt fald     |Maksimal stigning  |Reduced costs     
+---------------------------------------------------------------------------------------------------
+x_r_p              |6.00               |-1.00              |Inf                |1.00              
+x_r_q              |4.00               |-Inf               |1.00               |0.00              
+x_r_a              |9.00               |-2.00              |Inf                |2.00              
+x_p_q              |2.00               |-3.00              |Inf                |3.00              
+x_p_b              |3.00               |-2.00              |Inf                |2.00              
+x_q_p              |1.00               |-2.00              |1.00               |0.00              
+x_q_b              |2.00               |-6.00              |2.00               |0.00              
+x_q_d              |6.00               |-2.00              |Inf                |2.00              
+x_a_c              |8.00               |-6.00              |Inf                |6.00              
+x_a_d              |1.00               |-5.00              |1.00               |0.00              
+x_b_a              |1.00               |-5.00              |1.00               |0.00              
+x_b_s              |8.00               |-1.00              |Inf                |1.00              
+x_c_q              |1.00               |-6.00              |Inf                |6.00              
+x_c_b              |2.00               |-5.00              |Inf                |5.00              
+x_c_s              |4.00               |-Inf               |1.00               |0.00              
+x_d_c              |1.00               |-5.00              |1.00               |0.00              
+x_d_s              |6.00               |-1.00              |Inf                |1.00              
+---------------------------------------------------------------------------------------------------
+
+
+
+Sensitivitetsrapport for RHS (kapacitet): 
+
+Begrænsningnavn         |RHS (nu)             |Maksimalt fald       |Maksimal stigning   
+--------------------------------------------------------------------------------------
+Flow_balance_source_r   |-1.00                |-0.00                |-0.00               
+Flow_balance_node_p     |0.00                 |0.00                 |-0.00               
+Flow_balance_node_q     |0.00                 |-0.00                |-0.00               
+Flow_balance_node_a     |0.00                 |-0.00                |-0.00               
+Flow_balance_node_b     |0.00                 |-0.00                |-0.00               
+Flow_balance_node_c     |0.00                 |-0.00                |-0.00               
+Flow_balance_node_d     |0.00                 |-0.00                |-0.00               
+Flow_balance_sink_s     |1.00                 |0.00                 |0.00                
+--------------------------------------------------------------------------------------
+
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+TJEK FOR HELTALLIG LØSNING (UNIMODULARITET):
+────────────────────────────────────────────────────────────────────────────────────────────────────
+   Success: Alle løsningsværdier er heltallige (0 eller 1)
+   Dette bekræfter at constraint-matricen er totally unimodular.
+   LP-relaxation giver samme resultat som MIP!
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+====================================================================================================
+SHORTEST PATH - LØSNING
+====================================================================================================
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+KORTESTE STI:
+────────────────────────────────────────────────────────────────────────────────────────────────────
+Fra: r
+Til: s
+Total vægt: 13.00
+
+Sti:
+  r --[4.00]--> q --[2.00]--> b --[1.00]--> a --[1.00]--> d --[1.00]--> c --[4.00]--> s
+
+  r → q → b → a → d → c → s
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+OPSUMMERING:
+────────────────────────────────────────────────────────────────────────────────────────────────────
+  Total vægt af sti:        13.00
+  Antal kanter i sti:       6
+  Antal noder i sti:        7
+  Gennemsnitlig kantvægt:   2.17
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+====================================================================================================

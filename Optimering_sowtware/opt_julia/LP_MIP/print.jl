@@ -1,3 +1,22 @@
+# Funktion til at tjekke om løsningen er heltallig (for at verificere unimodularitet)
+# Bruges til at verificere at LP-relaxation giver heltallig løsning for totally unimodular problemer
+function check_integer_solution(x, x_navne, tol=1e-6)
+    all_integer = true
+    non_integer_vars = []
+    
+    for i in eachindex(x)
+        val = value(x[i])
+        # Tjek om værdien er tæt på et heltal (0 eller 1 for binære problemer)
+        nearest_int = round(val)
+        if abs(val - nearest_int) > tol
+            all_integer = false
+            push!(non_integer_vars, (x_navne[i], val))
+        end
+    end
+    
+    return all_integer, non_integer_vars
+end
+
 function print_optimal_solution(M, x, x_navne, x_type, dec=2)
     println("-"^100)
     @printf("Værdi af objektivfunktionen:\n -> %.*f\n", dec, objective_value(M))
@@ -551,4 +570,371 @@ else
     println("\nUKENDT STATUS: ", status_str)
 end
 
+end
+
+##########################################################
+# Funktion til at printe MST kanter (edges)
+function print_MST_edges(M, x, x_navne, kanter, c, dec=2)
+    println("\n" * "="^100)
+    println("MINIMUM SPANNING TREE - VALGTE KANTER")
+    println("="^100)
+    
+    # Find alle aktive kanter (x ≈ 1 for binary, eller x > tol for continuous)
+    active_edges = []
+    total_weight = 0.0
+    
+    for k in eachindex(x_navne)
+        val = value(x[k])
+        # For binary: tjek om ≈ 1, for continuous: tjek om > tol
+        if abs(val - 1.0) < 1e-6 || val > 1e-6
+            # Find hvilken kant dette svarer til
+            var_name = x_navne[k]
+            # Parse variabelnavn: x_node1_node2
+            parts = split(var_name, "_")
+            if length(parts) >= 3
+                node1 = parts[2]
+                node2 = parts[3]
+                
+                # Find vægten for denne kant
+                weight = c[k]
+                total_weight += weight * val
+                
+                push!(active_edges, (node1, node2, weight, val))
+            end
+        end
+    end
+    
+    # Sorter kanterne alfabetisk (først efter node1, derefter node2)
+    sort!(active_edges, by = edge -> (edge[1], edge[2]))
+    
+    # Print kanterne med forbedret formatering
+    println("\n" * "─"^100)
+    println("VALGTE KANTER I MINIMUM SPANNING TREE:")
+    println("─"^100)
+    @printf("%-4s | %-15s | %-15s | %-12s | %-12s\n", "Nr.", "Fra node", "Til node", "Vægt", "Værdi")
+    println("─"^100)
+    
+    for (idx, (node1, node2, weight, val)) in enumerate(active_edges)
+        @printf("%-4d | %-15s | %-15s | %-12.*f | %-12.*f\n", 
+                idx, node1, node2, dec, weight, dec, val)
+    end
+    
+    println("─"^100)
+    
+    # Beregn antal unikke noder
+    all_nodes_in_tree = Set{String}()
+    for (node1, node2, weight, val) in active_edges
+        push!(all_nodes_in_tree, node1)
+        push!(all_nodes_in_tree, node2)
+    end
+    num_nodes = length(all_nodes_in_tree)
+    
+    # Print opsummering
+    println("\n" * "─"^100)
+    println("OPSUMMERING:")
+    println("─"^100)
+    @printf("  %-25s %.*f\n", "Total vægt af MST:", dec, total_weight)
+    @printf("  %-25s %d\n", "Antal kanter i MST:", length(active_edges))
+    @printf("  %-25s %d\n", "Antal noder:", num_nodes)
+    @printf("  %-25s %.*f\n", "Gennemsnitlig kantvægt:", dec, total_weight / length(active_edges))
+    println("─"^100)
+    
+    # Print træ-struktur (visuel repræsentation)
+    println("\n" * "─"^100)
+    println("TRÆ-STRUKTUR (visuel repræsentation):")
+    println("─"^100)
+    
+    # Opret en mapping fra node til dens naboer
+    node_neighbors = Dict{String, Vector{String}}()
+    for (node1, node2, weight, val) in active_edges
+        if !haskey(node_neighbors, node1)
+            node_neighbors[node1] = []
+        end
+        if !haskey(node_neighbors, node2)
+            node_neighbors[node2] = []
+        end
+        push!(node_neighbors[node1], node2)
+        push!(node_neighbors[node2], node1)
+    end
+    
+    # Find root (node med færrest naboer, eller første node)
+    all_nodes = collect(keys(node_neighbors))
+    root = all_nodes[1]
+    for node in all_nodes
+        if length(node_neighbors[node]) == 1
+            root = node
+            break
+        end
+    end
+    
+    # Print træet med indentation
+    visited = Set{String}()
+    function print_tree(node, prefix="", is_last=true)
+        if node in visited
+            return
+        end
+        push!(visited, node)
+        
+        connector = is_last ? "└── " : "├── "
+        println(prefix * connector * node)
+        
+        neighbors = [n for n in node_neighbors[node] if n ∉ visited]
+        for (idx, neighbor) in enumerate(neighbors)
+            is_last_neighbor = idx == length(neighbors)
+            extension = is_last ? "    " : "│   "
+            print_tree(neighbor, prefix * extension, is_last_neighbor)
+        end
+    end
+    
+    print_tree(root)
+    
+    println("\n" * "="^100)
+end
+
+##########################################################
+# Funktion til at printe MST resultater fra Kruskal's algoritme
+function print_MST_Kruskal_output(active_edges, total_weight, dec=2, output_terminal=true)
+    # Sorter kanterne alfabetisk (først efter node1, derefter node2)
+    sort!(active_edges, by = edge -> (edge[1], edge[2]))
+    
+    # Beregn antal unikke noder
+    all_nodes_in_tree = Set{String}()
+    for (node1, node2, weight, val) in active_edges
+        push!(all_nodes_in_tree, node1)
+        push!(all_nodes_in_tree, node2)
+    end
+    num_nodes = length(all_nodes_in_tree)
+    
+    # Opret en mapping fra node til dens naboer
+    node_neighbors = Dict{String, Vector{String}}()
+    for (node1, node2, weight, val) in active_edges
+        if !haskey(node_neighbors, node1)
+            node_neighbors[node1] = []
+        end
+        if !haskey(node_neighbors, node2)
+            node_neighbors[node2] = []
+        end
+        push!(node_neighbors[node1], node2)
+        push!(node_neighbors[node2], node1)
+    end
+    
+    # Find root (node med færrest naboer, eller første node)
+    all_nodes = collect(keys(node_neighbors))
+    local root = all_nodes[1]
+    for node in all_nodes
+        if length(node_neighbors[node]) == 1
+            root = node
+            break
+        end
+    end
+    
+    # Print funktion (kun hvis output_terminal er true)
+    if output_terminal
+        println("\n" * "="^100)
+        println("MINIMUM SPANNING TREE - VALGTE KANTER (KRUSKAL'S ALGORITME)")
+        println("="^100)
+        
+        # Print kanterne med forbedret formatering
+        println("\n" * "─"^100)
+        println("VALGTE KANTER I MINIMUM SPANNING TREE:")
+        println("─"^100)
+        @printf("%-4s | %-15s | %-15s | %-12s | %-12s\n", "Nr.", "Fra node", "Til node", "Vægt", "Værdi")
+        println("─"^100)
+        
+        for (idx, (node1, node2, weight, val)) in enumerate(active_edges)
+            @printf("%-4d | %-15s | %-15s | %-12.*f | %-12.*f\n", 
+                    idx, node1, node2, dec, weight, dec, val)
+        end
+        
+        println("─"^100)
+        
+        # Print opsummering
+        println("\n" * "─"^100)
+        println("OPSUMMERING:")
+        println("─"^100)
+        @printf("  %-25s %.*f\n", "Total vægt af MST:", dec, total_weight)
+        @printf("  %-25s %d\n", "Antal kanter i MST:", length(active_edges))
+        @printf("  %-25s %d\n", "Antal noder:", num_nodes)
+        @printf("  %-25s %.*f\n", "Gennemsnitlig kantvægt:", dec, total_weight / length(active_edges))
+        println("─"^100)
+        
+        # Print træ-struktur (visuel repræsentation)
+        println("\n" * "─"^100)
+        println("TRÆ-STRUKTUR (visuel repræsentation):")
+        println("─"^100)
+        
+        # Print træet med indentation
+        visited = Set{String}()
+        function print_tree(node, prefix="", is_last=true)
+            if node in visited
+                return
+            end
+            push!(visited, node)
+            
+            connector = is_last ? "└── " : "├── "
+            println(prefix * connector * node)
+            
+            neighbors = [n for n in node_neighbors[node] if n ∉ visited]
+            for (idx, neighbor) in enumerate(neighbors)
+                is_last_neighbor = idx == length(neighbors)
+                extension = is_last ? "    " : "│   "
+                print_tree(neighbor, prefix * extension, is_last_neighbor)
+            end
+        end
+        
+        print_tree(root)
+        
+        println("\n" * "="^100)
+    end
+end
+
+##########################################################
+# Funktion til at printe shortest path sti
+function print_shortest_path(M, x, x_navne, kanter, source_node, sink_node, c, dec=2)
+    println("\n" * "="^100)
+    println("SHORTEST PATH - LØSNING")
+    println("="^100)
+    
+    # Find alle aktive kanter (værdi ≈ 1.0)
+    active_edges = Dict{String, String}();  # Mapping fra from_node til to_node
+    edge_weights = Dict{Tuple{String, String}, Float64}();  # Mapping fra (from, to) til vægt
+    total_weight = 0.0
+    
+    # Opret mapping fra variabelnavn til (from, to) par
+    var_to_edge = Dict{String, Tuple{String, String}}();
+    for (idx, var_name) in enumerate(x_navne)
+        val = value(x[idx])
+        if abs(val - 1.0) < 1e-6 || val > 1e-6
+            # Parse variabelnavn: x_from_to
+            parts = split(var_name, "_")
+            if length(parts) >= 3
+                from_node = parts[2]
+                to_node = parts[3]
+                var_to_edge[var_name] = (from_node, to_node)
+                
+                # Hvis værdien er tæt på 1, er det en aktiv kant
+                if abs(val - 1.0) < 1e-6
+                    active_edges[from_node] = to_node
+                    weight = c[idx]
+                    edge_weights[(from_node, to_node)] = weight
+                    total_weight += weight * val
+                end
+            end
+        end
+    end
+    
+    # Rekonstruer stien fra source til sink
+    path = [source_node]
+    current_node = source_node
+    path_found = false
+    
+    while current_node != sink_node
+        if haskey(active_edges, current_node)
+            next_node = active_edges[current_node]
+            push!(path, next_node)
+            current_node = next_node
+            path_found = true
+        else
+            # Hvis vi ikke kan finde næste node, er stien ikke komplet
+            println("⚠️  ADVARSEL: Kunne ikke rekonstruere hele stien fra ", source_node, " til ", sink_node)
+            break
+        end
+    end
+    
+    # Print stien
+    println("\n" * "─"^100)
+    println("KORTESTE STI:")
+    println("─"^100)
+    @printf("Fra: %s\n", source_node)
+    @printf("Til: %s\n", sink_node)
+    @printf("Total vægt: %.*f\n\n", dec, total_weight)
+    
+    println("Sti:")
+    if path_found && path[end] == sink_node
+        # Vis stien med kanter og vægte
+        for i in 1:(length(path)-1)
+            from = path[i]
+            to = path[i+1]
+            weight = haskey(edge_weights, (from, to)) ? edge_weights[(from, to)] : 0.0
+            if i == 1
+                @printf("  %s --[%.*f]--> %s", from, dec, weight, to)
+            else
+                @printf(" --[%.*f]--> %s", dec, weight, to)
+            end
+        end
+        println()
+        println()
+        # Vis også som simpel liste
+        @printf("  %s\n", join(path, " → "))
+    else
+        println("  Kunne ikke finde komplet sti")
+    end
+    
+    println("\n" * "─"^100)
+    println("OPSUMMERING:")
+    println("─"^100)
+    @printf("  %-25s %.*f\n", "Total vægt af sti:", dec, total_weight)
+    @printf("  %-25s %d\n", "Antal kanter i sti:", length(path) - 1)
+    @printf("  %-25s %d\n", "Antal noder i sti:", length(path))
+    if length(path) > 1
+        @printf("  %-25s %.*f\n", "Gennemsnitlig kantvægt:", dec, total_weight / (length(path) - 1))
+    end
+    println("─"^100)
+    
+    println("\n" * "="^100)
+end
+
+##########################################################
+# Funktion til at printe shortest path sti fra algoritme (Dijkstra/Bellman-Ford)
+# Tager path (liste af noder) og edge_weights (dict fra (from, to) til vægt)
+function print_shortest_path_algorithm(path, edge_weights, source_node, sink_node, total_weight, dec=2, output_terminal=true)
+    if !output_terminal
+        return
+    end
+    
+    println("\n" * "="^100)
+    println("SHORTEST PATH - LØSNING")
+    println("="^100)
+    
+    # Print stien
+    println("\n" * "─"^100)
+    println("KORTESTE STI:")
+    println("─"^100)
+    @printf("Fra: %s\n", source_node)
+    @printf("Til: %s\n", sink_node)
+    @printf("Total vægt: %.*f\n\n", dec, total_weight)
+    
+    println("Sti:")
+    if length(path) > 1
+        # Vis stien med kanter og vægte
+        for i in 1:(length(path)-1)
+            from = path[i]
+            to = path[i+1]
+            weight = haskey(edge_weights, (from, to)) ? edge_weights[(from, to)] : 0.0
+            if i == 1
+                @printf("  %s --[%.*f]--> %s", from, dec, weight, to)
+            else
+                @printf(" --[%.*f]--> %s", dec, weight, to)
+            end
+        end
+        println()
+        println()
+        # Vis også som simpel liste
+        @printf("  %s\n", join(path, " → "))
+    else
+        println("  Ingen sti fundet")
+    end
+    
+    println("\n" * "─"^100)
+    println("OPSUMMERING:")
+    println("─"^100)
+    @printf("  %-25s %.*f\n", "Total vægt af sti:", dec, total_weight)
+    if length(path) > 1
+        @printf("  %-25s %d\n", "Antal kanter i sti:", length(path) - 1)
+        @printf("  %-25s %d\n", "Antal noder i sti:", length(path))
+        @printf("  %-25s %.*f\n", "Gennemsnitlig kantvægt:", dec, total_weight / (length(path) - 1))
+    end
+    println("─"^100)
+    
+    println("\n" * "="^100)
 end

@@ -2,7 +2,7 @@ Running HiGHS 1.12.0 (git hash: 755a8e027): Copyright (c) 2025 HiGHS under MIT l
 MIP has 35 rows; 25 cols; 190 nonzeros; 25 integer variables (25 binary)
 Coefficient ranges:
   Matrix  [1e+00, 1e+00]
-  Cost    [3e+01, 1e+16]
+  Cost    [6e+00, 1e+16]
   Bound   [1e+00, 1e+00]
   RHS     [1e+00, 3e+00]
 WARNING: Problem has some excessively large costs
@@ -11,7 +11,7 @@ Presolving model
 35 rows, 25 cols, 190 nonzeros  0s
 35 rows, 25 cols, 200 nonzeros  0s
 Presolve reductions: rows 35(-0); columns 25(-0); nonzeros 190(-0) - Not reduced
-Objective function is integral with scale 1
+Objective function is integral with scale 2
 
 Solving MIP model with:
    35 rows
@@ -26,22 +26,22 @@ Src: B => Branching; C => Central rounding; F => Feasibility pump; H => Heuristi
         Nodes      |    B&B Tree     |            Objective Bounds              |  Dynamic Constraints |       Work      
 Src  Proc. InQueue |  Leaves   Expl. | BestBound       BestSol              Gap |   Cuts   InLp Confl. | LpIters     Time
 
- J       0       0         0   0.00%   -inf            845                Large        0      0      0         0     0.0s
- T       0       0         0   0.00%   0               512              100.00%        0      0      0        12     0.0s
-         1       0         1 100.00%   512             512                0.00%        0      0      0        12     0.0s
+ J       0       0         0   0.00%   -inf            56                 Large        0      0      0         0     0.0s
+ T       0       0         0   0.00%   0               48               100.00%        0      0      0        12     0.0s
+         1       0         1 100.00%   48              48                 0.00%        0      0      0        12     0.0s
 
 Solving report
   Status            Optimal
-  Primal bound      512
-  Dual bound        512
+  Primal bound      48
+  Dual bound        48
   Gap               0% (tolerance: 0.01%)
-  P-D integral      0.000777959823608
+  P-D integral      0.00116300582886
   Solution status   feasible
-                    512 (objective)
+                    48 (objective)
                     0 (bound viol.)
                     0 (int. viol.)
                     0 (row viol.)
-  Timing            0.01
+  Timing            0.02
   Max sub-MIP depth 0
   Nodes             1
   Repair LPs        0
@@ -53,7 +53,7 @@ Solving report
 ====================================================================================================
 PROBLEMFORMULERING
 ====================================================================================================
-Minimer Z = 1.0e16x_1_1 + 27.0x_1_2 + 240.0x_1_3 + 190.0x_1_4 + 180.0x_1_5 + 27.0x_2_1 + 1.0e16x_2_2 + 220.0x_2_3 + 175.0x_2_4 + 165.0x_2_5 + 240.0x_3_1 + 220.0x_3_2 + 1.0e16x_3_3 + 55.0x_3_4 + 75.0x_3_5 + 190.0x_4_1 + 175.0x_4_2 + 55.0x_4_3 + 1.0e16x_4_4 + 60.0x_4_5 + 180.0x_5_1 + 165.0x_5_2 + 75.0x_5_3 + 60.0x_5_4 + 1.0e16x_5_5
+Minimer Z = 1.0e16x_1_1 + 16.0x_1_2 + 10.0x_1_3 + 12.0x_1_4 + 11.5x_1_5 + 12.0x_2_1 + 1.0e16x_2_2 + 10.0x_2_3 + 12.0x_2_4 + 10.5x_2_5 + 12.0x_3_1 + 10.0x_3_2 + 1.0e16x_3_3 + 8.0x_3_4 + 7.5x_3_5 + 16.0x_4_1 + 12.0x_4_2 + 10.0x_4_3 + 1.0e16x_4_4 + 8.5x_4_5 + 13.5x_5_1 + 10.5x_5_2 + 5.5x_5_3 + 9.5x_5_4 + 1.0e16x_5_5
 
 u.b.b.:
   x_1_1 + x_1_2 + x_1_3 + x_1_4 + x_1_5 = 1.0
@@ -102,92 +102,92 @@ Output i MIP format begynder nu
 OPTIMAL - Optimal løsning fundet
 ----------------------------------------------------------------------------------------------------
 Værdi af objektivfunktionen:
- -> 512.00
+ -> 48.00
 
 
 Variabelnavn                   |Variabeltype                   |Værdi                         
 -------------------------------------------------------------------------------------
 x_1_1                          |Binary                         |0.00                          
-x_1_2                          |Binary                         |1.00                          
-x_1_3                          |Binary                         |0.00                          
-x_1_4                          |Binary                         |0.00                          
+x_1_2                          |Binary                         |0.00                          
+x_1_3                          |Binary                         |-0.00                         
+x_1_4                          |Binary                         |1.00                          
 x_1_5                          |Binary                         |-0.00                         
-x_2_1                          |Binary                         |-0.00                         
+x_2_1                          |Binary                         |1.00                          
 x_2_2                          |Binary                         |0.00                          
 x_2_3                          |Binary                         |0.00                          
-x_2_4                          |Binary                         |1.00                          
+x_2_4                          |Binary                         |0.00                          
 x_2_5                          |Binary                         |-0.00                         
 x_3_1                          |Binary                         |0.00                          
-x_3_2                          |Binary                         |0.00                          
+x_3_2                          |Binary                         |1.00                          
 x_3_3                          |Binary                         |0.00                          
 x_3_4                          |Binary                         |-0.00                         
-x_3_5                          |Binary                         |1.00                          
+x_3_5                          |Binary                         |0.00                          
 x_4_1                          |Binary                         |0.00                          
-x_4_2                          |Binary                         |0.00                          
-x_4_3                          |Binary                         |1.00                          
+x_4_2                          |Binary                         |-0.00                         
+x_4_3                          |Binary                         |0.00                          
 x_4_4                          |Binary                         |0.00                          
-x_4_5                          |Binary                         |-0.00                         
-x_5_1                          |Binary                         |1.00                          
+x_4_5                          |Binary                         |1.00                          
+x_5_1                          |Binary                         |0.00                          
 x_5_2                          |Binary                         |0.00                          
-x_5_3                          |Binary                         |0.00                          
-x_5_4                          |Binary                         |-0.00                         
+x_5_3                          |Binary                         |1.00                          
+x_5_4                          |Binary                         |0.00                          
 x_5_5                          |Binary                         |0.00                          
 
 
 Slack: 
 
-Begrænsningnavn      |LHS             |RHS             |Slack           |Bindende status
-------------------------------------------------------------------------------------
-Outgoing_Odense      |1.00            |1.00            |0.00            |Bindende       
-Outgoing_Nyborg      |1.00            |1.00            |0.00            |Bindende       
-Outgoing_København   |1.00            |1.00            |0.00            |Bindende       
-Outgoing_Holbæk      |1.00            |1.00            |0.00            |Bindende       
-Outgoing_Næstved     |1.00            |1.00            |0.00            |Bindende       
-Incoming_Odense      |1.00            |1.00            |0.00            |Bindende       
-Incoming_Nyborg      |1.00            |1.00            |0.00            |Bindende       
-Incoming_København   |1.00            |1.00            |0.00            |Bindende       
-Incoming_Holbæk      |1.00            |1.00            |0.00            |Bindende       
-Incoming_Næstved     |1.00            |1.00            |0.00            |Bindende       
-Subtour_1            |1.00            |1.00            |0.00            |Bindende       
-Subtour_2            |0.00            |1.00            |1.00            |Ikke-bindende  
-Subtour_3            |0.00            |1.00            |1.00            |Ikke-bindende  
-Subtour_4            |1.00            |1.00            |0.00            |Bindende       
-Subtour_5            |0.00            |1.00            |1.00            |Ikke-bindende  
-Subtour_6            |1.00            |1.00            |0.00            |Bindende       
-Subtour_7            |0.00            |1.00            |1.00            |Ikke-bindende  
-Subtour_8            |1.00            |1.00            |0.00            |Bindende       
-Subtour_9            |1.00            |1.00            |0.00            |Bindende       
-Subtour_10           |0.00            |1.00            |1.00            |Ikke-bindende  
-Subtour_11           |1.00            |2.00            |1.00            |Ikke-bindende  
-Subtour_12           |2.00            |2.00            |0.00            |Bindende       
-Subtour_13           |2.00            |2.00            |0.00            |Bindende       
-Subtour_14           |1.00            |2.00            |1.00            |Ikke-bindende  
-Subtour_15           |2.00            |2.00            |0.00            |Bindende       
-Subtour_16           |1.00            |2.00            |1.00            |Ikke-bindende  
-Subtour_17           |2.00            |2.00            |0.00            |Bindende       
-Subtour_18           |1.00            |2.00            |1.00            |Ikke-bindende  
-Subtour_19           |1.00            |2.00            |1.00            |Ikke-bindende  
-Subtour_20           |2.00            |2.00            |0.00            |Bindende       
-Subtour_21           |3.00            |3.00            |0.00            |Bindende       
-Subtour_22           |3.00            |3.00            |0.00            |Bindende       
-Subtour_23           |3.00            |3.00            |0.00            |Bindende       
-Subtour_24           |3.00            |3.00            |0.00            |Bindende       
-Subtour_25           |3.00            |3.00            |0.00            |Bindende       
+Begrænsningnavn |LHS             |RHS             |Slack           |Bindende status
+-------------------------------------------------------------------------------
+Outgoing_ca     |1.00            |1.00            |0.00            |Bindende       
+Outgoing_wh     |1.00            |1.00            |0.00            |Bindende       
+Outgoing_ta     |1.00            |1.00            |0.00            |Bindende       
+Outgoing_kr     |1.00            |1.00            |0.00            |Bindende       
+Outgoing_cr     |1.00            |1.00            |0.00            |Bindende       
+Incoming_ca     |1.00            |1.00            |0.00            |Bindende       
+Incoming_wh     |1.00            |1.00            |0.00            |Bindende       
+Incoming_ta     |1.00            |1.00            |0.00            |Bindende       
+Incoming_kr     |1.00            |1.00            |0.00            |Bindende       
+Incoming_cr     |1.00            |1.00            |0.00            |Bindende       
+Subtour_1       |1.00            |1.00            |0.00            |Bindende       
+Subtour_2       |0.00            |1.00            |1.00            |Ikke-bindende  
+Subtour_3       |1.00            |1.00            |0.00            |Bindende       
+Subtour_4       |0.00            |1.00            |1.00            |Ikke-bindende  
+Subtour_5       |1.00            |1.00            |0.00            |Bindende       
+Subtour_6       |0.00            |1.00            |1.00            |Ikke-bindende  
+Subtour_7       |0.00            |1.00            |1.00            |Ikke-bindende  
+Subtour_8       |0.00            |1.00            |1.00            |Ikke-bindende  
+Subtour_9       |1.00            |1.00            |0.00            |Bindende       
+Subtour_10      |1.00            |1.00            |0.00            |Bindende       
+Subtour_11      |2.00            |2.00            |0.00            |Bindende       
+Subtour_12      |2.00            |2.00            |0.00            |Bindende       
+Subtour_13      |1.00            |2.00            |1.00            |Ikke-bindende  
+Subtour_14      |1.00            |2.00            |1.00            |Ikke-bindende  
+Subtour_15      |1.00            |2.00            |1.00            |Ikke-bindende  
+Subtour_16      |2.00            |2.00            |0.00            |Bindende       
+Subtour_17      |1.00            |2.00            |1.00            |Ikke-bindende  
+Subtour_18      |2.00            |2.00            |0.00            |Bindende       
+Subtour_19      |1.00            |2.00            |1.00            |Ikke-bindende  
+Subtour_20      |2.00            |2.00            |0.00            |Bindende       
+Subtour_21      |3.00            |3.00            |0.00            |Bindende       
+Subtour_22      |3.00            |3.00            |0.00            |Bindende       
+Subtour_23      |3.00            |3.00            |0.00            |Bindende       
+Subtour_24      |3.00            |3.00            |0.00            |Bindende       
+Subtour_25      |3.00            |3.00            |0.00            |Bindende       
 
 
 
 ====================================================================================================
 TSP MATRIX
 ====================================================================================================
-           |Odense     |Nyborg     |København  |Holbæk     |Næstved    |Sum        
------------------------------------------------------------------------------------
-Odense     |       0.00|       1.00|       0.00|       0.00|      -0.00|       1.00
-Nyborg     |      -0.00|       0.00|       0.00|       1.00|      -0.00|       1.00
-København  |       0.00|       0.00|       0.00|      -0.00|       1.00|       1.00
-Holbæk     |       0.00|       0.00|       1.00|       0.00|      -0.00|       1.00
-Næstved    |       1.00|       0.00|       0.00|      -0.00|       0.00|       1.00
------------------------------------------------------------------------------------
-Sum        |       1.00|       1.00|       1.00|       1.00|       1.00|       5.00
+        |ca      |wh      |ta      |kr      |cr      |Sum     
+--------------------------------------------------------------
+ca      |    0.00|    0.00|   -0.00|    1.00|   -0.00|    1.00
+wh      |    1.00|    0.00|    0.00|    0.00|   -0.00|    1.00
+ta      |    0.00|    1.00|    0.00|   -0.00|    0.00|    1.00
+kr      |    0.00|   -0.00|    0.00|    0.00|    1.00|    1.00
+cr      |    0.00|    0.00|    1.00|    0.00|    0.00|    1.00
+--------------------------------------------------------------
+Sum     |    1.00|    1.00|    1.00|    1.00|    1.00|    5.00
 ====================================================================================================
 
 
@@ -196,8 +196,8 @@ TSP TOUR
 ====================================================================================================
 
 Tour sekvens:
-Odense → Nyborg → Holbæk → København → Næstved → Odense
+ca → kr → cr → ta → wh → ca
 
-Total omkostning: 512.00
+Total omkostning: 48.00
 ====================================================================================================
 
