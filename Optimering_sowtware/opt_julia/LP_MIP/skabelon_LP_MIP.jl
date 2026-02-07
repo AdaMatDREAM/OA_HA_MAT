@@ -1,8 +1,8 @@
 function LP_MIP_model_skabelon()
 # Type af model: LP eller MIP
-model_type = "MIP";
+model_type = "LP";
 # True hvis du også vil have dualt program
-dual_defined = false;
+dual_defined = true;
 
 # Objektiv MAX eller MIN
 obj = :MAX;  # eller :MIN for minimering
@@ -53,7 +53,7 @@ dec = 2;
 tol = 1e-9;
 
 # Output af resultater i terminal eller fil
-output_terminal = true;
+output_terminal = false;
 output_fil = true;
 ###### HUSK AT FILNAVN FOR CONVERT DUAL PROGRAMMET VÆLGES I RUN_CONVERT_DUAL.JL ######
 

@@ -420,6 +420,4 @@ return (
     b_sens_upper = b_sens_upper,
     multiple_solutions_info = multiple_solutions_info
 )
-
 end
-

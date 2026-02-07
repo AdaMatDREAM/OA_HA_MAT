@@ -1,7 +1,7 @@
 function TSP_problem_skabelon()
     # Type af model: TSP er altid MIP med binary variabler
     model_type = "MIP";
-    # True hvis du også vil have dualt program
+    # True hvis du også vil have dualt program (det vil du ikke)
     dual_defined = false;
     
     # TSP er altid et minimeringsproblem (minimer total omkostning/afstand)

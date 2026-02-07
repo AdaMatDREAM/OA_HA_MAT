@@ -24,8 +24,8 @@ function Assignment_problem_skabelon()
     c = vec(c_matrix');  # Flatten matrixen (row-major: række 1, række 2, ...)
     
     # Navne på workers og tasks
-    supply_navne = ["J", "K", "H", "MA", "MI"];
-    demand_navne = ["1", "2", "3", "4", "5"];
+    supply_navne = ["J", "K", "H", "MA", "MI"]; # Søjle
+    demand_navne = ["1", "2", "3", "4", "5"]; # Række
 
     # Opret variabelnavne som vektor (samme rækkefølge som c)
     x_navne = [string("x_", supply_navne[i], "_", demand_navne[j]) for i in 1:m for j in 1:n];

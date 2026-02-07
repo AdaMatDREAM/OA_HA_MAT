@@ -1,0 +1,45 @@
+
+OPTIMAL - Optimal løsning fundet
+----------------------------------------------------------------------------------------------------
+Værdi af objektivfunktionen:
+ -> 2080.00
+
+
+Variabelnavn                   |Variabeltype                   |Værdi                         
+-------------------------------------------------------------------------------------
+y_1                            |Continuous                     |40.00                         
+y_2                            |Continuous                     |0.00                          
+y_3                            |Continuous                     |2.00                          
+
+
+Slack og skyggepris: 
+
+Begrænsningnavn |LHS             |RHS             |Slack           |Skyggepris      |Bindende status
+-----------------------------------------------------------------------------------------------
+BDual_1         |120.00          |120.00          |0.00            |1.50            |Bindende       
+BDual_2         |200.00          |200.00          |0.00            |9.50            |Bindende       
+BDual_3         |280.00          |260.00          |20.00           |0.00            |Ikke-bindende  
+
+
+
+Sensitivitetsrapport for objektivkoefficienter: 
+
+Variabelnavn       |Koefficientværdi   |Maksimalt fald     |Maksimal stigning  |Reduced costs     
+---------------------------------------------------------------------------------------------------
+y_1                |11.00              |-0.75              |2.50               |0.00              
+y_2                |300.00             |-112.50            |Inf                |112.50            
+y_3                |820.00             |-300.00            |60.00              |0.00              
+---------------------------------------------------------------------------------------------------
+
+
+
+Sensitivitetsrapport for RHS (kapacitet): 
+
+Begrænsningnavn      |RHS (nu)             |Maksimalt fald       |Maksimal stigning   
+-----------------------------------------------------------------------------------
+BDual_1              |120.00               |-20.00               |20.00               
+BDual_2              |200.00               |-10.00               |40.00               
+BDual_3              |260.00               |-Inf                 |20.00               
+-----------------------------------------------------------------------------------
+
+

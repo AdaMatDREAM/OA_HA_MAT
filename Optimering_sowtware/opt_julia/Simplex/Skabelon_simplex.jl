@@ -9,6 +9,7 @@ function simplex_skabelon()
          30 15 45;
          40 80 120];
     
+    # Husk at alle b_dir er <=
     b = [11,  300,  820];
     b_navne = ["B1", "B2", "B3"];
     
@@ -17,7 +18,7 @@ function simplex_skabelon()
     S_navne = ["S_$(i)" for i in 1:length(b)];
     
     # Output konfiguration
-    output_terminal = true;
+    output_terminal = false;
     output_fil = true;
     print_tableaux_iterationer = true;
     output_base_sti = ""  # tom streng -> samme mappe som koden
@@ -30,7 +31,7 @@ function simplex_skabelon()
     if !isdir(output_mappe)
         mkpath(output_mappe)
     end
-    output_fil_navn = joinpath(output_mappe, "opg_5_u2.txt")
+    output_fil_navn = joinpath(output_mappe, "simplex_eksempel.txt")
     return (
         c = c, 
         x_navne = x_navne, 

@@ -8,7 +8,7 @@ include("Convert_dual.jl")
 P = LP_MIP_model_skabelon()
 
 # Vælg filnavn til samlet output (primal + dual i samme fil)
-output_fil_navn = joinpath(P.output_mappe, "primal_dual.txt")
+output_fil_navn = joinpath(P.output_mappe, "convert_primal_dual.txt")
 
 # Print primal og dual til terminal (altid print dual i convert_dual sammenhæng)
 if P.output_terminal
