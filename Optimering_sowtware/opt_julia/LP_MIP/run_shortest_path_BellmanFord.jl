@@ -1,5 +1,6 @@
 using Graphs
 using Printf
+using GraphPlot, Colors
 
 # Includefiler til funktioner
 include("build.jl")
@@ -68,6 +69,12 @@ try
     # Brug output funktionen (respekterer output_terminal)
     if P.output_terminal
         print_shortest_path_algorithm(path, edge_weights, P.source_node, P.sink_node, total_weight, P.dec, true)
+        
+        # Visualiser shortest path med GraphPlot
+        println("\n" * "─"^100)
+        println("GRAF VISUALISERING (GraphPlot):")
+        println("─"^100)
+        plot_shortest_path_from_algorithm(path, P.kanter, P.noder, P.source_node, P.sink_node, P.dec)
     end
     
     # ========== OUTPUT TIL FIL (hvis ønsket) ==========
@@ -82,6 +89,12 @@ try
                 # Brug samme output funktion (med output_terminal = true så den printer)
                 print_shortest_path_algorithm(path, edge_weights, P.source_node, P.sink_node, total_weight, P.dec, true)
             end
+            
+            # Visualiser shortest path med GraphPlot (udenfor redirect_stdout så plot stadig vises)
+            println("\n" * "─"^100)
+            println("GRAF VISUALISERING (GraphPlot):")
+            println("─"^100)
+            plot_shortest_path_from_algorithm(path, P.kanter, P.noder, P.source_node, P.sink_node, P.dec)
         end
         println("Output er gemt i .txt filen: ", output_fil_navn_bf)
     end

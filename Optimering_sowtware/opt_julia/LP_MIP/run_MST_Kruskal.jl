@@ -1,5 +1,6 @@
 using Graphs
 using Printf
+using GraphPlot, Colors
 
 # Includefiler til funktioner
 include("build.jl")
@@ -41,6 +42,14 @@ end
 # Brug output funktionen (respekterer output_terminal)
 print_MST_Kruskal_output(active_edges, total_weight, P.dec, P.output_terminal)
 
+# ========== VISUALISER MST ==========
+if P.output_terminal
+    println("\n" * "─"^100)
+    println("GRAF VISUALISERING (GraphPlot):")
+    println("─"^100)
+    plot_MST_from_edges(active_edges, P.kanter, P.noder, P.dec)
+end
+
 # ========== OUTPUT TIL FIL (hvis ønsket) ==========
 if P.output_fil
     output_fil_navn_kruskal = replace(P.output_fil_navn, ".txt" => "_Kruskal.txt")
@@ -53,6 +62,12 @@ if P.output_fil
             # Brug samme output funktion (med output_terminal = true så den printer)
             print_MST_Kruskal_output(active_edges, total_weight, P.dec, true)
         end
+        
+        # Visualiser MST med GraphPlot (udenfor redirect_stdout så plot stadig vises)
+        println("\n" * "─"^100)
+        println("GRAF VISUALISERING (GraphPlot):")
+        println("─"^100)
+        plot_MST_from_edges(active_edges, P.kanter, P.noder, P.dec)
     end
     println("Output er gemt i .txt filen: ", output_fil_navn_kruskal)
 end

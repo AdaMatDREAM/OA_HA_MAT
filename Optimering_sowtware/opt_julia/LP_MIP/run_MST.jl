@@ -1,5 +1,6 @@
 using HiGHS, JuMP;
 using Printf
+using Graphs, GraphPlot, Colors
 
 # Includefiler til funktioner
 include("build.jl")
@@ -32,6 +33,12 @@ if P.model_type == "MIP"
         status_str = string(status)
         if status_str == "OPTIMAL" || status_str == "ALMOST_OPTIMAL"
             print_MST_edges(M, x, P.x_navne, P.kanter, P.c, P.dec)
+            
+            # Visualiser MST med GraphPlot
+            println("\n" * "─"^100)
+            println("GRAF VISUALISERING (GraphPlot):")
+            println("─"^100)
+            plot_MST(M, x, P.x_navne, P.kanter, P.noder, P.c, P.dec)
         end
     end
     
@@ -54,6 +61,16 @@ if P.model_type == "MIP"
                 if status_str == "OPTIMAL" || status_str == "ALMOST_OPTIMAL"
                     print_MST_edges(M, x, P.x_navne, P.kanter, P.c, P.dec)
                 end
+            end
+            
+            # Visualiser MST med GraphPlot (udenfor redirect_stdout så plot stadig vises)
+            status = termination_status(M)
+            status_str = string(status)
+            if status_str == "OPTIMAL" || status_str == "ALMOST_OPTIMAL"
+                println("\n" * "─"^100)
+                println("GRAF VISUALISERING (GraphPlot):")
+                println("─"^100)
+                plot_MST(M, x, P.x_navne, P.kanter, P.noder, P.c, P.dec)
             end
         end
         println("Output er gemt i .txt filen: ", P.output_fil_navn)
@@ -87,6 +104,12 @@ elseif P.model_type == "LP"
             println("─"^100)
             
             print_MST_edges(M, x, P.x_navne, P.kanter, P.c, P.dec)
+            
+            # Visualiser MST med GraphPlot
+            println("\n" * "─"^100)
+            println("GRAF VISUALISERING (GraphPlot):")
+            println("─"^100)
+            plot_MST(M, x, P.x_navne, P.kanter, P.noder, P.c, P.dec)
         end
     end
     
@@ -127,6 +150,16 @@ elseif P.model_type == "LP"
                     
                     print_MST_edges(M, x, P.x_navne, P.kanter, P.c, P.dec)
                 end
+            end
+            
+            # Visualiser MST med GraphPlot (udenfor redirect_stdout så plot stadig vises)
+            status = termination_status(M)
+            status_str = string(status)
+            if status_str == "OPTIMAL" || status_str == "ALMOST_OPTIMAL"
+                println("\n" * "─"^100)
+                println("GRAF VISUALISERING (GraphPlot):")
+                println("─"^100)
+                plot_MST(M, x, P.x_navne, P.kanter, P.noder, P.c, P.dec)
             end
         end
         println("Output er gemt i .txt filen: ", P.output_fil_navn)

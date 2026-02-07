@@ -1,5 +1,6 @@
 using HiGHS, JuMP;
 using Printf
+using Graphs, GraphPlot, Colors
 
 # Includefiler til funktioner
 include("build.jl")
@@ -50,6 +51,12 @@ if P.model_type == "LP"
             println("─"^100)
             
             print_max_flow(M, x, P.x_navne, P.kanter, P.source_node, P.sink_node, P.kapaciteter, P.dec)
+            
+            # Visualiser max flow med GraphPlot
+            println("\n" * "─"^100)
+            println("GRAF VISUALISERING (GraphPlot):")
+            println("─"^100)
+            plot_max_flow(M, x, P.x_navne, P.kanter, P.noder, P.source_node, P.sink_node, P.kapaciteter, P.dec)
         end
     end
     
@@ -90,6 +97,16 @@ if P.model_type == "LP"
                     
                     print_max_flow(M, x, P.x_navne, P.kanter, P.source_node, P.sink_node, P.kapaciteter, P.dec)
                 end
+            end
+            
+            # Visualiser max flow med GraphPlot (udenfor redirect_stdout så plot stadig vises)
+            status = termination_status(M)
+            status_str = string(status)
+            if status_str == "OPTIMAL" || status_str == "ALMOST_OPTIMAL"
+                println("\n" * "─"^100)
+                println("GRAF VISUALISERING (GraphPlot):")
+                println("─"^100)
+                plot_max_flow(M, x, P.x_navne, P.kanter, P.noder, P.source_node, P.sink_node, P.kapaciteter, P.dec)
             end
         end
         println("Output er gemt i .txt filen: ", P.output_fil_navn)

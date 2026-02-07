@@ -1119,3 +1119,703 @@ function print_max_flow(M, x, x_navne, kanter, source_node, sink_node, kapacitet
     println("─"^100)
     println("\n" * "="^100)
 end
+
+##########################################################
+# Funktion til at visualisere maximum flow
+# Kræver: using Graphs, GraphPlot, Colors (skal være inkluderet i filen der kalder funktionen)
+function plot_max_flow(M, x, x_navne, kanter, noder, source_node, sink_node, kapaciteter, dec=2)
+    # Vi starter med at bygge grafen med alle noder
+    num_noder = length(noder)
+    G = SimpleDiGraph(num_noder)  # Directed graph for max flow
+
+    # Mapping fra nodenavn til integer index
+    node_to_int = Dict(noder[i] => i for i in 1:num_noder)
+
+    # Opretter mapping fra edge til kapacitet og flow
+    edge_capacities = Dict()
+    edge_flows = Dict()
+    
+    # Find flow værdier fra løsningen
+    for (idx, var_name) in enumerate(x_navne)
+        val = value(x[idx])
+        # Parse variabelnavn: x_from_to
+        parts = split(var_name, "_")
+        if length(parts) >= 3
+            from_node = parts[2]
+            to_node = parts[3]
+            if haskey(node_to_int, from_node) && haskey(node_to_int, to_node)
+                i = node_to_int[from_node]
+                j = node_to_int[to_node]
+                edge_flows[(i, j)] = val
+            end
+        end
+    end
+
+    # Tilføjer alle kanter til grafen og gem kapaciteter
+    for (idx, kant) in enumerate(kanter)
+        from_node, to_node, capacity = kant[1], kant[2], kant[3]
+        i = node_to_int[from_node]
+        j = node_to_int[to_node]
+        add_edge!(G, i, j)
+        edge_capacities[(i, j)] = Float64(capacity)
+        # Hvis der ikke er flow for denne edge, sæt til 0
+        if !haskey(edge_flows, (i, j))
+            edge_flows[(i, j)] = 0.0
+        end
+    end
+
+    # Beregn flow/capacity ratio for hver edge og find maksimum for normalisering
+    max_ratio = 0.0
+    edge_ratios = Dict()
+    for e in edges(G)
+        i, j = src(e), dst(e)
+        flow = edge_flows[(i, j)]
+        capacity = edge_capacities[(i, j)]
+        ratio = capacity > 0 ? flow / capacity : 0.0
+        edge_ratios[(i, j)] = ratio
+        max_ratio = max(max_ratio, ratio)
+    end
+
+    # Opretter farver for edges baseret på flow/capacity ratio
+    # Gradient: mørk blå (høj flow) -> lys blå (lav flow) -> grå (ingen flow)
+    edge_colors = []
+    edge_widths = []
+    for e in edges(G)
+        i, j = src(e), dst(e)
+        ratio = edge_ratios[(i, j)]
+        flow = edge_flows[(i, j)]
+        
+        if flow < 1e-6
+            # Ingen flow - grå og tynd
+            push!(edge_colors, colorant"grey70")
+            push!(edge_widths, 0.5)
+        else
+            # Normaliser ratio (0 til 1)
+            normalized_ratio = max_ratio > 0 ? ratio / max_ratio : 0.0
+            
+            # Gradient fra lys blå (lav flow) til mørk blå (høj flow)
+            # Interpoler mellem lightblue (0,0,1) og darkblue (0,0,0.5) baseret på normalized_ratio
+            # Brug RGB værdier: r=0, g går fra 0.7 til 0, b går fra 1.0 til 0.5
+            r = 0.0
+            g = 0.7 * (1.0 - normalized_ratio)  # Går fra 0.7 til 0
+            b = 1.0 - 0.5 * normalized_ratio    # Går fra 1.0 til 0.5
+            
+            # Konverter til RGB colorant
+            push!(edge_colors, RGB(r, g, b))
+            # Edge width baseret på flow: minimum 0.5, maksimum 2.0 (tyndere)
+            width = 0.5 + 1.5 * normalized_ratio
+            push!(edge_widths, width)
+        end
+    end
+    
+    # Opretter farver for noder - marker source og sink
+    node_colors = fill(colorant"lightsteelblue", num_noder)
+    source_idx = node_to_int[source_node]
+    sink_idx = node_to_int[sink_node]
+    node_colors[source_idx] = colorant"red"  # Rød for source (start)
+    node_colors[sink_idx] = colorant"green"  # Grøn for sink (mål)
+
+    # Opret edge labels (flow/capacity format)
+    edge_labels = String[]
+    for e in edges(G)
+        i, j = src(e), dst(e)
+        flow = edge_flows[(i, j)]
+        capacity = edge_capacities[(i, j)]
+        
+        # Vis label kun hvis der er flow (eller vis alle - kan justeres)
+        if flow > 1e-6
+            push!(edge_labels, string(round(flow, digits=dec), "/", round(capacity, digits=dec)))
+        else
+            push!(edge_labels, "")  # Tom label for kanter uden flow
+        end
+    end
+    
+    # Opret node labels
+    node_labels = [string(node) for node in noder]
+    
+    # Plotter grafen
+    p = gplot(G, 
+              nodelabel=node_labels,
+              edgelabel=edge_labels,
+              edgestrokec=edge_colors,
+              edgelinewidth=edge_widths,
+              nodesize=0.8,  # Større nodes for større plot
+              nodefillc=node_colors,
+              nodestrokec=colorant"black",
+              nodestrokelw=1.0)  # Tyndere node borders
+    
+    # Prøv at vise plottet - virker i VSCode, men kan fejle i terminalen uden Cairo/Fontconfig
+    try
+        display(p)
+    catch e
+        if occursin("Cairo", string(e)) || occursin("Fontconfig", string(e)) || occursin("image/png", string(e))
+            println("   (Plottet kan ikke vises i denne terminal. Installer Cairo og Fontconfig for at se plottet.)")
+            println("   Koden kører stadig korrekt - se output filen for resultater.")
+        else
+            rethrow(e)  # Hvis det er en anden fejl, rethrow den
+        end
+    end
+    return p
+end
+
+##########################################################
+# Funktion til at visualiserer MST
+# Kræver: using Graphs, GraphPlot, Colors (skal være inkluderet i filen der kalder funktionen)
+function plot_MST(M, x, x_navne, kanter, noder, c, dec=2)
+    # Vi starter med at bygge grafen med alle noder
+    num_noder = length(noder)
+    G = SimpleGraph(num_noder)
+
+    # Mapping fra nodenavn til integer index
+    node_to_int = Dict(noder[i] => i for i in 1:num_noder)
+
+    # Opretter mapping fra edge til vægt
+    edge_weights = Dict()
+
+    # Tilføjer alle kanter til grafen
+    for (idx, (node1, node2, weight)) in enumerate(kanter)
+        i = node_to_int[node1]
+        j = node_to_int[node2]
+        add_edge!(G, i, j)
+        edge_weights[(i, j)] = weight
+        edge_weights[(j, i)] = weight
+    end
+
+    # Find aktive kanter i MST
+    mst_edges = Set()
+    for k in eachindex(x_navne)
+        val = value(x[k])
+        if abs(val - 1.0) < 1e-6 || val > 1e-6
+            var_name = x_navne[k]
+            parts = split(var_name, "_")
+            if length(parts) >= 3
+                node1 = parts[2]
+                node2 = parts[3]
+                i = node_to_int[node1]
+                j = node_to_int[node2]
+                push!(mst_edges, (i, j))
+                push!(mst_edges, (j, i))
+            end
+        end
+    end
+
+    # Opretter farver for edges i MST
+    # Grøn for MST grå for andre - bruger colorant i stedet for Symbols
+    edge_colors = [(src(e), dst(e)) in mst_edges ? colorant"seagreen" : colorant"grey50" for e in edges(G)]
+    edge_widths = [(src(e), dst(e)) in mst_edges ? 3.0 : 0.5 for e in edges(G)]
+    
+    # Opretter farver for noder i MST
+    node_colors = fill(colorant"lightsteelblue", num_noder)
+
+    # ===== INDSTILLING: Edge labels =====
+    # Sæt til true for at vise labels på alle kanter, false for kun MST-kanter
+    show_all_edge_labels = true  # Ændr denne værdi for at vælge
+    # =====================================
+    
+    # Opret edge labels (vægte) som Vector - GraphPlot forventer Vector, ikke Dict
+    # En label for hver edge i edges(G)
+    edge_labels = String[]
+    for e in edges(G)
+        i, j = src(e), dst(e)
+        # Vis label hvis: alle labels er aktiveret, ELLER kanten er i MST
+        if show_all_edge_labels || (i, j) in mst_edges || (j, i) in mst_edges
+            weight = edge_weights[(i, j)]
+            push!(edge_labels, string(round(weight, digits=dec)))
+        else
+            push!(edge_labels, "")  # Tom label for kanter uden label
+        end
+    end
+    
+    # Opret node labels
+    node_labels = [string(node) for node in noder]
+    
+    # Plotter grafen
+    # GraphPlot bruger automatisk en passende layout (spring layout som default)
+    p = gplot(G, 
+              nodelabel=node_labels,
+              edgelabel=edge_labels,
+              edgestrokec=edge_colors,
+              edgelinewidth=edge_widths,
+              nodesize=0.3,
+              nodefillc=node_colors,
+              nodestrokec=colorant"black",
+              nodestrokelw=2.0)  # Rettet: nodestrokewidth -> nodestrokelw
+    
+    # Prøv at vise plottet - virker i VSCode, men kan fejle i terminalen uden Cairo/Fontconfig
+    try
+        display(p)
+    catch e
+        if occursin("Cairo", string(e)) || occursin("Fontconfig", string(e)) || occursin("image/png", string(e))
+            println("   (Plottet kan ikke vises i denne terminal. Installer Cairo og Fontconfig for at se plottet.)")
+            println("   Koden kører stadig korrekt - se output filen for resultater.")
+        else
+            rethrow(e)  # Hvis det er en anden fejl, rethrow den
+        end
+    end
+    return p
+end
+
+##########################################################
+# Funktion til at visualisere MST fra direkte edges (f.eks. fra Kruskal)
+# Kræver: using Graphs, GraphPlot, Colors (skal være inkluderet i filen der kalder funktionen)
+# active_edges: Liste af tuples (node1, node2, weight, value) eller (node1, node2, weight)
+function plot_MST_from_edges(active_edges, kanter, noder, dec=2)
+    # Vi starter med at bygge grafen med alle noder
+    num_noder = length(noder)
+    G = SimpleGraph(num_noder)
+
+    # Mapping fra nodenavn til integer index
+    node_to_int = Dict(noder[i] => i for i in 1:num_noder)
+
+    # Opretter mapping fra edge til vægt
+    edge_weights = Dict()
+
+    # Tilføjer alle kanter til grafen
+    for (idx, (node1, node2, weight)) in enumerate(kanter)
+        i = node_to_int[node1]
+        j = node_to_int[node2]
+        add_edge!(G, i, j)
+        edge_weights[(i, j)] = weight
+        edge_weights[(j, i)] = weight
+    end
+
+    # Find aktive kanter i MST fra active_edges
+    mst_edges = Set()
+    for edge_tuple in active_edges
+        # Håndter både (node1, node2, weight, value) og (node1, node2, weight) format
+        if length(edge_tuple) >= 3
+            node1 = edge_tuple[1]
+            node2 = edge_tuple[2]
+            if haskey(node_to_int, node1) && haskey(node_to_int, node2)
+                i = node_to_int[node1]
+                j = node_to_int[node2]
+                push!(mst_edges, (i, j))
+                push!(mst_edges, (j, i))
+            end
+        end
+    end
+
+    # Opretter farver for edges i MST
+    # Grøn for MST grå for andre - bruger colorant i stedet for Symbols
+    edge_colors = [(src(e), dst(e)) in mst_edges ? colorant"seagreen" : colorant"grey50" for e in edges(G)]
+    edge_widths = [(src(e), dst(e)) in mst_edges ? 3.0 : 0.5 for e in edges(G)]
+    
+    # Opretter farver for noder i MST
+    node_colors = fill(colorant"lightsteelblue", num_noder)
+
+    # ===== INDSTILLING: Edge labels =====
+    # Sæt til true for at vise labels på alle kanter, false for kun MST-kanter
+    show_all_edge_labels = true  # Ændr denne værdi for at vælge
+    # =====================================
+    
+    # Opret edge labels (vægte) som Vector - GraphPlot forventer Vector, ikke Dict
+    # En label for hver edge i edges(G)
+    edge_labels = String[]
+    for e in edges(G)
+        i, j = src(e), dst(e)
+        # Vis label hvis: alle labels er aktiveret, ELLER kanten er i MST
+        if show_all_edge_labels || (i, j) in mst_edges || (j, i) in mst_edges
+            weight = edge_weights[(i, j)]
+            push!(edge_labels, string(round(weight, digits=dec)))
+        else
+            push!(edge_labels, "")  # Tom label for kanter uden label
+        end
+    end
+    
+    # Opret node labels
+    node_labels = [string(node) for node in noder]
+    
+    # Plotter grafen
+    # GraphPlot bruger automatisk en passende layout (spring layout som default)
+    p = gplot(G, 
+              nodelabel=node_labels,
+              edgelabel=edge_labels,
+              edgestrokec=edge_colors,
+              edgelinewidth=edge_widths,
+              nodesize=0.3,
+              nodefillc=node_colors,
+              nodestrokec=colorant"black",
+              nodestrokelw=2.0)
+    
+    # Prøv at vise plottet - virker i VSCode, men kan fejle i terminalen uden Cairo/Fontconfig
+    try
+        display(p)
+    catch e
+        if occursin("Cairo", string(e)) || occursin("Fontconfig", string(e)) || occursin("image/png", string(e))
+            println("   (Plottet kan ikke vises i denne terminal. Installer Cairo og Fontconfig for at se plottet.)")
+            println("   Koden kører stadig korrekt - se output filen for resultater.")
+        else
+            rethrow(e)  # Hvis det er en anden fejl, rethrow den
+        end
+    end
+    return p
+end
+
+##########################################################
+# Funktion til at visualisere shortest path
+# Kræver: using Graphs, GraphPlot, Colors (skal være inkluderet i filen der kalder funktionen)
+function plot_shortest_path(M, x, x_navne, kanter, noder, source_node, sink_node, c, dec=2)
+    # Vi starter med at bygge grafen med alle noder
+    num_noder = length(noder)
+    G = SimpleDiGraph(num_noder)  # Directed graph for shortest path
+
+    # Mapping fra nodenavn til integer index
+    node_to_int = Dict(noder[i] => i for i in 1:num_noder)
+
+    # Opretter mapping fra edge til vægt
+    edge_weights = Dict()
+    bidirectional_edges = Dict()  # Track edges der har modsatte retning: (min(i,j), max(i,j)) => (weight_ij, weight_ji)
+    added_undirected = Set()  # Track undirected edges vi allerede har tilføjet
+
+    # Først: saml alle edges for at finde bidirectional edges
+    for (idx, kant) in enumerate(kanter)
+        from_node, to_node, weight = kant[1], kant[2], kant[3]
+        i = node_to_int[from_node]
+        j = node_to_int[to_node]
+        
+        is_undirected = length(kant) == 4 && kant[4] == "U"
+        
+        if !is_undirected
+            # For directed edges, track begge retninger
+            key = (min(i, j), max(i, j))
+            if !haskey(bidirectional_edges, key)
+                bidirectional_edges[key] = (nothing, nothing)
+            end
+            if i < j
+                bidirectional_edges[key] = (Float64(weight), bidirectional_edges[key][2])
+            else
+                bidirectional_edges[key] = (bidirectional_edges[key][1], Float64(weight))
+            end
+        end
+    end
+
+    # Tilføjer alle kanter til grafen
+    for (idx, kant) in enumerate(kanter)
+        from_node, to_node, weight = kant[1], kant[2], kant[3]
+        i = node_to_int[from_node]
+        j = node_to_int[to_node]
+        
+        # Håndter både (node1, node2, weight) og (node1, node2, weight, direction) format
+        is_undirected = length(kant) == 4 && kant[4] == "U"
+        
+        if is_undirected
+            # For undirected edges, tilføj begge retninger som separate edges (to pile)
+            if i < j
+                # Tilføj begge retninger
+                if !has_edge(G, i, j)
+                    add_edge!(G, i, j)
+                end
+                if !has_edge(G, j, i)
+                    add_edge!(G, j, i)
+                end
+                edge_weights[(i, j)] = Float64(weight)
+                edge_weights[(j, i)] = Float64(weight)
+                push!(added_undirected, (i, j))
+            elseif j < i && !((j, i) in added_undirected)
+                # Tilføj begge retninger
+                if !has_edge(G, j, i)
+                    add_edge!(G, j, i)
+                end
+                if !has_edge(G, i, j)
+                    add_edge!(G, i, j)
+                end
+                edge_weights[(j, i)] = Float64(weight)
+                edge_weights[(i, j)] = Float64(weight)
+                push!(added_undirected, (j, i))
+            end
+        else
+            # Directed edge - tilføj begge retninger hvis der er to retninger (to pile)
+            key = (min(i, j), max(i, j))
+            has_both_directions = haskey(bidirectional_edges, key) && 
+                                  bidirectional_edges[key][1] !== nothing && 
+                                  bidirectional_edges[key][2] !== nothing
+            
+            if has_both_directions
+                # For bidirectional edges, tilføj begge retninger som separate edges (to pile)
+                w1, w2 = bidirectional_edges[key]
+                if i < j
+                    # Tilføj begge retninger
+                    if !has_edge(G, i, j)
+                        add_edge!(G, i, j)
+                    end
+                    if !has_edge(G, j, i)
+                        add_edge!(G, j, i)
+                    end
+                    edge_weights[(i, j)] = w1  # Vægt for i -> j
+                    edge_weights[(j, i)] = w2  # Vægt for j -> i
+                end
+            else
+                # Kun én retning - tilføj normalt
+                add_edge!(G, i, j)
+                edge_weights[(i, j)] = Float64(weight)
+            end
+        end
+    end
+
+    # Find aktive kanter i shortest path (værdi ≈ 1.0)
+    path_edges = Set()
+    for k in eachindex(x_navne)
+        val = value(x[k])
+        if abs(val - 1.0) < 1e-6 || val > 1e-6
+            var_name = x_navne[k]
+            parts = split(var_name, "_")
+            if length(parts) >= 3
+                node1 = parts[2]
+                node2 = parts[3]
+                if haskey(node_to_int, node1) && haskey(node_to_int, node2)
+                    i = node_to_int[node1]
+                    j = node_to_int[node2]
+                    if abs(val - 1.0) < 1e-6  # Kun edges med værdi 1.0 er i stien
+                        push!(path_edges, (i, j))
+                    end
+                end
+            end
+        end
+    end
+
+    # Opretter farver for edges - grøn og tyk for path, grå og tynd for andre
+    # For undirected edges, tjek også omvendt retning
+    edge_colors = []
+    edge_widths = []
+    for e in edges(G)
+        i, j = src(e), dst(e)
+        # Tjek om edge er i path (inkl. omvendt retning for undirected)
+        is_in_path = (i, j) in path_edges || (j, i) in path_edges
+        push!(edge_colors, is_in_path ? colorant"seagreen" : colorant"grey50")
+        push!(edge_widths, is_in_path ? 3.0 : 0.5)
+    end
+    
+    # Opretter farver for noder - marker source og sink
+    node_colors = fill(colorant"lightsteelblue", num_noder)
+    source_idx = node_to_int[source_node]
+    sink_idx = node_to_int[sink_node]
+    node_colors[source_idx] = colorant"red"  # Rød for source (start)
+    node_colors[sink_idx] = colorant"green"  # Grøn for sink (mål)
+
+    # ===== INDSTILLING: Edge labels =====
+    # Sæt til true for at vise labels på alle kanter, false for kun path-kanter
+    show_all_edge_labels = false  # Ændr denne værdi for at vælge
+    # =====================================
+    
+    # Opret edge labels (vægte) som Vector - GraphPlot forventer Vector, ikke Dict
+    edge_labels = String[]
+    for e in edges(G)
+        i, j = src(e), dst(e)
+        # Tjek om edge er i path (inkl. omvendt retning for undirected)
+        is_in_path = (i, j) in path_edges || (j, i) in path_edges
+        # Vis label hvis: alle labels er aktiveret, ELLER kanten er i path
+        if show_all_edge_labels || is_in_path
+            weight = edge_weights[(i, j)]
+            push!(edge_labels, string(round(weight, digits=dec)))
+        else
+            push!(edge_labels, "")  # Tom label for kanter uden label
+        end
+    end
+    
+    # Opret node labels
+    node_labels = [string(node) for node in noder]
+    
+    # Plotter grafen
+    p = gplot(G, 
+              nodelabel=node_labels,
+              edgelabel=edge_labels,
+              edgestrokec=edge_colors,
+              edgelinewidth=edge_widths,
+              nodesize=0.3,
+              nodefillc=node_colors,
+              nodestrokec=colorant"black",
+              nodestrokelw=2.0)
+    
+    # Prøv at vise plottet - virker i VSCode, men kan fejle i terminalen uden Cairo/Fontconfig
+    try
+        display(p)
+    catch e
+        if occursin("Cairo", string(e)) || occursin("Fontconfig", string(e)) || occursin("image/png", string(e))
+            println("   (Plottet kan ikke vises i denne terminal. Installer Cairo og Fontconfig for at se plottet.)")
+            println("   Koden kører stadig korrekt - se output filen for resultater.")
+        else
+            rethrow(e)  # Hvis det er en anden fejl, rethrow den
+        end
+    end
+    return p
+end
+
+##########################################################
+# Funktion til at visualisere shortest path fra algoritme (Dijkstra/Bellman-Ford)
+# Kræver: using Graphs, GraphPlot, Colors (skal være inkluderet i filen der kalder funktionen)
+# path: Liste af nodenavne fra source til sink
+function plot_shortest_path_from_algorithm(path, kanter, noder, source_node, sink_node, dec=2)
+    # Vi starter med at bygge grafen med alle noder
+    num_noder = length(noder)
+    G = SimpleDiGraph(num_noder)  # Directed graph for shortest path
+
+    # Mapping fra nodenavn til integer index
+    node_to_int = Dict(noder[i] => i for i in 1:num_noder)
+
+    # Opretter mapping fra edge til vægt
+    edge_weights = Dict()
+    bidirectional_edges = Dict()  # Track edges der har modsatte retning
+    added_undirected = Set()  # Track undirected edges vi allerede har tilføjet
+
+    # Først: saml alle edges for at finde bidirectional edges
+    for (idx, kant) in enumerate(kanter)
+        from_node, to_node, weight = kant[1], kant[2], kant[3]
+        i = node_to_int[from_node]
+        j = node_to_int[to_node]
+        
+        is_undirected = length(kant) == 4 && kant[4] == "U"
+        
+        if !is_undirected
+            # For directed edges, track begge retninger
+            key = (min(i, j), max(i, j))
+            if !haskey(bidirectional_edges, key)
+                bidirectional_edges[key] = (nothing, nothing)
+            end
+            if i < j
+                bidirectional_edges[key] = (Float64(weight), bidirectional_edges[key][2])
+            else
+                bidirectional_edges[key] = (bidirectional_edges[key][1], Float64(weight))
+            end
+        end
+    end
+
+    # Tilføjer alle kanter til grafen
+    for (idx, kant) in enumerate(kanter)
+        from_node, to_node, weight = kant[1], kant[2], kant[3]
+        i = node_to_int[from_node]
+        j = node_to_int[to_node]
+        
+        # Håndter både (node1, node2, weight) og (node1, node2, weight, direction) format
+        is_undirected = length(kant) == 4 && kant[4] == "U"
+        
+        if is_undirected
+            # For undirected edges, tilføj begge retninger som separate edges (to pile)
+            if i < j
+                # Tilføj begge retninger
+                if !has_edge(G, i, j)
+                    add_edge!(G, i, j)
+                end
+                if !has_edge(G, j, i)
+                    add_edge!(G, j, i)
+                end
+                edge_weights[(i, j)] = Float64(weight)
+                edge_weights[(j, i)] = Float64(weight)
+                push!(added_undirected, (i, j))
+            elseif j < i && !((j, i) in added_undirected)
+                # Tilføj begge retninger
+                if !has_edge(G, j, i)
+                    add_edge!(G, j, i)
+                end
+                if !has_edge(G, i, j)
+                    add_edge!(G, i, j)
+                end
+                edge_weights[(j, i)] = Float64(weight)
+                edge_weights[(i, j)] = Float64(weight)
+                push!(added_undirected, (j, i))
+            end
+        else
+            # Directed edge - tilføj begge retninger hvis der er to retninger (to pile)
+            key = (min(i, j), max(i, j))
+            has_both_directions = haskey(bidirectional_edges, key) && 
+                                  bidirectional_edges[key][1] !== nothing && 
+                                  bidirectional_edges[key][2] !== nothing
+            
+            if has_both_directions
+                # For bidirectional edges, tilføj begge retninger som separate edges (to pile)
+                w1, w2 = bidirectional_edges[key]
+                if i < j
+                    # Tilføj begge retninger
+                    if !has_edge(G, i, j)
+                        add_edge!(G, i, j)
+                    end
+                    if !has_edge(G, j, i)
+                        add_edge!(G, j, i)
+                    end
+                    edge_weights[(i, j)] = w1  # Vægt for i -> j
+                    edge_weights[(j, i)] = w2  # Vægt for j -> i
+                end
+            else
+                # Kun én retning - tilføj normalt
+                add_edge!(G, i, j)
+                edge_weights[(i, j)] = Float64(weight)
+            end
+        end
+    end
+
+    # Find kanter i path
+    path_edges = Set()
+    for i in 1:(length(path)-1)
+        from_node = path[i]
+        to_node = path[i+1]
+        if haskey(node_to_int, from_node) && haskey(node_to_int, to_node)
+            from_idx = node_to_int[from_node]
+            to_idx = node_to_int[to_node]
+            push!(path_edges, (from_idx, to_idx))
+        end
+    end
+
+    # Opretter farver for edges - grøn og tyk for path, grå og tynd for andre
+    # For undirected edges, tjek også omvendt retning
+    edge_colors = []
+    edge_widths = []
+    for e in edges(G)
+        i, j = src(e), dst(e)
+        # Tjek om edge er i path (inkl. omvendt retning for undirected)
+        is_in_path = (i, j) in path_edges || (j, i) in path_edges
+        push!(edge_colors, is_in_path ? colorant"seagreen" : colorant"grey50")
+        push!(edge_widths, is_in_path ? 3.0 : 0.5)
+    end
+    
+    # Opretter farver for noder - marker source og sink
+    node_colors = fill(colorant"lightsteelblue", num_noder)
+    source_idx = node_to_int[source_node]
+    sink_idx = node_to_int[sink_node]
+    node_colors[source_idx] = colorant"red"  # Rød for source (start)
+    node_colors[sink_idx] = colorant"green"  # Grøn for sink (mål)
+
+    # ===== INDSTILLING: Edge labels =====
+    show_all_edge_labels = false  # Ændr denne værdi for at vælge
+    # =====================================
+    
+    # Opret edge labels (vægte) som Vector
+    edge_labels = String[]
+    for e in edges(G)
+        i, j = src(e), dst(e)
+        # Tjek om edge er i path (inkl. omvendt retning for undirected)
+        is_in_path = (i, j) in path_edges || (j, i) in path_edges
+        if show_all_edge_labels || is_in_path
+            weight = edge_weights[(i, j)]
+            push!(edge_labels, string(round(weight, digits=dec)))
+        else
+            push!(edge_labels, "")
+        end
+    end
+    
+    # Opret node labels
+    node_labels = [string(node) for node in noder]
+    
+    # Plotter grafen
+    p = gplot(G, 
+              nodelabel=node_labels,
+              edgelabel=edge_labels,
+              edgestrokec=edge_colors,
+              edgelinewidth=edge_widths,
+              nodesize=0.3,
+              nodefillc=node_colors,
+              nodestrokec=colorant"black",
+              nodestrokelw=2.0)
+    
+    # Prøv at vise plottet - virker i VSCode, men kan fejle i terminalen uden Cairo/Fontconfig
+    try
+        display(p)
+    catch e
+        if occursin("Cairo", string(e)) || occursin("Fontconfig", string(e)) || occursin("image/png", string(e))
+            println("   (Plottet kan ikke vises i denne terminal. Installer Cairo og Fontconfig for at se plottet.)")
+            println("   Koden kører stadig korrekt - se output filen for resultater.")
+        else
+            rethrow(e)  # Hvis det er en anden fejl, rethrow den
+        end
+    end
+    return p
+end
+    
