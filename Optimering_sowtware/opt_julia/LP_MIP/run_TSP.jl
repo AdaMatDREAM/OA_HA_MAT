@@ -1,5 +1,7 @@
 using HiGHS, JuMP;
 using Printf
+using Colors  # Nødvendig for colorant i print.jl funktioner
+using Combinatorics  # For combinations() i TSP subtour constraints
 
 # Includefiler til funktioner
 include("build.jl")

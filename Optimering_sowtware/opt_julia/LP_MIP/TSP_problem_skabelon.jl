@@ -1,3 +1,5 @@
+using Combinatorics  # For combinations() funktionen til at generere delmængder
+
 function TSP_problem_skabelon()
     # Type af model: TSP er altid MIP med binary variabler
     model_type = "MIP";
@@ -80,8 +82,10 @@ function TSP_problem_skabelon()
     );
     
     # Generer subtour elimination constraints
-    # For alle delmængder S ⊆ {1,...,n} hvor |S| >= 2 og |S| <= n-1
-    # Constraint: Σ_{i ∈ S} Σ_{j ∈ S} x_ij ≤ |S| - 1
+    # For alle delmængder S ⊆ {1,...,n} hvor 2 ≤ |S| ≤ n-1
+    # Constraint: Σ_{i ∈ S} Σ_{j ∈ S, j ≠ i} x_ij ≤ |S| - 1
+    # Self-loops forhindres via høje omkostninger (L) i diagonalen af c_matrix
+    # Størrelse n (alle noder) er redundant med assignment constraints
     A_subtour, b_subtour, b_dir_subtour, b_navne_subtour = generate_subtour_constraints(n, node_navne);
     
     # Kombiner alle constraints
@@ -161,66 +165,44 @@ end
 
 # Funktion til at generere subtour elimination constraints
 # For alle delmængder S ⊆ {1,...,n} hvor 2 ≤ |S| ≤ n-1
-# Constraint: Σ_{i ∈ S} Σ_{j ∈ S} x_ij ≤ |S| - 1
+# Constraint: Σ_{i ∈ S} Σ_{j ∈ S, j ≠ i} x_ij ≤ |S| - 1
+# BEMÆRK: Vi udelader størrelse 1 (self-loops forhindres via høje omkostninger L i diagonalen)
+# BEMÆRK: Vi udelader også størrelse n (alle noder) da det er redundant med assignment constraints
+# Brug Combinatorics.combinations() for at simplificere genereringen
 function generate_subtour_constraints(n, node_navne)
-    # Saml først alle constraints dynamisk for at undgå undefined references
+    # Saml alle constraints
     A_rows = Vector{Vector{Float64}}()
     b_values = Float64[]
     b_dir_values = Symbol[]
     b_navne_values = String[]
     
-    # Generer alle delmængder S ⊆ {1,...,n} hvor 2 ≤ |S| ≤ n-1
-    # Generer systematisk: først alle delmængder med størrelse 2, så 3, osv.
-    # Saml først alle delmængder, sorter dem, og generer derefter constraints
     constraint_idx = 1
     
-    # Generer delmængder systematisk efter størrelse (2, 3, ..., n-1)
+    # Generer constraints for alle delmængder med størrelse 2 til n-1
+    # Brug Combinatorics.combinations() for at generere alle kombinationer
     for size_S in 2:(n-1)
-        # Saml alle delmængder med denne størrelse
-        subsets_of_size = Vector{Vector{Int}}()
-        
         # Generer alle kombinationer af 'size_S' noder fra {1,...,n}
-        for mask in 1:(2^n - 1)
-            # Konverter mask til delmængde S
-            S = Int[]
-            for i in 1:n
-                if (mask & (1 << (i-1))) != 0
-                    push!(S, i)
+        for S in combinations(1:n, size_S)
+            # Opret en række for denne constraint
+            A_row = zeros(n*n)
+            
+            # Constraint: Σ_{i ∈ S} Σ_{j ∈ S, j ≠ i} x_ij ≤ |S| - 1
+            # x_navne er i row-major orden, så x_ij er på position (i-1)*n + j
+            # Vi udelader self-loops (x_ii) - kun kanter mellem forskellige noder i S
+            for i in S
+                for j in S
+                    if i != j  # Udelad self-loops
+                        # Variabel x_ij er på position (i-1)*n + j (row-major)
+                        A_row[(i-1)*n + j] = 1.0
+                    end
                 end
             end
             
-            # Kun delmængder med præcis størrelse size_S
-            if length(S) == size_S
-                push!(subsets_of_size, S)
-            end
-        end
-        
-        # Sorter delmængderne leksikografisk (så {1,2} kommer før {1,3}, osv.)
-        sort!(subsets_of_size)
-        
-        # Generer constraints for hver sorteret delmængde
-        for S in subsets_of_size
-                # Opret en række for denne constraint
-                A_row = zeros(n*n)
-                
-                # Constraint: Σ_{i ∈ S} Σ_{j ∈ S, j ≠ i} x_ij ≤ |S| - 1
-                # x_navne er i row-major orden, så x_ij er på position (i-1)*n + j
-                # BEMÆRK: Vi udelader self-loops (x_ii) - kun kanter mellem forskellige noder i S
-                for i in S
-                    for j in S
-                        if i != j  # Udelad self-loops - kun kanter mellem forskellige noder
-                            # Variabel x_ij er på position (i-1)*n + j (row-major)
-                            A_row[(i-1)*n + j] = 1.0
-                        end
-                    end
-                end
-                
-                push!(A_rows, A_row)
-                push!(b_values, length(S) - 1)
-                push!(b_dir_values, :<=)
-                push!(b_navne_values, string("Subtour_", constraint_idx))
-                
-                constraint_idx += 1
+            push!(A_rows, A_row)
+            push!(b_values, length(S) - 1)
+            push!(b_dir_values, :<=)
+            push!(b_navne_values, string("Subtour_", constraint_idx))
+            constraint_idx += 1
         end
     end
     
