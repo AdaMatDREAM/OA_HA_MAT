@@ -1,27 +1,30 @@
-Running HiGHS 1.10.0 (git hash: fd8665394e): Copyright (c) 2025 HiGHS under MIT licence terms
-LP   has 25 rows; 17 cols; 51 nonzeros
+Running HiGHS 1.12.0 (git hash: 755a8e027): Copyright (c) 2025 HiGHS under MIT licence terms
+LP has 25 rows; 17 cols; 51 nonzeros
 Coefficient ranges:
-  Matrix [1e+00, 1e+00]
-  Cost   [1e+00, 9e+00]
-  Bound  [1e+00, 1e+00]
-  RHS    [1e+00, 1e+00]
+  Matrix  [1e+00, 1e+00]
+  Cost    [1e+00, 9e+00]
+  Bound   [1e+00, 1e+00]
+  RHS     [1e+00, 1e+00]
 Presolving model
 8 rows, 17 cols, 34 nonzeros  0s
 Dependent equations search running on 8 equations with time limit of 1000.00s
 Dependent equations search removed 1 rows and 3 nonzeros in 0.00s (limit = 1000.00s)
 7 rows, 17 cols, 31 nonzeros  0s
-Presolve : Reductions: rows 7(-18); columns 17(-0); elements 31(-20)
+Presolve reductions: rows 7(-18); columns 17(-0); nonzeros 31(-20) 
 Solving the presolved LP
 Using EKK dual simplex solver - serial
   Iteration        Objective     Infeasibilities num(sum)
           0     0.0000000000e+00 Pr: 1(1) 0s
           7     1.3000000000e+01 Pr: 0(0) 0s
+
+Performed postsolve
 Solving the original LP from the solution after postsolve
+
 Model status        : Optimal
 Simplex   iterations: 7
 Objective value     :  1.3000000000e+01
-Relative P-D gap    :  0.0000000000e+00
-HiGHS run time      :          0.00
+P-D objective error :  0.0000000000e+00
+HiGHS run time      :          0.06
 
 ====================================================================================================
 PROBLEMFORMULERING

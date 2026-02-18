@@ -1246,7 +1246,7 @@ function plot_max_flow(M, x, x_navne, kanter, noder, source_node, sink_node, kap
     
     # Prøv at vise plottet - virker i VSCode, men kan fejle i terminalen uden Cairo/Fontconfig
     try
-        display(p)
+        display("image/svg+xml",p)
     catch e
         if occursin("Cairo", string(e)) || occursin("Fontconfig", string(e)) || occursin("image/png", string(e))
             println("   (Plottet kan ikke vises i denne terminal. Installer Cairo og Fontconfig for at se plottet.)")
@@ -1343,7 +1343,7 @@ function plot_MST(M, x, x_navne, kanter, noder, c, dec=2)
     
     # Prøv at vise plottet - virker i VSCode, men kan fejle i terminalen uden Cairo/Fontconfig
     try
-        display(p)
+        display("image/svg+xml",p)
     catch e
         if occursin("Cairo", string(e)) || occursin("Fontconfig", string(e)) || occursin("image/png", string(e))
             println("   (Plottet kan ikke vises i denne terminal. Installer Cairo og Fontconfig for at se plottet.)")
@@ -1439,7 +1439,7 @@ function plot_MST_from_edges(active_edges, kanter, noder, dec=2)
     
     # Prøv at vise plottet - virker i VSCode, men kan fejle i terminalen uden Cairo/Fontconfig
     try
-        display(p)
+        display("image/svg+xml",p)
     catch e
         if occursin("Cairo", string(e)) || occursin("Fontconfig", string(e)) || occursin("image/png", string(e))
             println("   (Plottet kan ikke vises i denne terminal. Installer Cairo og Fontconfig for at se plottet.)")
@@ -1628,7 +1628,7 @@ function plot_shortest_path(M, x, x_navne, kanter, noder, source_node, sink_node
     
     # Prøv at vise plottet - virker i VSCode, men kan fejle i terminalen uden Cairo/Fontconfig
     try
-        display(p)
+        display("image/svg+xml",p)
     catch e
         if occursin("Cairo", string(e)) || occursin("Fontconfig", string(e)) || occursin("image/png", string(e))
             println("   (Plottet kan ikke vises i denne terminal. Installer Cairo og Fontconfig for at se plottet.)")
@@ -1807,7 +1807,7 @@ function plot_shortest_path_from_algorithm(path, kanter, noder, source_node, sin
     
     # Prøv at vise plottet - virker i VSCode, men kan fejle i terminalen uden Cairo/Fontconfig
     try
-        display(p)
+        display("image/svg+xml",p)
     catch e
         if occursin("Cairo", string(e)) || occursin("Fontconfig", string(e)) || occursin("image/png", string(e))
             println("   (Plottet kan ikke vises i denne terminal. Installer Cairo og Fontconfig for at se plottet.)")
