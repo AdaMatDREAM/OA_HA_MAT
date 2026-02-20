@@ -130,6 +130,12 @@ function _print_queue_table_content(io, lambda, mu, sigma_a, sigma_p, N, dec)
     @printf(io, "%-50s = %.*f\n", "Average_length_of_queue (A_L_queue)", dec, avg_length_of_queue)
     @printf(io, "%-50s = %.*f\n", "Total_inventory (T_inventory)", dec, total_inventory)
     
+    # Beregn minimum N for at rho <= 1
+    min_N = ceil(Int, lambda / mu)
+    println(io, "-"^80)
+    @printf(io, "%-50s = %d\n", "Minimum N (for rho <= 1)", min_N)
+    @printf(io, "%-50s = %.*f\n", "  (lambda/mu = minimum N)", dec, lambda/mu)
+    
     println(io, "="^80)
     println(io)
     
@@ -204,6 +210,12 @@ function _print_queue_table_T_content(io, T_a, T_p, sigma_a, sigma_p, N, dec)
     @printf(io, "%-50s = %.*f\n", "Inventory_processing (I_processing)", dec, inventory_processing)
     @printf(io, "%-50s = %.*f\n", "Average_length_of_queue (A_L_queue)", dec, avg_length_of_queue)
     @printf(io, "%-50s = %.*f\n", "Total_inventory (T_inventory)", dec, total_inventory)
+    
+    # Beregn minimum N for at rho <= 1
+    min_N = ceil(Int, lambda / mu)
+    println(io, "-"^80)
+    @printf(io, "%-50s = %d\n", "Minimum N (for rho <= 1)", min_N)
+    @printf(io, "%-50s = %.*f\n", "  (lambda/mu = minimum N)", dec, lambda/mu)
     
     println(io, "="^80)
     println(io)
