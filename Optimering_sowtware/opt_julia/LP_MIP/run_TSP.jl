@@ -2,6 +2,7 @@ using HiGHS, JuMP;
 using Printf
 using Colors  # Nødvendig for colorant i print.jl funktioner
 using Combinatorics  # For combinations() i TSP subtour constraints
+using Graphs, GraphPlot  # For TSP tour visualisering
 
 # Includefiler til funktioner
 include("build.jl")
@@ -35,6 +36,12 @@ if P.model_type == "MIP"
         if status_str == "OPTIMAL" || status_str == "ALMOST_OPTIMAL"
             print_TSP_matrix(M, x, P.x_navne, P.node_navne, P.dec)
             print_TSP_tour(M, x, P.x_navne, P.node_navne, P.c, P.dec)
+            
+            # Visualiser TSP tour med GraphPlot
+            println("\n" * "─"^100)
+            println("GRAF VISUALISERING (GraphPlot):")
+            println("─"^100)
+            plot_TSP(M, x, P.x_navne, P.node_navne, P.c, P.dec)
         end
     end
     
@@ -57,6 +64,12 @@ if P.model_type == "MIP"
                 if status_str == "OPTIMAL" || status_str == "ALMOST_OPTIMAL"
                     print_TSP_matrix(M, x, P.x_navne, P.node_navne, P.dec)
                     print_TSP_tour(M, x, P.x_navne, P.node_navne, P.c, P.dec)
+
+                     # Visualiser TSP tour med GraphPlot
+                    println("\n" * "─"^100)
+                    println("GRAF VISUALISERING (GraphPlot):")
+                    println("─"^100)
+                    plot_TSP(M, x, P.x_navne, P.node_navne, P.c, P.dec)
                 end
             end
         end

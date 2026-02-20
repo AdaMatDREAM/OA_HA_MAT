@@ -1818,4 +1818,131 @@ function plot_shortest_path_from_algorithm(path, kanter, noder, source_node, sin
     end
     return p
 end
+
+##########################################################
+# Funktion til at visualisere TSP tour
+# Kræver: using Graphs, GraphPlot, Colors (skal være inkluderet i filen der kalder funktionen)
+function plot_TSP(M, x, x_navne, node_navne, c, dec=2)
+    # Vi starter med at bygge grafen med alle noder
+    n = length(node_navne)
+    G = SimpleDiGraph(n)  # Directed graph for TSP
+    
+    # Tilføj alle mulige kanter (alle par af noder)
+    for i in 1:n
+        for j in 1:n
+            if i != j  # Udelad self-loops
+                if !has_edge(G, i, j)
+                    add_edge!(G, i, j)
+                end
+            end
+        end
+    end
+    
+    # Opretter mapping fra edge til omkostning
+    # c er en vektor i row-major orden: c[(i-1)*n + j] er omkostningen for x_ij
+    edge_costs = Dict()
+    for i in 1:n
+        for j in 1:n
+            if i != j
+                cost_idx = (i-1)*n + j
+                if cost_idx <= length(c)
+                    edge_costs[(i, j)] = c[cost_idx]
+                end
+            end
+        end
+    end
+    
+    # Find alle aktive kanter i tour'en (x_ij = 1)
+    tour_edges = Set()
+    for k in eachindex(x_navne)
+        if abs(value(x[k]) - 1.0) < 1e-6  # Tjek om x[k] ≈ 1
+            var_name = x_navne[k]
+            # Parse variabelnavn: x_i_j (hvor i og j er tal)
+            parts = split(var_name, "_")
+            if length(parts) >= 3
+                i_str = parts[2]
+                j_str = parts[3]
+                
+                # Konverter til integers
+                try
+                    i = parse(Int, i_str)
+                    j = parse(Int, j_str)
+                    if i != j  # Udelad self-loops
+                        push!(tour_edges, (i, j))
+                    end
+                catch
+                    # Hvis parsing fejler, prøv at finde i node_navne (for bagudkompatibilitet)
+                    i = findfirst(==(i_str), node_navne)
+                    j = findfirst(==(j_str), node_navne)
+                    if i !== nothing && j !== nothing && i != j
+                        push!(tour_edges, (i, j))
+                    end
+                end
+            end
+        end
+    end
+    
+    # Opretter farver for edges - grøn og tyk for tour, grå og tynd for andre
+    edge_colors = []
+    edge_widths = []
+    for e in edges(G)
+        i, j = src(e), dst(e)
+        is_in_tour = (i, j) in tour_edges
+        push!(edge_colors, is_in_tour ? colorant"seagreen" : colorant"grey50")
+        push!(edge_widths, is_in_tour ? 3.0 : 0.5)
+    end
+    
+    # Opretter farver for noder - alle samme farve (lightsteelblue)
+    node_colors = fill(colorant"lightsteelblue", n)
+    
+    # ===== INDSTILLING: Edge labels =====
+    # Sæt til true for at vise labels på alle kanter, false for kun tour-kanter
+    show_all_edge_labels = false  # Ændr denne værdi for at vælge
+    # =====================================
+    
+    # Opret edge labels (omkostninger) som Vector - GraphPlot forventer Vector, ikke Dict
+    edge_labels = String[]
+    for e in edges(G)
+        i, j = src(e), dst(e)
+        is_in_tour = (i, j) in tour_edges
+        # Vis label hvis: alle labels er aktiveret, ELLER kanten er i tour
+        if show_all_edge_labels || is_in_tour
+            if haskey(edge_costs, (i, j))
+                cost = edge_costs[(i, j)]
+                push!(edge_labels, string(round(cost, digits=dec)))
+            else
+                push!(edge_labels, "")
+            end
+        else
+            push!(edge_labels, "")  # Tom label for kanter uden label
+        end
+    end
+    
+    # Opret node labels
+    node_labels = [string(node) for node in node_navne]
+    
+    # Plotter grafen
+    p = gplot(G, 
+              nodelabel=node_labels,
+              edgelabel=edge_labels,
+              edgestrokec=edge_colors,
+              edgelinewidth=edge_widths,
+              nodesize=0.8,
+              nodefillc=node_colors,
+              nodestrokec=colorant"black",
+              nodestrokelw=1.0)
+    
+    # Prøv at vise plottet - virker i VSCode, men kan fejle i terminalen uden Cairo/Fontconfig
+    try
+        display("image/svg+xml",p)
+    catch e
+        if occursin("Cairo", string(e)) || occursin("Fontconfig", string(e)) || occursin("image/png", string(e))
+            println("   (Plottet kan ikke vises i denne terminal. Installer Cairo og Fontconfig for at se plottet.)")
+            println("   Koden kører stadig korrekt - se output filen for resultater.")
+        else
+            rethrow(e)  # Hvis det er en anden fejl, rethrow den
+        end
+    end
+    return p
+end
     

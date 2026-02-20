@@ -1,0 +1,107 @@
+
+================================================================================
+KØTEORI BEREGNINGER
+================================================================================
+
+Input parametre:
+  lambda (ankomst rate)                            = 180.0000
+  mu (service rate)                                = 75.0000
+  sigma_a (std. ankomst)                           = 0.0100
+  sigma_p (std. service)                           = 0.0500
+  N (antal servere)                                = 3
+
+--------------------------------------------------------------------------------
+Beregnede værdier (i rækkefølge):
+--------------------------------------------------------------------------------
+Arrival_rate (lambda)                              = 180.0000
+Processing_rate (mu)                               = 75.0000
+Utilization (rho)                                  = 0.8000
+Coefficient_of_variation_arrival (c_a)             = 1.8000
+Coefficient_of_variation_processing (c_p)          = 3.7500
+Average_queing_time (A_Q_time)                     = 0.1278
+Average_lead_time (A_L_time)                       = 0.1412
+Inventory_processing (I_processing)                = 2.4000
+Average_length_of_queue (A_L_queue)                = 23.0116
+Total_inventory (T_inventory)                      = 25.4116
+================================================================================
+
+FORKLARING AF BEREGNEDE VÆRDIER:
+--------------------------------------------------------------------------------
+
+• Arrival_rate (lambda):
+  Gennemsnitlig antal kunder/opgaver der ankommer per tidsenhed.
+  Højere lambda betyder mere trafik til systemet.
+
+• Processing_rate (mu):
+  Gennemsnitlig antal kunder/opgaver der kan betjenes per tidsenhed per server.
+  Højere mu betyder hurtigere service.
+
+• Utilization (rho):
+  Systemets udnyttelsesgrad: rho = lambda / (N * mu).
+  - rho < 1: Systemet kan håndtere ankomsten (stabil tilstand)
+  - rho = 1: Systemet er præcis i balance (meget følsomt)
+  - rho > 1: Systemet kan ikke følge med (ustabil, kø vokser)
+  Når rho nærmer sig 1, vokser ventetiderne eksponentielt.
+
+• Coefficient_of_variation_arrival (c_a):
+  Måler variabiliteten i ankomsttiderne.
+  - c_a = 0: Perfekt regelmæssige ankomster
+  - c_a = 1: Poisson-ankomster (tilfældige)
+  - c_a > 1: Høj variabilitet (bursty trafik)
+  Højere variabilitet øger ventetiderne.
+
+• Coefficient_of_variation_processing (c_p):
+  Måler variabiliteten i service-tiderne.
+  - c_p = 0: Faste service-tider
+  - c_p = 1: Eksponentielt fordelte service-tider
+  - c_p > 1: Høj variabilitet i service
+  Højere variabilitet øger ventetiderne.
+
+• Average_queing_time (A_Q_time):
+  Forventet tid en kunde/opgave venter i køen før betjening starter.
+  Beregnet ved hjælp af Kingman's formel (eller udvidet formel for multi-server).
+  Denne værdi vokser kraftigt når utilization (rho) nærmer sig 1.
+
+• Average_lead_time (A_L_time):
+  Forventet total tid en kunde/opgave er i systemet (ventetid + service tid).
+  A_L_time = A_Q_time + 1/mu
+  Dette er den samlede 'lead time' fra ankomst til afgang.
+
+• Inventory_processing (I_processing):
+  Forventet antal kunder/opgaver der er i betjening (ikke i kø).
+  I_processing = rho * N
+  Dette er antallet af aktive servere i gennemsnit.
+
+• Average_length_of_queue (A_L_queue):
+  Forventet antal kunder/opgaver i køen (venter på betjening).
+  A_L_queue = lambda * A_Q_time (Little's Law)
+  Højere værdi betyder længere køer.
+
+• Total_inventory (T_inventory):
+  Forventet totalt antal kunder/opgaver i systemet (kø + betjening).
+  T_inventory = lambda * A_L_time (Little's Law)
+  Dette er det samlede 'work-in-progress' i systemet.
+
+PRAKTISKE IMPLIKATIONER:
+--------------------------------------------------------------------------------
+
+• Hvis utilization (rho) er tæt på 1, er systemet meget følsomt for
+  små ændringer i ankomst eller service rate. Små stigninger i
+  ankomst kan føre til dramatiske stigninger i ventetider.
+
+• For at reducere ventetider kan man:
+  - Øge antal servere (N)
+  - Øge service rate (mu) - hurtigere betjening
+  - Reducere variabilitet (c_a og c_p) - mere forudsigelige processer
+
+• Økonomiske overvejelser:
+  - Højere kapacitet (flere servere) reducerer ventetider men øger omkostninger
+  - Længere ventetider kan føre til:
+    * Tabt goodwill (utilfredse kunder)
+    * Abandoned calls/opgaver (kunder der opgiver)
+    * Tabt omsætning
+  - Optimal løsning findes ved at balancere kapacitetsomkostninger mod
+    omkostningerne ved ventetid.
+
+================================================================================
+
