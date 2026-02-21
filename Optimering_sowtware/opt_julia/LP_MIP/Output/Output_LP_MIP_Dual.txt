@@ -1,10 +1,10 @@
 Running HiGHS 1.12.0 (git hash: 755a8e027): Copyright (c) 2025 HiGHS under MIT licence terms
 LP has 3 rows; 3 cols; 9 nonzeros
 Coefficient ranges:
-  Matrix  [1e+00, 1e+02]
-  Cost    [1e+01, 8e+02]
+  Matrix  [1e+00, 1e+05]
+  Cost    [1e+03, 8e+05]
   Bound   [0e+00, 0e+00]
-  RHS     [1e+02, 3e+02]
+  RHS     [2e+01, 4e+03]
 Presolving model
 3 rows, 3 cols, 9 nonzeros  0s
 3 rows, 3 cols, 9 nonzeros  0s
@@ -12,28 +12,28 @@ Presolve reductions: rows 3(-0); columns 3(-0); nonzeros 9(-0) - Not reduced
 Problem not reduced by presolve: solving the LP
 Using EKK dual simplex solver - serial
   Iteration        Objective     Infeasibilities num(sum)
-          0     0.0000000000e+00 Pr: 3(580) 0s
-          4     2.0800000000e+03 Pr: 0(0) 0s
+          0     0.0000000000e+00 Pr: 3(1380) 0s
+          2     2.2400000000e+04 Pr: 0(0) 0s
 
 Model status        : Optimal
-Simplex   iterations: 4
-Objective value     :  2.0800000000e+03
-P-D objective error :  1.0928799589e-16
+Simplex   iterations: 2
+Objective value     :  2.2400000000e+04
+P-D objective error :  8.1203071518e-17
 HiGHS run time      :          0.00
 DUAL PROBLEM:
 
 ====================================================================================================
 PROBLEMFORMULERING
 ====================================================================================================
-Minimer Z = 11y_1 + 300y_2 + 820y_3
+Minimer Z = 800000y_1 + 1000y_2
 
 u.b.b.:
-  y_1 + 30y_2 + 40y_3 ≥ 120
-  y_1 + 15y_2 + 80y_3 ≥ 200
-  y_1 + 45y_2 + 120y_3 ≥ 260
+  100000y_1 + 100y_2 - 10y_3 ≥ 4000
+  5000y_1 + y_2 + y_3 ≥ 20
+  15000y_1 + 20y_2 + y_3 ≥ 300
 
 Samt:
-  y_1 ≥ 0, y_2 ≥ 0, y_3 ≥ 0
+  y_1 ≥ 0, y_2 ≥ 0, y_3 ≤ 0
 ====================================================================================================
 
 Output i LP format begynder nu
@@ -42,23 +42,23 @@ Output i LP format begynder nu
 OPTIMAL - Optimal løsning fundet
 ----------------------------------------------------------------------------------------------------
 Værdi af objektivfunktionen:
- -> 2080.00
+ -> 22400.00
 
 
 Variabelnavn                   |Variabeltype                   |Værdi                         
 -------------------------------------------------------------------------------------
-y_1                            |Continuous                     |40.00                         
+y_1                            |Continuous                     |0.03                          
 y_2                            |Continuous                     |0.00                          
-y_3                            |Continuous                     |2.00                          
+y_3                            |Continuous                     |-120.00                       
 
 
 Slack og skyggepris: 
 
 Begrænsningnavn |LHS             |RHS             |Slack           |Skyggepris      |Bindende status
 -----------------------------------------------------------------------------------------------
-BDual_1         |120.00          |120.00          |0.00            |1.50            |Bindende       
-BDual_2         |200.00          |200.00          |0.00            |9.50            |Bindende       
-BDual_3         |280.00          |260.00          |20.00           |0.00            |Ikke-bindende  
+BDual_1         |4000.00         |4000.00         |0.00            |5.33            |Bindende       
+BDual_2         |20.00           |20.00           |0.00            |53.33           |Bindende       
+BDual_3         |300.00          |300.00          |0.00            |0.00            |Bindende       
 
 
 
@@ -66,9 +66,9 @@ Sensitivitetsrapport for objektivkoefficienter:
 
 Variabelnavn       |Koefficientværdi   |Maksimalt fald     |Maksimal stigning  |Reduced costs     
 ---------------------------------------------------------------------------------------------------
-y_1                |11.00              |-0.75              |2.50               |0.00              
-y_2                |300.00             |-112.50            |Inf                |112.50            
-y_3                |820.00             |-300.00            |60.00              |0.00              
+y_1                |800000.00          |-800000.00         |563636.36          |0.00              
+y_2                |1000.00            |-413.33            |Inf                |413.33            
+y_3                |0.00               |-80.00             |160.00             |0.00              
 ---------------------------------------------------------------------------------------------------
 
 
@@ -77,9 +77,9 @@ Sensitivitetsrapport for RHS (kapacitet):
 
 Begrænsningnavn      |RHS (nu)             |Maksimalt fald       |Maksimal stigning   
 -----------------------------------------------------------------------------------
-BDual_1              |120.00               |-20.00               |20.00               
-BDual_2              |200.00               |-10.00               |40.00               
-BDual_3              |260.00               |-Inf                 |20.00               
+BDual_1              |4000.00              |0.00                 |Inf                 
+BDual_2              |20.00                |0.00                 |180.00              
+BDual_3              |300.00               |-Inf                 |0.00                
 -----------------------------------------------------------------------------------
 
 

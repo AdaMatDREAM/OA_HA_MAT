@@ -1,3 +1,22 @@
+using Printf
+
+# Hjælpefunktion til at runde værdier tæt på nul til 0.0 (for at undgå -0.00 i output)
+function round_near_zero(val, tol=1e-9)
+    return abs(val) < tol ? 0.0 : val
+end
+
+# Simpel funktion til at beregne kolonnebredde baseret på værdier
+function calculate_num_width(values, dec=2, min_width=10)
+    max_len = min_width
+    for val in values
+        if !isnan(val) && !isinf(val)
+            len = length(@sprintf("%.*f", dec, val))
+            max_len = max(max_len, len)
+        end
+    end
+    return max_len + 2  # Lidt padding
+end
+
 # Funktion til at tjekke om løsningen er heltallig (for at verificere unimodularitet)
 # Bruges til at verificere at LP-relaxation giver heltallig løsning for totally unimodular problemer
 function check_integer_solution(x, x_navne, tol=1e-6)
@@ -37,15 +56,16 @@ function print_slack_shadow_price(M, constraints, b_navne, b, b_dir, dec=2, tol=
     max_name_length = min(30, maximum([length(s) for s in b_navne]))
     name_width = max(15, max_name_length + 2)
     
-    @printf("%-*s |%-15s |%-15s |%-15s |%-15s |%-15s\n", 
-            name_width, "Begrænsningnavn", "LHS", "RHS", "Slack", "Skyggepris", "Bindende status")
-    println("-"^(name_width + 15*5 + 5))
-    
     # Hent objektivets retning
     obj_sense = objective_sense(M)
     obj_sense_str = string(obj_sense)
     
+    # Beregn alle værdier først for at finde maksimale bredder
+    lhs_vals = Float64[]
+    slack_vals = Float64[]
+    shadow_vals = Float64[]
     for i in eachindex(constraints)
+        push!(lhs_vals, value(constraints[i]))
         lhs = value(constraints[i])
         if b_dir[i] == :<=
             slack = b[i] - lhs
@@ -54,30 +74,34 @@ function print_slack_shadow_price(M, constraints, b_navne, b, b_dir, dec=2, tol=
         else
             slack = b[i] - lhs
         end
-        if abs(slack) <= tol
-            bindende = "Bindende"
-        else
-            bindende = "Ikke-bindende"
-        end
-        
-        # Beregn skyggepris korrekt baseret på objektivets retning
-        # I JuMP: for MIN problemer returnerer dual() positiv værdi for ≤ begrænsninger
-        #         for MAX problemer returnerer dual() negativ værdi for ≤ begrænsninger
-        # Skyggeprisen skal altid være den marginale værdi af at øge RHS
+        push!(slack_vals, slack)
         dual_val = dual(constraints[i])
-        # objective_sense returnerer MOI enum, konverter til string for sammenligning
-        if obj_sense_str == "MIN_SENSE"
-            # For MIN: dual() returnerer allerede korrekt fortegn
-            shadow_price = dual_val
-        else  # MAX_SENSE
-            # For MAX: dual() returnerer negativ værdi, så vi skal tage minus
-            shadow_price = -dual_val
-        end
-        
-        # Afkort navn hvis det er for langt
+        shadow_price = obj_sense_str == "MIN_SENSE" ? dual_val : -dual_val
+        push!(shadow_vals, round_near_zero(shadow_price))
+    end
+    
+    # Beregn dynamiske bredder
+    lhs_width = calculate_num_width(vcat(lhs_vals, b), dec, 10)
+    rhs_width = calculate_num_width(b, dec, 10)
+    slack_width = calculate_num_width(slack_vals, dec, 10)
+    shadow_width = calculate_num_width(shadow_vals, dec, 10)
+    bindende_width = max(15, length("Ikke-bindende"))
+    
+    total_width = name_width + lhs_width + rhs_width + slack_width + shadow_width + bindende_width + 10
+    @printf("%-*s |%-*s |%-*s |%-*s |%-*s |%-*s\n", 
+            name_width, "Begrænsningnavn", lhs_width, "LHS", rhs_width, "RHS", 
+            slack_width, "Slack", shadow_width, "Skyggepris", bindende_width, "Bindende status")
+    println("-"^total_width)
+    
+    for i in eachindex(constraints)
+        lhs = lhs_vals[i]
+        slack = slack_vals[i]
+        shadow_price = shadow_vals[i]
+        bindende = abs(slack) <= tol ? "Bindende" : "Ikke-bindende"
         navn = length(b_navne[i]) > max_name_length ? b_navne[i][1:max_name_length] : b_navne[i]
-        @printf("%-*s |%-15.*f |%-15.*f |%-15.*f |%-15.*f |%-15s\n", 
-                name_width, navn, dec, lhs, dec, b[i], dec, slack, dec, shadow_price, bindende)
+        @printf("%-*s |%-*.*f |%-*.*f |%-*.*f |%-*.*f |%-*s\n", 
+                name_width, navn, lhs_width, dec, lhs, rhs_width, dec, b[i], 
+                slack_width, dec, slack, shadow_width, dec, shadow_price, bindende_width, bindende)
     end
     println("\n")
 end
@@ -90,30 +114,43 @@ function print_sensitivity_objective_coefficients(M, report, x, x_navne, c, dec=
     max_name_length = min(40, maximum([length(s) for s in x_navne]))
     name_width = max(18, max_name_length + 2)
     
-    # Standard bredde for numeriske kolonner
-    num_width = 18
+    # Beregn alle værdier først for at finde maksimale bredder
+    coeff_vals = Float64[]
+    limit1_vals = Float64[]
+    limit2_vals = Float64[]
+    red_cost_vals = Float64[]
+    for i in eachindex(x)
+        push!(coeff_vals, c[i])
+        limits = report[x[i]]
+        push!(limit1_vals, round_near_zero(limits[1]))
+        push!(limit2_vals, round_near_zero(limits[2]))
+        push!(red_cost_vals, round_near_zero(reduced_cost(x[i])))
+    end
     
-    # Beregn total bredde for separator
-    total_width = name_width + num_width * 4 + 9  # 4 numeriske kolonner + 4 separators + 1
+    # Beregn dynamiske bredder
+    coeff_width = calculate_num_width(coeff_vals, dec, 10)
+    limit1_width = calculate_num_width(limit1_vals, dec, 10)
+    limit2_width = calculate_num_width(limit2_vals, dec, 10)
+    red_cost_width = calculate_num_width(red_cost_vals, dec, 10)
     
+    total_width = name_width + coeff_width + limit1_width + limit2_width + red_cost_width + 9
     @printf("%-*s |%-*s |%-*s |%-*s |%-*s\n", 
             name_width, "Variabelnavn", 
-            num_width, "Koefficientværdi",
-            num_width, "Maksimalt fald", 
-            num_width, "Maksimal stigning", 
-            num_width, "Reduced costs")
+            coeff_width, "Koefficientværdi",
+            limit1_width, "Maksimalt fald", 
+            limit2_width, "Maksimal stigning", 
+            red_cost_width, "Reduced costs")
     println("-"^total_width)
     
     for i in eachindex(x)
         limits = report[x[i]]
-        # Afkort navn hvis det er for langt
         navn = length(x_navne[i]) > max_name_length ? x_navne[i][1:max_name_length] : x_navne[i]
         @printf("%-*s |%-*.*f |%-*.*f |%-*.*f |%-*.*f\n", 
                 name_width, navn, 
-                num_width, dec, c[i], 
-                num_width, dec, limits[1], 
-                num_width, dec, limits[2], 
-                num_width, dec, reduced_cost(x[i]))
+                coeff_width, dec, c[i], 
+                limit1_width, dec, round_near_zero(limits[1]), 
+                limit2_width, dec, round_near_zero(limits[2]), 
+                red_cost_width, dec, round_near_zero(reduced_cost(x[i])))
     end
     println("-"^total_width)
     println("\n")
@@ -127,18 +164,50 @@ function print_sensitivity_RHS(report, constraints, b, b_navne, dec=2)
     max_name_length = min(30, maximum([length(s) for s in b_navne]))
     name_width = max(20, max_name_length + 2)
     
-    @printf("%-*s |%-20s |%-20s |%-20s\n", name_width, "Begrænsningnavn", "RHS (nu)",
-            "Maksimalt fald", "Maksimal stigning")
-    println("-"^(name_width + 20*3 + 3))
+    # Beregn alle værdier først for at finde maksimale bredder
+    rhs_vals = Float64[]
+    limit1_vals = Float64[]
+    limit2_vals = Float64[]
+    for i in eachindex(constraints)
+        push!(rhs_vals, b[i])
+        limits = report[constraints[i]]
+        push!(limit1_vals, round_near_zero(limits[1]))
+        push!(limit2_vals, round_near_zero(limits[2]))
+    end
+    
+    # Beregn dynamiske bredder
+    rhs_width = calculate_num_width(rhs_vals, dec, 10)
+    limit1_width = calculate_num_width(limit1_vals, dec, 10)
+    limit2_width = calculate_num_width(limit2_vals, dec, 10)
+    
+    total_width = name_width + rhs_width + limit1_width + limit2_width + 6
+    @printf("%-*s |%-*s |%-*s |%-*s\n", name_width, "Begrænsningnavn", rhs_width, "RHS (nu)",
+            limit1_width, "Maksimalt fald", limit2_width, "Maksimal stigning")
+    println("-"^total_width)
     for i in eachindex(constraints)
         limits = report[constraints[i]]
-        # Afkort navn hvis det er for langt
         navn = length(b_navne[i]) > max_name_length ? b_navne[i][1:max_name_length] : b_navne[i]
-        @printf("%-*s |%-20.*f |%-20.*f |%-20.*f\n", 
-                name_width, navn, dec, b[i], dec, limits[1], dec, limits[2])
+        @printf("%-*s |%-*.*f |%-*.*f |%-*.*f\n", 
+                name_width, navn, rhs_width, dec, b[i], 
+                limit1_width, dec, round_near_zero(limits[1]), 
+                limit2_width, dec, round_near_zero(limits[2]))
     end
-    println("-"^(name_width + 20*3 + 3))
+    println("-"^total_width)
     println("\n")
+end
+
+# Funktion til at tjekke for advarsel om uendeligt mange løsninger
+function check_multiple_solutions(x, x_navne, tol=1e-9)
+    warning_vars = []
+    for i in eachindex(x)
+        val = value(x[i])
+        red_cost = reduced_cost(x[i])
+        # Tjek om variabel er ikke-basis (værdi tæt på 0) og har reduced cost = 0
+        if abs(val) < tol && abs(red_cost) < tol
+            push!(warning_vars, x_navne[i])
+        end
+    end
+    return warning_vars
 end
 
 ##########################################################
@@ -147,6 +216,21 @@ function full_report_LP(M, report, x, x_navne, c, constraints, b, b_dir, b_navne
     print_slack_shadow_price(M, constraints, b_navne, b, b_dir, dec, tol)
     print_sensitivity_objective_coefficients(M, report, x, x_navne, c, dec)
     print_sensitivity_RHS(report, constraints, b, b_navne, dec)
+    
+    # Tjek for advarsel om uendeligt mange løsninger
+    warning_vars = check_multiple_solutions(x, x_navne, tol)
+    if !isempty(warning_vars)
+        println("="^100)
+        println(" ADVARSEL: Uendeligt mange løsninger muligt")
+        println("="^100)
+        println("Følgende ikke-basisvariabler har reduced cost = 0:")
+        for var in warning_vars
+            println("  - $var")
+        end
+        println("Dette kan indikere, at der findes uendeligt mange optimale løsninger.")
+        println("="^100)
+        println()
+    end
 end
 
 ##########################################################
@@ -223,11 +307,12 @@ function print_slack(constraints, b_navne, b, b_dir, dec=2, tol=1e-9)
     max_name_length = min(30, maximum([length(s) for s in b_navne]))
     name_width = max(15, max_name_length + 2)
     
-    @printf("%-*s |%-15s |%-15s |%-15s |%-15s\n", 
-            name_width, "Begrænsningnavn", "LHS", "RHS", "Slack", "Bindende status")
-    println("-"^(name_width + 15*4 + 4))
+    # Beregn alle værdier først for at finde maksimale bredder
+    lhs_vals = Float64[]
+    slack_vals = Float64[]
     for i in eachindex(constraints)
         lhs = value(constraints[i])
+        push!(lhs_vals, lhs)
         if b_dir[i] == :<=
             slack = b[i] - lhs
         elseif b_dir[i] == :>=
@@ -235,15 +320,28 @@ function print_slack(constraints, b_navne, b, b_dir, dec=2, tol=1e-9)
         else
             slack = b[i] - lhs
         end
-        if abs(slack) <= tol
-            bindende = "Bindende"
-        else
-            bindende = "Ikke-bindende"
-        end
-        # Afkort navn hvis det er for langt
+        push!(slack_vals, slack)
+    end
+    
+    # Beregn dynamiske bredder
+    lhs_width = calculate_num_width(vcat(lhs_vals, b), dec, 10)
+    rhs_width = calculate_num_width(b, dec, 10)
+    slack_width = calculate_num_width(slack_vals, dec, 10)
+    bindende_width = max(15, length("Ikke-bindende"))
+    
+    total_width = name_width + lhs_width + rhs_width + slack_width + bindende_width + 8
+    @printf("%-*s |%-*s |%-*s |%-*s |%-*s\n", 
+            name_width, "Begrænsningnavn", lhs_width, "LHS", rhs_width, "RHS", 
+            slack_width, "Slack", bindende_width, "Bindende status")
+    println("-"^total_width)
+    for i in eachindex(constraints)
+        lhs = lhs_vals[i]
+        slack = slack_vals[i]
+        bindende = abs(slack) <= tol ? "Bindende" : "Ikke-bindende"
         navn = length(b_navne[i]) > max_name_length ? b_navne[i][1:max_name_length] : b_navne[i]
-        @printf("%-*s |%-15.*f |%-15.*f |%-15.*f |%-15s\n", 
-                name_width, navn, dec, lhs, dec, b[i], dec, slack, bindende)
+        @printf("%-*s |%-*.*f |%-*.*f |%-*.*f |%-*s\n", 
+                name_width, navn, lhs_width, dec, lhs, rhs_width, dec, b[i], 
+                slack_width, dec, slack, bindende_width, bindende)
     end
     println("\n")
 end
@@ -857,7 +955,7 @@ function print_shortest_path(M, x, x_navne, kanter, source_node, sink_node, c, d
             path_found = true
         else
             # Hvis vi ikke kan finde næste node, er stien ikke komplet
-            println("⚠️  ADVARSEL: Kunne ikke rekonstruere hele stien fra ", source_node, " til ", sink_node)
+            println(" ADVARSEL: Kunne ikke rekonstruere hele stien fra ", source_node, " til ", sink_node)
             break
         end
     end

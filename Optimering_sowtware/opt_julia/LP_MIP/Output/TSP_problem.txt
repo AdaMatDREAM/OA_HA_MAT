@@ -28,20 +28,20 @@ Src  Proc. InQueue |  Leaves   Expl. | BestBound       BestSol              Gap 
 
  J       0       0         0   0.00%   -inf            56                 Large        0      0      0         0     0.0s
  T       0       0         0   0.00%   0               48               100.00%        0      0      0        12     0.0s
-         1       0         1 100.00%   48              48                 0.00%        0      0      0        12     0.1s
+         1       0         1 100.00%   48              48                 0.00%        0      0      0        12     0.0s
 
 Solving report
   Status            Optimal
   Primal bound      48
   Dual bound        48
   Gap               0% (tolerance: 0.01%)
-  P-D integral      0.00103187561035
+  P-D integral      0.00108695030212
   Solution status   feasible
                     48 (objective)
                     0 (bound viol.)
                     0 (int. viol.)
                     0 (row viol.)
-  Timing            0.08
+  Timing            0.02
   Max sub-MIP depth 0
   Nodes             1
   Repair LPs        0

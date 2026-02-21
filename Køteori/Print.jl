@@ -67,7 +67,7 @@ function _print_explanation(io)
     println(io, "  ankomst kan føre til dramatiske stigninger i ventetider.")
     println(io)
     println(io, "• For at reducere ventetider kan man:")
-    println(io, "  - Øge antal servere (N)")
+    println(io, "  - Øge antal servere ")
     println(io, "  - Øge service rate (mu) - hurtigere betjening")
     println(io, "  - Reducere variabilitet (c_a og c_p) - mere forudsigelige processer")
     println(io)
@@ -211,10 +211,13 @@ function _print_queue_table_T_content(io, T_a, T_p, sigma_a, sigma_p, N, dec)
     @printf(io, "%-50s = %.*f\n", "Average_length_of_queue (A_L_queue)", dec, avg_length_of_queue)
     @printf(io, "%-50s = %.*f\n", "Total_inventory (T_inventory)", dec, total_inventory)
     
-    # Beregn minimum N for at rho <= 1
+    # Beregn minimum N for at rho < 1
     min_N = ceil(Int, lambda / mu)
+    if(abs(min_N - lambda/mu) < 1e-9)
+        min_N += 1  # Sørg for at min_N er tilstrækkeligt stort til at rho < 1
+    end
     println(io, "-"^80)
-    @printf(io, "%-50s = %d\n", "Minimum N (for rho <= 1)", min_N)
+    @printf(io, "%-50s = %d\n", "Minimum N (for rho < 1)", min_N)
     @printf(io, "%-50s = %.*f\n", "  (lambda/mu = minimum N)", dec, lambda/mu)
     
     println(io, "="^80)

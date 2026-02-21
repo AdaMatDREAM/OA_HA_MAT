@@ -1,10 +1,10 @@
 Running HiGHS 1.12.0 (git hash: 755a8e027): Copyright (c) 2025 HiGHS under MIT licence terms
 LP has 3 rows; 3 cols; 9 nonzeros
 Coefficient ranges:
-  Matrix  [1e+00, 1e+02]
-  Cost    [1e+02, 3e+02]
+  Matrix  [1e+00, 1e+05]
+  Cost    [2e+01, 4e+03]
   Bound   [0e+00, 0e+00]
-  RHS     [1e+01, 8e+02]
+  RHS     [1e+02, 8e+05]
 Presolving model
 3 rows, 3 cols, 9 nonzeros  0s
 3 rows, 3 cols, 9 nonzeros  0s
@@ -12,27 +12,27 @@ Presolve reductions: rows 3(-0); columns 3(-0); nonzeros 9(-0) - Not reduced
 Problem not reduced by presolve: solving the LP
 Using EKK dual simplex solver - serial
   Iteration        Objective     Infeasibilities num(sum)
-          0    -5.6249953742e+01 Ph1: 3(7.42188); Du: 3(56.25) 0s
-          3     2.0800000000e+03 Pr: 0(0) 0s
+          0    -5.7031190877e+00 Ph1: 3(10.4453); Du: 3(5.70312) 0s
+          2     1.0400000000e+04 Pr: 0(0) 0s
 
 Model status        : Optimal
-Simplex   iterations: 3
-Objective value     :  2.0800000000e+03
+Simplex   iterations: 2
+Objective value     :  1.0400000000e+04
 P-D objective error :  0.0000000000e+00
-HiGHS run time      :          0.02
+HiGHS run time      :          0.00
 
 ====================================================================================================
 PROBLEMFORMULERING
 ====================================================================================================
-Maksimer Z = 120x_1 + 200x_2 + 260x_3
+Maksimer Z = 4000x_a + 20x_b + 300x_c
 
 u.b.b.:
-  x_1 + x_2 + x_3 ≤ 11
-  30x_1 + 15x_2 + 45x_3 ≤ 300
-  40x_1 + 80x_2 + 120x_3 ≤ 820
+  100000x_a + 5000x_b + 15000x_c ≤ 800000
+  100x_a + x_b + 20x_c ≤ 1000
+   - 10x_a + x_b + x_c ≥ 100
 
 Samt:
-  x_1 ≥ 0, x_2 ≥ 0, x_3 ≥ 0
+  x_a ≥ 0, x_b ≥ 0, x_c ≥ 0
 ====================================================================================================
 
 Output i LP format begynder nu
@@ -41,44 +41,52 @@ Output i LP format begynder nu
 OPTIMAL - Optimal løsning fundet
 ----------------------------------------------------------------------------------------------------
 Værdi af objektivfunktionen:
- -> 2080.00
+ -> 10400.0000000000
 
 
 Variabelnavn                   |Variabeltype                   |Værdi                         
 -------------------------------------------------------------------------------------
-x_1                            |Continuous                     |1.50                          
-x_2                            |Continuous                     |9.50                          
-x_3                            |Continuous                     |0.00                          
+x_a                            |Continuous                     |2.0000000000                  
+x_b                            |Continuous                     |120.0000000000                
+x_c                            |Continuous                     |0.0000000000                  
 
 
 Slack og skyggepris: 
 
-Begrænsningnavn |LHS             |RHS             |Slack           |Skyggepris      |Bindende status
------------------------------------------------------------------------------------------------
-B1              |11.00           |11.00           |0.00            |40.00           |Bindende       
-B2              |187.50          |300.00          |112.50          |-0.00           |Ikke-bindende  
-B3              |820.00          |820.00          |0.00            |2.00            |Bindende       
+Begrænsningnavn |LHS                 |RHS                 |Slack            |Skyggepris        |Bindende status
+---------------------------------------------------------------------------------------------------------------
+Pris            |800000.0000000000   |800000.0000000000   |0.0000000000     |0.0280000000      |Bindende       
+Kvm             |320.0000000000      |1000.0000000000     |680.0000000000   |0.0000000000      |Ikke-bindende  
+SK              |100.0000000000      |100.0000000000      |0.0000000000     |-120.0000000000   |Bindende       
 
 
 
 Sensitivitetsrapport for objektivkoefficienter: 
 
-Variabelnavn       |Koefficientværdi   |Maksimalt fald     |Maksimal stigning  |Reduced costs     
----------------------------------------------------------------------------------------------------
-x_1                |120.00             |-20.00             |20.00              |-0.00             
-x_2                |200.00             |-10.00             |40.00              |-0.00             
-x_3                |260.00             |-Inf               |20.00              |-20.00            
----------------------------------------------------------------------------------------------------
+Variabelnavn       |Koefficientværdi  |Maksimalt fald |Maksimal stigning |Reduced costs 
+----------------------------------------------------------------------------------------
+x_a                |4000.0000000000   |0.0000000000   |Inf              |0.0000000000  
+x_b                |20.0000000000     |0.0000000000   |180.0000000000   |0.0000000000  
+x_c                |300.0000000000    |-Inf           |0.0000000000     |0.0000000000  
+----------------------------------------------------------------------------------------
 
 
 
 Sensitivitetsrapport for RHS (kapacitet): 
 
-Begrænsningnavn      |RHS (nu)             |Maksimalt fald       |Maksimal stigning   
------------------------------------------------------------------------------------
-B1                   |11.00                |-0.75                |2.50                
-B2                   |300.00               |-112.50              |Inf                 
-B3                   |820.00               |-300.00              |60.00               
------------------------------------------------------------------------------------
+Begrænsningnavn      |RHS (nu)            |Maksimalt fald       |Maksimal stigning  
+------------------------------------------------------------------------------------
+Pris                 |800000.0000000000   |-300000.0000000000   |927272.7272727273  
+Kvm                  |1000.0000000000     |-680.0000000000      |Inf                
+SK                   |100.0000000000      |-180.0000000000      |60.0000000000      
+------------------------------------------------------------------------------------
 
+
+====================================================================================================
+ ADVARSEL: Uendeligt mange løsninger muligt
+====================================================================================================
+Følgende ikke-basisvariabler har reduced cost = 0:
+  - x_c
+Dette kan indikere, at der findes uendeligt mange optimale løsninger.
+====================================================================================================
 

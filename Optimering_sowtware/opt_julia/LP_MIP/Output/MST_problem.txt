@@ -24,7 +24,7 @@ Model status        : Optimal
 Simplex   iterations: 7
 Objective value     :  3.4000000000e+01
 P-D objective error :  0.0000000000e+00
-HiGHS run time      :          0.00
+HiGHS run time      :          0.01
 
 ====================================================================================================
 PROBLEMFORMULERING

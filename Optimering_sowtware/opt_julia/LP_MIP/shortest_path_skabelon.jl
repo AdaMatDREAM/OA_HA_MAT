@@ -13,6 +13,7 @@ function shortest_path_skabelon()
     # Defineres som (egde1, edge2, vægt, "D"/"U" = directed/undirected)
 kanter = [
             ("r", "p", 6, "D"),
+            ("p", "r", 5, "D"),
             ("r", "q", 4, "D"),
             ("r", "a", 9, "D"),
             ("p", "q", 2, "D"),

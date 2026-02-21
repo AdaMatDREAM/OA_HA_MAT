@@ -2,19 +2,19 @@ function LP_MIP_model_skabelon()
 # Type af model: LP eller MIP
 model_type = "LP";
 # True hvis du også vil have dualt program
-dual_defined = true;
+dual_defined = false;
 
 # Objektiv MAX eller MIN
 obj = :MAX;  # eller :MIN for minimering
 
 # Objektivcoefficienter og variabelnavne
-c = [120, 200, 260];
-x_navne = ["x_1", "x_2", "x_3"];
+c = [4000, 20, 300];
+x_navne = ["x_a", "x_b", "x_c"];
 # Fortegnskrav 
 # :R -> ]-inf, inf[
 # :>= -> x_i >= 0
 # :<= -> x_i <= 0
-fortegn = [:>=, :>=, :>=]
+fortegn = [:>=, :>=, :>=, :>=]
 nedre_grænse = zeros(length(fortegn))
 øvre_grænse = zeros(length(fortegn))
 for i in eachindex(fortegn)
@@ -30,16 +30,16 @@ for i in eachindex(fortegn)
     end
 end
 
+L = 1e9; # Må ikke være for høj, da det kan give problemer. 
 # Begrænsninger og kapaciteter
-A = [1  1  1;
-     30 15 45;
-     40 80 120];
+A = [100000  5000  15000;
+     100     1     20;
+     -10     1     1];
 
-b = [11,  300,  820];
-b_navne = ["B1", "B2", "B3"];
+b = [800000,  1000,  100];
+b_navne = ["Pris", "Kvm", "SK"];
 # Retningen af begrænsningerne kan skiftes mellem :<=, :>= og :(==)
-b_dir = [:<=, :<=, :<=];
-b_navne = ["B1", "B2", "B3"];
+b_dir = [:<=, :<=, :>=];
 
 if model_type == "MIP"
     # vælg variabeltyper hved MIP problemer. Du kan vælge mellem :Integer, :Binary og :Continuous.
@@ -49,7 +49,7 @@ elseif model_type == "LP"
 end
 
 # Antal decimaler i output og tolerance for 0-værdier
-dec = 2;
+dec = 10;
 tol = 1e-9;
 
 # Output af resultater i terminal eller fil
