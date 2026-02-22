@@ -4,28 +4,32 @@ KØTEORI BEREGNINGER
 ================================================================================
 
 Input parametre:
-  lambda (ankomst rate)                            = 180.0000
-  mu (service rate)                                = 75.0000
-  sigma_a (std. ankomst)                           = 0.0100
-  sigma_p (std. service)                           = 0.0500
+  T_a (gennemsnitlig ankomst tid)                  = 4.0000
+  T_p (gennemsnitlig service tid)                  = 8.0000
+  sigma_a (std. ankomst)                           = 3.0000
+  sigma_p (std. service)                           = 6.0000
   N (antal servere)                                = 3
+
+Beregnet fra input:
+  lambda (ankomst rate) = 1/T_a                    = 0.2500
+  mu (service rate) = 1/T_p                        = 0.1250
 
 --------------------------------------------------------------------------------
 Beregnede værdier (i rækkefølge):
 --------------------------------------------------------------------------------
-Arrival_rate (lambda)                              = 180.0000
-Processing_rate (mu)                               = 75.0000
-Utilization (rho)                                  = 0.8000
-Coefficient_of_variation_arrival (c_a)             = 1.8000
-Coefficient_of_variation_processing (c_p)          = 3.7500
-Average_queing_time (A_Q_time)                     = 0.1278
-Average_lead_time (A_L_time)                       = 0.1412
-Inventory_processing (I_processing)                = 2.4000
-Average_length_of_queue (A_L_queue)                = 23.0116
-Total_inventory (T_inventory)                      = 25.4116
+Arrival_rate (lambda)                              = 0.2500
+Processing_rate (mu)                               = 0.1250
+Utilization (rho)                                  = 0.6667
+Coefficient_of_variation_arrival (c_a)             = 0.7500
+Coefficient_of_variation_processing (c_p)          = 0.7500
+Average_queing_time (A_Q_time)                     = 2.1441
+Average_lead_time (A_L_time)                       = 10.1441
+Inventory_processing (I_processing)                = 2.0000
+Average_length_of_queue (A_L_queue)                = 0.5360
+Total_inventory (T_inventory)                      = 2.5360
 --------------------------------------------------------------------------------
-Minimum N (for rho <= 1)                           = 3
-  (lambda/mu = minimum N)                          = 2.4000
+Minimum N (for rho < 1)                            = 3
+  (lambda/mu = minimum N)                          = 2.0000
 ================================================================================
 
 FORKLARING AF BEREGNEDE VÆRDIER:
@@ -93,7 +97,7 @@ PRAKTISKE IMPLIKATIONER:
   ankomst kan føre til dramatiske stigninger i ventetider.
 
 • For at reducere ventetider kan man:
-  - Øge antal servere (N)
+  - Øge antal servere 
   - Øge service rate (mu) - hurtigere betjening
   - Reducere variabilitet (c_a og c_p) - mere forudsigelige processer
 

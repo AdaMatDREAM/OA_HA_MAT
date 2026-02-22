@@ -1,0 +1,148 @@
+Running HiGHS 1.12.0 (git hash: 755a8e027): Copyright (c) 2025 HiGHS under MIT licence terms
+MIP has 15 rows; 13 cols; 27 nonzeros; 8 integer variables (4 binary)
+Coefficient ranges:
+  Matrix  [1e+00, 3e+03]
+  Cost    [2e+02, 2e+05]
+  Bound   [1e+00, 1e+00]
+  RHS     [3e+02, 8e+02]
+Presolving model
+8 rows, 11 cols, 18 nonzeros  0s
+5 rows, 8 cols, 12 nonzeros  0s
+Presolve reductions: rows 5(-10); columns 8(-5); nonzeros 12(-15) 
+Objective function is integral with scale 0.02
+
+Solving MIP model with:
+   5 rows
+   8 cols (3 binary, 4 integer, 1 implied int., 0 continuous, 0 domain fixed)
+   12 nonzeros
+
+Src: B => Branching; C => Central rounding; F => Feasibility pump; H => Heuristic;
+     I => Shifting; J => Feasibility jump; L => Sub-MIP; P => Empty MIP; R => Randomized rounding;
+     S => Solve LP; T => Evaluate node; U => Unbounded; X => User solution; Y => HiGHS solution;
+     Z => ZI Round; l => Trivial lower; p => Trivial point; u => Trivial upper; z => Trivial zero
+
+        Nodes      |    B&B Tree     |            Objective Bounds              |  Dynamic Constraints |       Work      
+Src  Proc. InQueue |  Leaves   Expl. | BestBound       BestSol              Gap |   Cuts   InLp Confl. | LpIters     Time
+
+ J       0       0         0   0.00%   inf             -1130000           Large        0      0      0         0     0.0s
+         0       0         0   0.00%   -1063516.483516 -1130000           5.88%        0      0      4         0     0.0s
+         1       0         1 100.00%   -1130000        -1130000           0.00%        2      0      4         2     0.0s
+
+Solving report
+  Status            Optimal
+  Primal bound      -1130000
+  Dual bound        -1130000
+  Gap               0% (tolerance: 0.01%)
+  P-D integral      0.000739200829555
+  Solution status   feasible
+                    -1130000 (objective)
+                    0 (bound viol.)
+                    0 (int. viol.)
+                    0 (row viol.)
+  Timing            0.02
+  Max sub-MIP depth 0
+  Nodes             1
+  Repair LPs        0
+  LP iterations     2
+                    0 (strong br.)
+                    2 (separation)
+                    0 (heuristics)
+
+====================================================================================================
+PROBLEMFORMULERING
+====================================================================================================
+Maksimer Z =  - 350x_1 - 350x_2 - 350x_3 - 350x_4 - 200i_0 - 200i_1 - 200i_2 - 200i_3 - 200i_4 - 150000delta_1 - 150000delta_2 - 150000delta_3 - 150000delta_4
+
+u.b.b.:
+  x_1 + i_0 - i_1 = 500.0
+  x_2 + i_1 - i_2 = 600.0
+  x_3 + i_2 - i_3 = 300.0
+  x_4 + i_3 - i_4 = 400.0
+  i_0 = 0.0
+  i_4 = 0.0
+  i_0 ≤ 800.0
+  i_1 ≤ 800.0
+  i_2 ≤ 800.0
+  i_3 ≤ 800.0
+  i_4 ≤ 800.0
+  x_1 - 2600.0delta_1 ≤ 0.0
+  x_2 - 2600.0delta_2 ≤ 0.0
+  x_3 - 2600.0delta_3 ≤ 0.0
+  x_4 - 2600.0delta_4 ≤ 0.0
+
+Samt:
+  x_1 ∈ ℤ, x_1 ≥ 0, x_2 ∈ ℤ, x_2 ≥ 0, x_3 ∈ ℤ, x_3 ≥ 0, x_4 ∈ ℤ, x_4 ≥ 0, i_0 ≥ 0, i_1 ≥ 0, i_2 ≥ 0, i_3 ≥ 0, i_4 ≥ 0, delta_1 ∈ {0,1}, delta_2 ∈ {0,1}, delta_3 ∈ {0,1}, delta_4 ∈ {0,1}
+====================================================================================================
+
+Output i MIP format begynder nu
+
+
+OPTIMAL - Optimal løsning fundet
+----------------------------------------------------------------------------------------------------
+Værdi af objektivfunktionen:
+ -> -1130000.00
+
+
+Variabelnavn                   |Variabeltype                   |Værdi                         
+-------------------------------------------------------------------------------------
+x_1                            |Integer                        |1100.00                       
+x_2                            |Integer                        |-0.00                         
+x_3                            |Integer                        |700.00                        
+x_4                            |Integer                        |-0.00                         
+i_0                            |Continuous                     |0.00                          
+i_1                            |Continuous                     |600.00                        
+i_2                            |Continuous                     |-0.00                         
+i_3                            |Continuous                     |400.00                        
+i_4                            |Continuous                     |0.00                          
+delta_1                        |Binary                         |1.00                          
+delta_2                        |Binary                         |-0.00                         
+delta_3                        |Binary                         |1.00                          
+delta_4                        |Binary                         |-0.00                         
+
+
+Slack: 
+
+Begrænsningnavn   |LHS          |RHS          |Slack        |Bindende status
+----------------------------------------------------------------------------
+Lager_balance_1   |500.00       |500.00       |0.00         |Bindende       
+Lager_balance_2   |600.00       |600.00       |0.00         |Bindende       
+Lager_balance_3   |300.00       |300.00       |0.00         |Bindende       
+Lager_balance_4   |400.00       |400.00       |0.00         |Bindende       
+Startlager        |0.00         |0.00         |0.00         |Bindende       
+Slutlager         |0.00         |0.00         |0.00         |Bindende       
+Kapacitet_0       |0.00         |800.00       |800.00       |Ikke-bindende  
+Kapacitet_1       |600.00       |800.00       |200.00       |Ikke-bindende  
+Kapacitet_2       |0.00         |800.00       |800.00       |Ikke-bindende  
+Kapacitet_3       |400.00       |800.00       |400.00       |Ikke-bindende  
+Kapacitet_4       |0.00         |800.00       |800.00       |Ikke-bindende  
+BigM_1            |-1500.00     |0.00         |1500.00      |Ikke-bindende  
+BigM_2            |0.00         |0.00         |0.00         |Bindende       
+BigM_3            |-1900.00     |0.00         |1900.00      |Ikke-bindende  
+BigM_4            |0.00         |0.00         |0.00         |Bindende       
+
+
+
+====================================================================================================
+LAGERPROBLEM - EKSTRA INFORMATION
+====================================================================================================
+
+Total omsætning (d^T·p): 1.35e6
+
+Detaljerede omkostninger:
+  Variable produktionsomkostninger: 630000.0
+  Lageromkostninger: 200000.0
+  Faste omkostninger: 300000.0
+  Total omkostninger: 1.13e6
+
+Total profit (omsætning - omkostninger): 220000.0
+
+Produktionsplan:
+Periode | Produktion (x_i) | Efterspørgsel (d_i) | Slutlager (i_i) | Produktion aktiv (δ_i)
+----------------------------------------------------------------------------------------------------
+   0    |        -         |         -          |          0.00      |         -
+   1    |       1100.00      |          500.00       |        600.00      |         1
+   2    |         -0.00      |          600.00       |         -0.00      |         0
+   3    |        700.00      |          300.00       |        400.00      |         1
+   4    |         -0.00      |          400.00       |          0.00      |         0
+
+====================================================================================================

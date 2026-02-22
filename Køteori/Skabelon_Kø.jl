@@ -32,12 +32,11 @@ function skabelon_kø()
     
     # Hvis rate-parameter er TRUE, så har vi lambda og mu som input
     # Hvis rate-parameter er FALSE, så har vi T_a og T_p som input
-    rate_parameter = true;
+    rate_parameter = false;
     lambda = 4; # Lambda er ankomst rate; antall som kommer per time(elrno)
-    #mu = 75; # Mu er service rate; antall som kan serveres per time(elrno)
-    T_a = 1/lambda;
-    T_p = (12/60);
-    mu = 1/T_p;
+    mu = 75; # Mu er service rate; antall som kan serveres per time(elrno)
+    T_a = 4;
+    T_p = 8;
     
     # ============================================================================
     # SYSTEM TYPE KONFIGURATION - VÆLG EN AF FØLGENDE:
@@ -52,18 +51,18 @@ function skabelon_kø()
     # sigma_p = T_p;  # For markovian: sigma_p skal være lig T_p
     
     # G/G/N (Generel) - NUVÆRENDE KONFIGURATION:
-    sigma_a = T_a; # Sigma_a er standardafvigelse/spredning for ankomst rate
-    sigma_p = T_p; # Sigma_p er standardafvigelse/spredning for service rate
+    sigma_a = 3; # Sigma_a er standardafvigelse/spredning for ankomst rate
+    sigma_p = 6; # Sigma_p er standardafvigelse/spredning for service rate
     
-    N = 1; # N er antal servere
+    N = 3; # N er antal servere
     
     # Antal decimaler i output
     dec = 4;
     
     # OUTPUT KONFIGURATION
     # Output af resultater i terminal eller fil
-    output_terminal = true;
-    output_fil = false;
+    output_terminal = false;
+    output_fil = true;
     
     # Output mappe konfiguration
     # Du kan enten bruge en absolut sti eller en relativ sti
