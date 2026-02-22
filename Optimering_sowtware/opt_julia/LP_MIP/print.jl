@@ -2043,4 +2043,191 @@ function plot_TSP(M, x, x_navne, node_navne, c, dec=2)
     end
     return p
 end
+
+##########################################################
+# Funktion til at printe lagerproblem løsning
+function print_lager_problem(M, x, P, dec=2, tol=1e-9)
+    status = termination_status(M)
+    status_str = string(status)
+    
+    if status_str != "OPTIMAL" && status_str != "ALMOST_OPTIMAL"
+        println("\nStatus: $status_str")
+        return
+    end
+    
+    # Hent løsningsværdier
+    x_vals = [round_near_zero(value(x[i]), tol) for i in 1:P.k]
+    i_vals = [round_near_zero(value(x[P.k + 1 + t]), tol) for t in 0:P.k]
+    delta_vals = [round_near_zero(value(x[2*P.k + 1 + i]), tol) for i in 1:P.k]
+    
+    # Beregn omkostninger og omsætning
+    total_omsætning = sum(P.d .* P.p)
+    variable_omkostninger = sum(x_vals .* P.c_V)
+    lager_omkostninger = sum(i_vals .* P.c_I)
+    faste_omkostninger = sum(delta_vals .* P.c_F)
+    total_omkostninger = variable_omkostninger + lager_omkostninger + faste_omkostninger
+    total_profit = total_omsætning - total_omkostninger
+    
+    # Objektivværdi (uden omsætning, da den er konstant)
+    obj_value = objective_value(M)
+    
+    # Print header
+    println("\n" * "="^100)
+    println("LAGERPROBLEM - OPTIMAL LØSNING")
+    println("="^100)
+    
+    # Print objektivværdi (brug @sprintf for at undgå videnskabelig notation)
+    println("\nObjektivværdi (omkostninger): $(@sprintf("%.*f", dec, obj_value))")
+    println("Total omsætning (d^T·p): $(@sprintf("%.*f", dec, total_omsætning))")
+    println("Total profit (omsætning - omkostninger): $(@sprintf("%.*f", dec, total_profit))")
+    
+    # Print omkostningsoversigt (brug @sprintf for at undgå videnskabelig notation)
+    println("\n" * "-"^100)
+    println("OMKOSTNINGSOVERSIGT:")
+    println("-"^100)
+    @printf("  %-40s %15.*f\n", "Variable produktionsomkostninger:", dec, variable_omkostninger)
+    @printf("  %-40s %15.*f\n", "Lageromkostninger:", dec, lager_omkostninger)
+    @printf("  %-40s %15.*f\n", "Faste omkostninger:", dec, faste_omkostninger)
+    @printf("  %-40s %15.*f\n", "Total omkostninger:", dec, total_omkostninger)
+    @printf("  %-40s %15.*f\n", "Total omsætning:", dec, total_omsætning)
+    @printf("  %-40s %15.*f\n", "Total profit:", dec, total_profit)
+    
+    # Print produktionsplan
+    println("\n" * "-"^100)
+    println("PRODUKTIONSPLAN:")
+    println("-"^100)
+    
+    # Beregn kolonnebredder for pæn formatering
+    periode_width = 8
+    prod_width = max(15, calculate_num_width(x_vals, dec, 12))
+    efterspørgsel_width = max(15, calculate_num_width(P.d, dec, 12))
+    lager_width = max(15, calculate_num_width(i_vals, dec, 12))
+    delta_width = 8
+    
+    # Header - beregn total bredde
+    header_prod = "Produktion (x_i)"
+    header_efterspørgsel = "Efterspørgsel (d_i)"
+    header_lager = "Slutlager (i_i)"
+    header_delta = "δ_i"
+    
+    # Juster bredder baseret på header længder
+    prod_width = max(prod_width, length(header_prod))
+    efterspørgsel_width = max(efterspørgsel_width, length(header_efterspørgsel))
+    lager_width = max(lager_width, length(header_lager))
+    delta_width = max(delta_width, length(header_delta))
+    
+    total_width = periode_width + prod_width + efterspørgsel_width + lager_width + delta_width + 12
+    @printf("%-*s | %*s | %*s | %*s | %*s\n", 
+        periode_width, "Periode", prod_width, header_prod, 
+        efterspørgsel_width, header_efterspørgsel, 
+        lager_width, header_lager, delta_width, header_delta)
+    println("-"^total_width)
+    
+    # Startlager (periode 0)
+    @printf("%-*s | %*s | %*s | %*.*f | %*s\n", 
+        periode_width, "0", prod_width, "-", 
+        efterspørgsel_width, "-", 
+        lager_width, dec, i_vals[1], delta_width, "-")
+    
+    # Produktionsperioder
+    for i in 1:P.k
+        delta_str = round(Int, delta_vals[i]) == 1 ? "1" : "0"
+        @printf("%-*s | %*.*f | %*.*f | %*.*f | %*s\n", 
+            periode_width, string(i), 
+            prod_width, dec, x_vals[i], 
+            efterspørgsel_width, dec, P.d[i], 
+            lager_width, dec, i_vals[i+1], 
+            delta_width, delta_str)
+    end
+    
+    println("-"^total_width)
+    
+    # Print periodevis omkostningsoversigt
+    println("\n" * "-"^100)
+    println("PERIODEVIS OMKOSTNINGSOVERSIGT:")
+    println("-"^100)
+    
+    # Beregn omkostninger pr. periode
+    periode_omkostninger = []
+    periode_omsætning = []
+    periode_profit = []
+    
+    for i in 1:P.k
+        var_omkost = x_vals[i] * P.c_V[i]
+        lager_omkost = i_vals[i+1] * P.c_I[i+1]  # Lageromkostning for slutlager i periode i
+        fast_omkost = delta_vals[i] * P.c_F[i]
+        total_periode_omkost = var_omkost + lager_omkost + fast_omkost
+        periode_omsæt = P.d[i] * P.p[i]
+        periode_prof = periode_omsæt - total_periode_omkost
+        
+        push!(periode_omkostninger, total_periode_omkost)
+        push!(periode_omsætning, periode_omsæt)
+        push!(periode_profit, periode_prof)
+    end
+    
+    # Beregn kolonnebredder
+    periode_col_width = 8
+    var_omkost_width = max(20, calculate_num_width([x_vals[i] * P.c_V[i] for i in 1:P.k], dec, 15))
+    lager_omkost_width = max(20, calculate_num_width([i_vals[i+1] * P.c_I[i+1] for i in 1:P.k], dec, 15))
+    fast_omkost_width = max(20, calculate_num_width([delta_vals[i] * P.c_F[i] for i in 1:P.k], dec, 15))
+    total_omkost_width = max(20, calculate_num_width(periode_omkostninger, dec, 15))
+    omsætning_width = max(20, calculate_num_width(periode_omsætning, dec, 15))
+    profit_width = max(20, calculate_num_width(periode_profit, dec, 15))
+    
+    # Header
+    header_total = "Total omkost."
+    header_omsætning = "Omsætning"
+    header_profit = "Profit"
+    
+    total_omkost_width = max(total_omkost_width, length(header_total))
+    omsætning_width = max(omsætning_width, length(header_omsætning))
+    profit_width = max(profit_width, length(header_profit))
+    
+    total_table_width = periode_col_width + var_omkost_width + lager_omkost_width + fast_omkost_width + 
+                       total_omkost_width + omsætning_width + profit_width + 18
+    
+    @printf("%-*s | %*s | %*s | %*s | %*s | %*s | %*s\n",
+        periode_col_width, "Periode",
+        var_omkost_width, "Var. omkost.",
+        lager_omkost_width, "Lager omkost.",
+        fast_omkost_width, "Faste omkost.",
+        total_omkost_width, header_total,
+        omsætning_width, header_omsætning,
+        profit_width, header_profit)
+    println("-"^total_table_width)
+    
+    # Data rækker
+    for i in 1:P.k
+        var_omkost = x_vals[i] * P.c_V[i]
+        lager_omkost = i_vals[i+1] * P.c_I[i+1]
+        fast_omkost = delta_vals[i] * P.c_F[i]
+        total_periode_omkost = periode_omkostninger[i]
+        periode_omsæt = periode_omsætning[i]
+        periode_prof = periode_profit[i]
+        
+        @printf("%-*s | %*.*f | %*.*f | %*.*f | %*.*f | %*.*f | %*.*f\n",
+            periode_col_width, string(i),
+            var_omkost_width, dec, var_omkost,
+            lager_omkost_width, dec, lager_omkost,
+            fast_omkost_width, dec, fast_omkost,
+            total_omkost_width, dec, total_periode_omkost,
+            omsætning_width, dec, periode_omsæt,
+            profit_width, dec, periode_prof)
+    end
+    
+    # Total række
+    println("-"^total_table_width)
+    @printf("%-*s | %*.*f | %*.*f | %*.*f | %*.*f | %*.*f | %*.*f\n",
+        periode_col_width, "Total",
+        var_omkost_width, dec, variable_omkostninger,
+        lager_omkost_width, dec, lager_omkostninger,
+        fast_omkost_width, dec, faste_omkostninger,
+        total_omkost_width, dec, total_omkostninger,
+        omsætning_width, dec, total_omsætning,
+        profit_width, dec, total_profit)
+    
+    println("-"^total_table_width)
+    println("="^100)
+    println()
+end
     
