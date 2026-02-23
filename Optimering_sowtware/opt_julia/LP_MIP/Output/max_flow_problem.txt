@@ -1,68 +1,60 @@
 Running HiGHS 1.12.0 (git hash: 755a8e027): Copyright (c) 2025 HiGHS under MIT licence terms
-LP has 27 rows; 19 cols; 51 nonzeros
+LP has 19 rows; 12 cols; 31 nonzeros
 Coefficient ranges:
   Matrix  [1e+00, 1e+00]
   Cost    [1e+00, 1e+00]
-  Bound   [2e+00, 2e+01]
-  RHS     [2e+00, 2e+01]
+  Bound   [1e+00, 1e+01]
+  RHS     [1e+00, 1e+01]
 Presolving model
-6 rows, 17 cols, 27 nonzeros  0s
-5 rows, 13 cols, 20 nonzeros  0s
-Dependent equations search running on 5 equations with time limit of 1000.00s
+4 rows, 9 cols, 13 nonzeros  0s
+3 rows, 8 cols, 11 nonzeros  0s
+Dependent equations search running on 3 equations with time limit of 1000.00s
 Dependent equations search removed 0 rows and 0 nonzeros in 0.00s (limit = 1000.00s)
-5 rows, 13 cols, 20 nonzeros  0s
-Presolve reductions: rows 5(-22); columns 13(-6); nonzeros 20(-31) 
+3 rows, 7 cols, 10 nonzeros  0s
+Presolve reductions: rows 3(-16); columns 7(-5); nonzeros 10(-21) 
 Solving the presolved LP
 Using EKK dual simplex solver - serial
   Iteration        Objective     Infeasibilities num(sum)
           0     0.0000000000e+00 Ph1: 0(0) 0s
-          7    -2.1000000000e+01 Pr: 0(0) 0s
+          4    -9.0000000000e+00 Pr: 0(0) 0s
 
 Performed postsolve
 Solving the original LP from the solution after postsolve
 
 Model status        : Optimal
-Simplex   iterations: 7
-Objective value     :  2.1000000000e+01
+Simplex   iterations: 4
+Objective value     :  9.0000000000e+00
 P-D objective error :  0.0000000000e+00
-HiGHS run time      :          0.03
+HiGHS run time      :          0.00
 
 ====================================================================================================
 PROBLEMFORMULERING
 ====================================================================================================
-Maksimer Z = x_København_Rostock + x_København_Putgarden + x_København_Padborg
+Maksimer Z = x_S_AV
 
 u.b.b.:
-  x_København_Rostock - x_Rostock_Hamburg - x_Rostock_Berlin = 0.0
-  x_København_Putgarden - x_Putgarden_Hamburg - x_Putgarden_Berlin = 0.0
-  x_København_Padborg - x_Padborg_Hamburg = 0.0
-  x_Rostock_Hamburg + x_Putgarden_Hamburg + x_Padborg_Hamburg - x_Hamburg_Berlin - x_Hamburg_Strasbourg = 0.0
-  x_Rostock_Berlin + x_Putgarden_Berlin + x_Hamburg_Berlin - x_Berlin_Strasbourg - x_Berlin_Bruxelles - x_Berlin_Liege = 0.0
-  x_Hamburg_Strasbourg + x_Berlin_Strasbourg - x_Strasbourg_Bruxelles - x_Strasbourg_Liege - x_Strasbourg_Paris = 0.0
-  x_Berlin_Bruxelles + x_Strasbourg_Bruxelles - x_Bruxelles_Liege - x_Bruxelles_Paris = 0.0
-  x_Berlin_Liege + x_Strasbourg_Liege + x_Bruxelles_Liege - x_Liege_Paris = 0.0
-  x_København_Rostock ≤ 8.0
-  x_København_Putgarden ≤ 11.0
-  x_København_Padborg ≤ 2.0
-  x_Rostock_Hamburg ≤ 3.0
-  x_Rostock_Berlin ≤ 5.0
-  x_Putgarden_Hamburg ≤ 14.0
-  x_Putgarden_Berlin ≤ 11.0
-  x_Padborg_Hamburg ≤ 10.0
-  x_Hamburg_Berlin ≤ 12.0
-  x_Hamburg_Strasbourg ≤ 12.0
-  x_Berlin_Strasbourg ≤ 4.0
-  x_Berlin_Bruxelles ≤ 10.0
-  x_Berlin_Liege ≤ 10.0
-  x_Strasbourg_Bruxelles ≤ 4.0
-  x_Strasbourg_Liege ≤ 12.0
-  x_Strasbourg_Paris ≤ 11.0
-  x_Bruxelles_Liege ≤ 23.0
-  x_Bruxelles_Paris ≤ 16.0
-  x_Liege_Paris ≤ 10.0
+  x_S_AV - x_AV_SK - x_AV_SL = 0.0
+  x_AV_SK - x_SK_B1 - x_SK_B2 - x_SK_B3 = 0.0
+  x_AV_SL - x_SL_B3 - x_SL_F = 0.0
+  x_SK_B1 - x_B1_T = 0.0
+  x_SK_B2 - x_B2_T = 0.0
+  x_SK_B3 + x_SL_B3 - x_B3_T = 0.0
+  x_SL_F - x_F_T = 0.0
+  x_S_AV ≤ 11.0
+  x_AV_SK ≤ 5.0
+  x_AV_SL ≤ 9.0
+  x_SK_B1 ≤ 5.0
+  x_SK_B2 ≤ 5.0
+  x_SK_B3 ≤ 4.0
+  x_SL_B3 ≤ 4.0
+  x_SL_F ≤ 3.0
+  x_B1_T ≤ 1.0
+  x_B2_T ≤ 1.0
+  x_B3_T ≤ 4.0
+  x_F_T ≤ 5.0
 
 Samt:
-  x_København_Rostock ≥ 0, x_København_Putgarden ≥ 0, x_København_Padborg ≥ 0, x_Rostock_Hamburg ≥ 0, x_Rostock_Berlin ≥ 0, x_Putgarden_Hamburg ≥ 0, x_Putgarden_Berlin ≥ 0, x_Padborg_Hamburg ≥ 0, x_Hamburg_Berlin ≥ 0, x_Hamburg_Strasbourg ≥ 0, x_Berlin_Strasbourg ≥ 0, x_Berlin_Bruxelles ≥ 0, x_Berlin_Liege ≥ 0, x_Strasbourg_Bruxelles ≥ 0, x_Strasbourg_Liege ≥ 0, x_Strasbourg_Paris ≥ 0, x_Bruxelles_Liege ≥ 0, x_Bruxelles_Paris ≥ 0, x_Liege_Paris ≥ 0
+  x_S_AV ≥ 0, x_AV_SK ≥ 0, x_AV_SL ≥ 0, x_SK_B1 ≥ 0, x_SK_B2 ≥ 0, x_SK_B3 ≥ 0, x_SL_B3 ≥ 0, x_SL_F ≥ 0, x_B1_T ≥ 0, x_B2_T ≥ 0, x_B3_T ≥ 0, x_F_T ≥ 0
 ====================================================================================================
 
 Output i LP format begynder nu
@@ -71,126 +63,104 @@ Output i LP format begynder nu
 OPTIMAL - Optimal løsning fundet
 ----------------------------------------------------------------------------------------------------
 Værdi af objektivfunktionen:
- -> 21.00
+ -> 9.00
 
 
 Variabelnavn                   |Variabeltype                   |Værdi                         
 -------------------------------------------------------------------------------------
-x_København_Rostock            |Continuous                     |8.00                          
-x_København_Putgarden          |Continuous                     |11.00                         
-x_København_Padborg            |Continuous                     |2.00                          
-x_Rostock_Hamburg              |Continuous                     |3.00                          
-x_Rostock_Berlin               |Continuous                     |5.00                          
-x_Putgarden_Hamburg            |Continuous                     |-0.00                         
-x_Putgarden_Berlin             |Continuous                     |11.00                         
-x_Padborg_Hamburg              |Continuous                     |2.00                          
-x_Hamburg_Berlin               |Continuous                     |0.00                          
-x_Hamburg_Strasbourg           |Continuous                     |5.00                          
-x_Berlin_Strasbourg            |Continuous                     |0.00                          
-x_Berlin_Bruxelles             |Continuous                     |10.00                         
-x_Berlin_Liege                 |Continuous                     |6.00                          
-x_Strasbourg_Bruxelles         |Continuous                     |0.00                          
-x_Strasbourg_Liege             |Continuous                     |0.00                          
-x_Strasbourg_Paris             |Continuous                     |5.00                          
-x_Bruxelles_Liege              |Continuous                     |0.00                          
-x_Bruxelles_Paris              |Continuous                     |10.00                         
-x_Liege_Paris                  |Continuous                     |6.00                          
+x_S_AV                         |Continuous                     |9.00                          
+x_AV_SK                        |Continuous                     |2.00                          
+x_AV_SL                        |Continuous                     |7.00                          
+x_SK_B1                        |Continuous                     |1.00                          
+x_SK_B2                        |Continuous                     |1.00                          
+x_SK_B3                        |Continuous                     |-0.00                         
+x_SL_B3                        |Continuous                     |4.00                          
+x_SL_F                         |Continuous                     |3.00                          
+x_B1_T                         |Continuous                     |1.00                          
+x_B2_T                         |Continuous                     |1.00                          
+x_B3_T                         |Continuous                     |4.00                          
+x_F_T                          |Continuous                     |3.00                          
 
 
 Slack og skyggepris: 
 
-Begrænsningnavn                  |LHS             |RHS             |Slack           |Skyggepris      |Bindende status
-----------------------------------------------------------------------------------------------------------------
-Flow_balance_Rostock             |0.00            |0.00            |0.00            |1.00            |Bindende       
-Flow_balance_Putgarden           |0.00            |0.00            |0.00            |0.00            |Bindende       
-Flow_balance_Padborg             |0.00            |0.00            |0.00            |0.00            |Bindende       
-Flow_balance_Hamburg             |0.00            |0.00            |0.00            |0.00            |Bindende       
-Flow_balance_Berlin              |0.00            |0.00            |0.00            |0.00            |Bindende       
-Flow_balance_Strasbourg          |0.00            |0.00            |0.00            |0.00            |Bindende       
-Flow_balance_Bruxelles           |0.00            |0.00            |0.00            |0.00            |Bindende       
-Flow_balance_Liege               |0.00            |0.00            |0.00            |0.00            |Bindende       
-Capacity_x_København_Rostock     |8.00            |8.00            |0.00            |-0.00           |Bindende       
-Capacity_x_København_Putgarden   |11.00           |11.00           |0.00            |-0.00           |Bindende       
-Capacity_x_København_Padborg     |2.00            |2.00            |0.00            |-0.00           |Bindende       
-Capacity_x_Rostock_Hamburg       |3.00            |3.00            |0.00            |-0.00           |Bindende       
-Capacity_x_Rostock_Berlin        |5.00            |5.00            |0.00            |-0.00           |Bindende       
-Capacity_x_Putgarden_Hamburg     |0.00            |14.00           |14.00           |-0.00           |Ikke-bindende  
-Capacity_x_Putgarden_Berlin      |11.00           |11.00           |0.00            |-0.00           |Bindende       
-Capacity_x_Padborg_Hamburg       |2.00            |10.00           |8.00            |-0.00           |Ikke-bindende  
-Capacity_x_Hamburg_Berlin        |0.00            |12.00           |12.00           |-0.00           |Ikke-bindende  
-Capacity_x_Hamburg_Strasbourg    |5.00            |12.00           |7.00            |-0.00           |Ikke-bindende  
-Capacity_x_Berlin_Strasbourg     |0.00            |4.00            |4.00            |-0.00           |Ikke-bindende  
-Capacity_x_Berlin_Bruxelles      |10.00           |10.00           |0.00            |-0.00           |Bindende       
-Capacity_x_Berlin_Liege          |6.00            |10.00           |4.00            |-0.00           |Ikke-bindende  
-Capacity_x_Strasbourg_Bruxelle   |0.00            |4.00            |4.00            |-0.00           |Ikke-bindende  
-Capacity_x_Strasbourg_Liege      |0.00            |12.00           |12.00           |-0.00           |Ikke-bindende  
-Capacity_x_Strasbourg_Paris      |5.00            |11.00           |6.00            |-0.00           |Ikke-bindende  
-Capacity_x_Bruxelles_Liege       |0.00            |23.00           |23.00           |-0.00           |Ikke-bindende  
-Capacity_x_Bruxelles_Paris       |10.00           |16.00           |6.00            |-0.00           |Ikke-bindende  
-Capacity_x_Liege_Paris           |6.00            |10.00           |4.00            |-0.00           |Ikke-bindende  
+Begrænsningnavn    |LHS          |RHS          |Slack        |Skyggepris   |Bindende status
+-------------------------------------------------------------------------------------------
+Flow_balance_AV    |0.00         |0.00         |0.00         |1.00         |Bindende       
+Flow_balance_SK    |0.00         |0.00         |0.00         |1.00         |Bindende       
+Flow_balance_SL    |0.00         |0.00         |0.00         |1.00         |Bindende       
+Flow_balance_B1    |0.00         |0.00         |0.00         |1.00         |Bindende       
+Flow_balance_B2    |0.00         |0.00         |0.00         |1.00         |Bindende       
+Flow_balance_B3    |0.00         |0.00         |0.00         |1.00         |Bindende       
+Flow_balance_F     |0.00         |0.00         |0.00         |0.00         |Bindende       
+Capacity_x_S_AV    |9.00         |11.00        |2.00         |0.00         |Ikke-bindende  
+Capacity_x_AV_SK   |2.00         |5.00         |3.00         |0.00         |Ikke-bindende  
+Capacity_x_AV_SL   |7.00         |9.00         |2.00         |0.00         |Ikke-bindende  
+Capacity_x_SK_B1   |1.00         |5.00         |4.00         |0.00         |Ikke-bindende  
+Capacity_x_SK_B2   |1.00         |5.00         |4.00         |0.00         |Ikke-bindende  
+Capacity_x_SK_B3   |0.00         |4.00         |4.00         |0.00         |Ikke-bindende  
+Capacity_x_SL_B3   |4.00         |4.00         |0.00         |0.00         |Bindende       
+Capacity_x_SL_F    |3.00         |3.00         |0.00         |0.00         |Bindende       
+Capacity_x_B1_T    |1.00         |1.00         |0.00         |0.00         |Bindende       
+Capacity_x_B2_T    |1.00         |1.00         |0.00         |0.00         |Bindende       
+Capacity_x_B3_T    |4.00         |4.00         |0.00         |0.00         |Bindende       
+Capacity_x_F_T     |3.00         |5.00         |2.00         |0.00         |Ikke-bindende  
 
 
 
 Sensitivitetsrapport for objektivkoefficienter: 
 
-Variabelnavn             |Koefficientværdi   |Maksimalt fald     |Maksimal stigning  |Reduced costs     
----------------------------------------------------------------------------------------------------------
-x_København_Rostock      |1.00               |-1.00              |Inf                |-0.00             
-x_København_Putgarden    |1.00               |-1.00              |Inf                |1.00              
-x_København_Padborg      |1.00               |-1.00              |Inf                |1.00              
-x_Rostock_Hamburg        |0.00               |-1.00              |Inf                |1.00              
-x_Rostock_Berlin         |0.00               |-1.00              |Inf                |1.00              
-x_Putgarden_Hamburg      |0.00               |-1.00              |-0.00              |-0.00             
-x_Putgarden_Berlin       |0.00               |0.00               |Inf                |-0.00             
-x_Padborg_Hamburg        |0.00               |-1.00              |Inf                |-0.00             
-x_Hamburg_Berlin         |0.00               |-Inf               |0.00               |-0.00             
-x_Hamburg_Strasbourg     |0.00               |-0.00              |-0.00              |-0.00             
-x_Berlin_Strasbourg      |0.00               |-Inf               |0.00               |-0.00             
-x_Berlin_Bruxelles       |0.00               |0.00               |Inf                |-0.00             
-x_Berlin_Liege           |0.00               |0.00               |-0.00              |-0.00             
-x_Strasbourg_Bruxelles   |0.00               |-Inf               |0.00               |-0.00             
-x_Strasbourg_Liege       |0.00               |-Inf               |0.00               |-0.00             
-x_Strasbourg_Paris       |0.00               |-0.00              |-0.00              |-0.00             
-x_Bruxelles_Liege        |0.00               |-Inf               |0.00               |-0.00             
-x_Bruxelles_Paris        |0.00               |0.00               |0.00               |-0.00             
-x_Liege_Paris            |0.00               |0.00               |-0.00              |-0.00             
----------------------------------------------------------------------------------------------------------
+Variabelnavn       |Koefficientværdi |Maksimalt fald |Maksimal stigning |Reduced costs
+---------------------------------------------------------------------------------------
+x_S_AV             |1.00             |-1.00          |∞                 |0.00         
+x_AV_SK            |0.00             |-1.00          |0.00              |0.00         
+x_AV_SL            |0.00             |0.00           |∞                 |0.00         
+x_SK_B1            |0.00             |-1.00          |∞                 |0.00         
+x_SK_B2            |0.00             |-1.00          |∞                 |0.00         
+x_SK_B3            |0.00             |-1.00          |0.00              |0.00         
+x_SL_B3            |0.00             |0.00           |∞                 |0.00         
+x_SL_F             |0.00             |-1.00          |∞                 |1.00         
+x_B1_T             |0.00             |-1.00          |∞                 |1.00         
+x_B2_T             |0.00             |-1.00          |∞                 |1.00         
+x_B3_T             |0.00             |-1.00          |∞                 |1.00         
+x_F_T              |0.00             |-1.00          |∞                 |0.00         
+---------------------------------------------------------------------------------------
 
 
 
 Sensitivitetsrapport for RHS (kapacitet): 
 
-Begrænsningnavn                  |RHS (nu)             |Maksimalt fald       |Maksimal stigning   
------------------------------------------------------------------------------------------------
-Flow_balance_Rostock             |0.00                 |-8.00                |0.00                
-Flow_balance_Putgarden           |0.00                 |-6.00                |-0.00               
-Flow_balance_Padborg             |0.00                 |-6.00                |2.00                
-Flow_balance_Hamburg             |0.00                 |-6.00                |5.00                
-Flow_balance_Berlin              |0.00                 |-4.00                |6.00                
-Flow_balance_Strasbourg          |0.00                 |-6.00                |5.00                
-Flow_balance_Bruxelles           |0.00                 |-6.00                |10.00               
-Flow_balance_Liege               |0.00                 |-4.00                |6.00                
-Capacity_x_København_Rostock     |8.00                 |0.00                 |Inf                 
-Capacity_x_København_Putgarden   |11.00                |0.00                 |Inf                 
-Capacity_x_København_Padborg     |2.00                 |0.00                 |Inf                 
-Capacity_x_Rostock_Hamburg       |3.00                 |0.00                 |Inf                 
-Capacity_x_Rostock_Berlin        |5.00                 |0.00                 |Inf                 
-Capacity_x_Putgarden_Hamburg     |14.00                |-14.00               |Inf                 
-Capacity_x_Putgarden_Berlin      |11.00                |0.00                 |Inf                 
-Capacity_x_Padborg_Hamburg       |10.00                |-8.00                |Inf                 
-Capacity_x_Hamburg_Berlin        |12.00                |-12.00               |Inf                 
-Capacity_x_Hamburg_Strasbourg    |12.00                |-7.00                |Inf                 
-Capacity_x_Berlin_Strasbourg     |4.00                 |-4.00                |Inf                 
-Capacity_x_Berlin_Bruxelles      |10.00                |0.00                 |Inf                 
-Capacity_x_Berlin_Liege          |10.00                |-4.00                |Inf                 
-Capacity_x_Strasbourg_Bruxelle   |4.00                 |-4.00                |Inf                 
-Capacity_x_Strasbourg_Liege      |12.00                |-12.00               |Inf                 
-Capacity_x_Strasbourg_Paris      |11.00                |-6.00                |Inf                 
-Capacity_x_Bruxelles_Liege       |23.00                |-23.00               |Inf                 
-Capacity_x_Bruxelles_Paris       |16.00                |-6.00                |Inf                 
-Capacity_x_Liege_Paris           |10.00                |-4.00                |Inf                 
------------------------------------------------------------------------------------------------
+Begrænsningnavn      |RHS (nu)     |Maksimalt fald |Maksimal stigning
+---------------------------------------------------------------------
+Flow_balance_AV      |0.00         |-9.00          |2.00             
+Flow_balance_SK      |0.00         |-2.00          |2.00             
+Flow_balance_SL      |0.00         |-7.00          |2.00             
+Flow_balance_B1      |0.00         |-1.00          |2.00             
+Flow_balance_B2      |0.00         |-1.00          |2.00             
+Flow_balance_B3      |0.00         |0.00           |2.00             
+Flow_balance_F       |0.00         |-2.00          |3.00             
+Capacity_x_S_AV      |11.00        |-2.00          |∞                
+Capacity_x_AV_SK     |5.00         |-3.00          |∞                
+Capacity_x_AV_SL     |9.00         |-2.00          |∞                
+Capacity_x_SK_B1     |5.00         |-4.00          |∞                
+Capacity_x_SK_B2     |5.00         |-4.00          |∞                
+Capacity_x_SK_B3     |4.00         |-4.00          |∞                
+Capacity_x_SL_B3     |4.00         |0.00           |∞                
+Capacity_x_SL_F      |3.00         |0.00           |∞                
+Capacity_x_B1_T      |1.00         |0.00           |∞                
+Capacity_x_B2_T      |1.00         |0.00           |∞                
+Capacity_x_B3_T      |4.00         |0.00           |∞                
+Capacity_x_F_T       |5.00         |-2.00          |∞                
+---------------------------------------------------------------------
 
+
+====================================================================================================
+ ADVARSEL: Uendeligt mange løsninger muligt
+====================================================================================================
+Følgende ikke-basisvariabler har reduced cost = 0:
+  - x_SK_B3
+Dette kan indikere, at der findes uendeligt mange optimale løsninger.
+====================================================================================================
 
 
 ────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -208,70 +178,64 @@ MAXIMUM FLOW - LØSNING
 ────────────────────────────────────────────────────────────────────────────────────────────────────
 FLOW RESULTATER:
 ────────────────────────────────────────────────────────────────────────────────────────────────────
-Source node: København
-Sink node: Paris
-Maksimal flow: 21.00
+Source node: S
+Sink node: T
+Maksimal flow: 9.00
 
 Flow gennem kanter:
 ────────────────────────────────────────────────────────────────────────────────────────────────────
 Fra node             | Til node             | Flow            | Kapacitet       | Utilisering    
 ────────────────────────────────────────────────────────────────────────────────────────────────────
-Berlin               | Bruxelles            | 10.00           | 10.00           | 100.00         %
-Berlin               | Liege                | 6.00            | 10.00           | 60.00          %
-Bruxelles            | Paris                | 10.00           | 16.00           | 62.50          %
-Hamburg              | Strasbourg           | 5.00            | 12.00           | 41.67          %
-København            | Padborg              | 2.00            | 2.00            | 100.00         %
-København            | Putgarden            | 11.00           | 11.00           | 100.00         %
-København            | Rostock              | 8.00            | 8.00            | 100.00         %
-Liege                | Paris                | 6.00            | 10.00           | 60.00          %
-Padborg              | Hamburg              | 2.00            | 10.00           | 20.00          %
-Putgarden            | Berlin               | 11.00           | 11.00           | 100.00         %
-Rostock              | Berlin               | 5.00            | 5.00            | 100.00         %
-Rostock              | Hamburg              | 3.00            | 3.00            | 100.00         %
-Strasbourg           | Paris                | 5.00            | 11.00           | 45.45          %
+AV                   | SK                   | 2.00            | 5.00            | 40.00          %
+AV                   | SL                   | 7.00            | 9.00            | 77.78          %
+B1                   | T                    | 1.00            | 1.00            | 100.00         %
+B2                   | T                    | 1.00            | 1.00            | 100.00         %
+B3                   | T                    | 4.00            | 4.00            | 100.00         %
+F                    | T                    | 3.00            | 5.00            | 60.00          %
+S                    | AV                   | 9.00            | 11.00           | 81.82          %
+SK                   | B1                   | 1.00            | 5.00            | 20.00          %
+SK                   | B2                   | 1.00            | 5.00            | 20.00          %
+SL                   | B3                   | 4.00            | 4.00            | 100.00         %
+SL                   | F                    | 3.00            | 3.00            | 100.00         %
 ────────────────────────────────────────────────────────────────────────────────────────────────────
 
 ────────────────────────────────────────────────────────────────────────────────────────────────────
 OPSUMMERING:
 ────────────────────────────────────────────────────────────────────────────────────────────────────
-  Maksimal flow værdi:           21.00
-  Antal aktive kanter:           13
+  Maksimal flow værdi:           9.00
+  Antal aktive kanter:           11
 ────────────────────────────────────────────────────────────────────────────────────────────────────
 
 ────────────────────────────────────────────────────────────────────────────────────────────────────
 FLOW NETVÆRK (visuel repræsentation):
 ────────────────────────────────────────────────────────────────────────────────────────────────────
 
-  København (SOURCE)
-     ──[flow: 8.0 / cap: 8.0]──> Rostock
-     ──[flow: 11.0 / cap: 11.0]──> Putgarden
-     ──[flow: 2.0 / cap: 2.0]──> Padborg
+  S (SOURCE)
+     ──[flow: 9.0 / cap: 11.0]──> AV
 
-  Rostock
-     ──[flow: 3.0 / cap: 3.0]──> Hamburg
-     ──[flow: 5.0 / cap: 5.0]──> Berlin
+  AV
+     ──[flow: 7.0 / cap: 9.0]──> SL
+     ──[flow: 2.0 / cap: 5.0]──> SK
 
-  Putgarden
-     ──[flow: 11.0 / cap: 11.0]──> Berlin
+  SL
+     ──[flow: 3.0 / cap: 3.0]──> F
+     ──[flow: 4.0 / cap: 4.0]──> B3
 
-  Padborg
-     ──[flow: 2.0 / cap: 10.0]──> Hamburg
+  SK
+     ──[flow: 1.0 / cap: 5.0]──> B2
+     ──[flow: 1.0 / cap: 5.0]──> B1
 
-  Hamburg
-     ──[flow: 5.0 / cap: 12.0]──> Strasbourg
+  F
+     ──[flow: 3.0 / cap: 5.0]──> T (SINK)
 
-  Berlin
-     ──[flow: 10.0 / cap: 10.0]──> Bruxelles
-     ──[flow: 6.0 / cap: 10.0]──> Liege
+  B3
+     ──[flow: 4.0 / cap: 4.0]──> T (SINK)
 
-  Strasbourg
-     ──[flow: 5.0 / cap: 11.0]──> Paris (SINK)
+  B2
+     ──[flow: 1.0 / cap: 1.0]──> T (SINK)
 
-  Bruxelles
-     ──[flow: 10.0 / cap: 16.0]──> Paris (SINK)
-
-  Liege
-     ──[flow: 6.0 / cap: 10.0]──> Paris (SINK)
+  B1
+     ──[flow: 1.0 / cap: 1.0]──> T (SINK)
 
 ────────────────────────────────────────────────────────────────────────────────────────────────────
 

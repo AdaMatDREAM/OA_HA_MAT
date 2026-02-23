@@ -1,92 +1,111 @@
 Running HiGHS 1.12.0 (git hash: 755a8e027): Copyright (c) 2025 HiGHS under MIT licence terms
-LP has 3 rows; 3 cols; 9 nonzeros
+MIP has 12 rows; 10 cols; 40 nonzeros; 10 integer variables (0 binary)
 Coefficient ranges:
-  Matrix  [1e+00, 1e+05]
-  Cost    [2e+01, 4e+03]
+  Matrix  [1e+00, 1e+00]
+  Cost    [1e+00, 1e+00]
   Bound   [0e+00, 0e+00]
-  RHS     [1e+02, 8e+05]
+  RHS     [1e+00, 5e+00]
 Presolving model
-3 rows, 3 cols, 9 nonzeros  0s
-3 rows, 3 cols, 9 nonzeros  0s
-Presolve reductions: rows 3(-0); columns 3(-0); nonzeros 9(-0) - Not reduced
-Problem not reduced by presolve: solving the LP
-Using EKK dual simplex solver - serial
-  Iteration        Objective     Infeasibilities num(sum)
-          0    -5.7031190877e+00 Ph1: 3(10.4453); Du: 3(5.70312) 0s
-          2     1.0400000000e+04 Pr: 0(0) 0s
+12 rows, 10 cols, 40 nonzeros  0s
+9 rows, 8 cols, 28 nonzeros  0s
+7 rows, 7 cols, 22 nonzeros  0s
+Presolve reductions: rows 7(-5); columns 7(-3); nonzeros 22(-18) 
+Objective function is integral with scale 1
 
-Model status        : Optimal
-Simplex   iterations: 2
-Objective value     :  1.0400000000e+04
-P-D objective error :  0.0000000000e+00
-HiGHS run time      :          0.00
+Solving MIP model with:
+   7 rows
+   7 cols (7 binary, 0 integer, 0 implied int., 0 continuous, 0 domain fixed)
+   22 nonzeros
+
+Src: B => Branching; C => Central rounding; F => Feasibility pump; H => Heuristic;
+     I => Shifting; J => Feasibility jump; L => Sub-MIP; P => Empty MIP; R => Randomized rounding;
+     S => Solve LP; T => Evaluate node; U => Unbounded; X => User solution; Y => HiGHS solution;
+     Z => ZI Round; l => Trivial lower; p => Trivial point; u => Trivial upper; z => Trivial zero
+
+        Nodes      |    B&B Tree     |            Objective Bounds              |  Dynamic Constraints |       Work      
+Src  Proc. InQueue |  Leaves   Expl. | BestBound       BestSol              Gap |   Cuts   InLp Confl. | LpIters     Time
+
+ J       0       0         0 100.00%   inf             3                  Large        0      0      0         0     0.0s
+         1       0         1 100.00%   3               3                  0.00%        0      0      0         0     0.0s
+
+Solving report
+  Status            Optimal
+  Primal bound      3
+  Dual bound        3
+  Gap               0% (tolerance: 0.01%)
+  P-D integral      1.43051147461e-06
+  Solution status   feasible
+                    3 (objective)
+                    0 (bound viol.)
+                    0 (int. viol.)
+                    0 (row viol.)
+  Timing            0.01
+  Max sub-MIP depth 0
+  Nodes             1
+  Repair LPs        0
+  LP iterations     0
 
 ====================================================================================================
 PROBLEMFORMULERING
 ====================================================================================================
-Maksimer Z = 4000x_a + 20x_b + 300x_c
+Maksimer Z = x_1f + x_2f + x_3f + x_4f + x_5f
 
 u.b.b.:
-  100000x_a + 5000x_b + 15000x_c ≤ 800000
-  100x_a + x_b + 20x_c ≤ 1000
-   - 10x_a + x_b + x_c ≥ 100
+  x_1f + x_1a ≤ 1
+  x_2f + x_2a ≤ 1
+  x_3f + x_3a ≤ 1
+  x_4f + x_4a ≤ 1
+  x_5f + x_5a ≤ 1
+  x_1f + x_4f ≤ 1
+   - x_2f - x_3f - x_2a - x_3a ≤ -2
+  x_2f + x_3a ≤ 1
+  x_3f + x_2a ≤ 1
+  x_1f + x_2f + x_3f + x_4f + x_5f ≤ 3
+  x_1a + x_2a + x_3a + x_4a + x_5a ≤ 3
+   - x_1f - x_2f - x_3f - x_4f - x_5f - x_1a - x_2a - x_3a - x_4a - x_5a ≤ -5
 
 Samt:
-  x_a ≥ 0, x_b ≥ 0, x_c ≥ 0
+  x_1f ∈ ℤ, x_1f ≥ 0, x_2f ∈ ℤ, x_2f ≥ 0, x_3f ∈ ℤ, x_3f ≥ 0, x_4f ∈ ℤ, x_4f ≥ 0, x_5f ∈ ℤ, x_5f ≥ 0, x_1a ∈ ℤ, x_1a ≥ 0, x_2a ∈ ℤ, x_2a ≥ 0, x_3a ∈ ℤ, x_3a ≥ 0, x_4a ∈ ℤ, x_4a ≥ 0, x_5a ∈ ℤ, x_5a ≥ 0
 ====================================================================================================
 
-Output i LP format begynder nu
+Output i MIP format begynder nu
 
 
 OPTIMAL - Optimal løsning fundet
 ----------------------------------------------------------------------------------------------------
 Værdi af objektivfunktionen:
- -> 10400.0000000000
+ -> 3.00
 
 
 Variabelnavn                   |Variabeltype                   |Værdi                         
 -------------------------------------------------------------------------------------
-x_a                            |Continuous                     |2.0000000000                  
-x_b                            |Continuous                     |120.0000000000                
-x_c                            |Continuous                     |0.0000000000                  
+x_1f                           |Integer                        |0.00                         
+x_2f                           |Integer                        |1.00                          
+x_3f                           |Integer                        |1.00                          
+x_4f                           |Integer                        |1.00                          
+x_5f                           |Integer                        |0.00                         
+x_1a                           |Integer                        |1.00                          
+x_2a                           |Integer                        |0.00                         
+x_3a                           |Integer                        |0.00                          
+x_4a                           |Integer                        |0.00                         
+x_5a                           |Integer                        |1.00                          
 
 
-Slack og skyggepris: 
+Slack: 
 
-Begrænsningnavn |LHS                 |RHS                 |Slack            |Skyggepris        |Bindende status
----------------------------------------------------------------------------------------------------------------
-Pris            |800000.0000000000   |800000.0000000000   |0.0000000000     |0.0280000000      |Bindende       
-Kvm             |320.0000000000      |1000.0000000000     |680.0000000000   |0.0000000000      |Ikke-bindende  
-SK              |100.0000000000      |100.0000000000      |0.0000000000     |-120.0000000000   |Bindende       
+Begrænsningnavn |LHS          |RHS          |Slack        |Bindende status
+--------------------------------------------------------------------------
+B1              |1.00         |1.00         |0.00         |Bindende       
+B2              |1.00         |1.00         |0.00         |Bindende       
+B3              |1.00         |1.00         |0.00         |Bindende       
+B4              |1.00         |1.00         |0.00         |Bindende       
+B5              |1.00         |1.00         |0.00         |Bindende       
+B6              |1.00         |1.00         |0.00         |Bindende       
+B7              |-2.00        |-2.00        |0.00         |Bindende       
+B8              |1.00         |1.00         |0.00         |Bindende       
+B9              |1.00         |1.00         |0.00         |Bindende       
+B10             |3.00         |3.00         |0.00         |Bindende       
+B11             |2.00         |3.00         |1.00         |Ikke-bindende  
+B12             |-5.00        |-5.00        |0.00         |Bindende       
 
-
-
-Sensitivitetsrapport for objektivkoefficienter: 
-
-Variabelnavn       |Koefficientværdi  |Maksimalt fald |Maksimal stigning |Reduced costs 
-----------------------------------------------------------------------------------------
-x_a                |4000.0000000000   |0.0000000000   |Inf              |0.0000000000  
-x_b                |20.0000000000     |0.0000000000   |180.0000000000   |0.0000000000  
-x_c                |300.0000000000    |-Inf           |0.0000000000     |0.0000000000  
-----------------------------------------------------------------------------------------
-
-
-
-Sensitivitetsrapport for RHS (kapacitet): 
-
-Begrænsningnavn      |RHS (nu)            |Maksimalt fald       |Maksimal stigning  
-------------------------------------------------------------------------------------
-Pris                 |800000.0000000000   |-300000.0000000000   |927272.7272727273  
-Kvm                  |1000.0000000000     |-680.0000000000      |Inf                
-SK                   |100.0000000000      |-180.0000000000      |60.0000000000      
-------------------------------------------------------------------------------------
-
-
-====================================================================================================
- ADVARSEL: Uendeligt mange løsninger muligt
-====================================================================================================
-Følgende ikke-basisvariabler har reduced cost = 0:
-  - x_c
-Dette kan indikere, at der findes uendeligt mange optimale løsninger.
-====================================================================================================
 

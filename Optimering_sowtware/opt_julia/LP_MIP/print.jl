@@ -12,9 +12,28 @@ function calculate_num_width(values, dec=2, min_width=10)
         if !isnan(val) && !isinf(val)
             len = length(@sprintf("%.*f", dec, val))
             max_len = max(max_len, len)
+        elseif isinf(val)
+            max_len = max(max_len, 1)  # "∞" er 1 tegn
         end
     end
     return max_len + 2  # Lidt padding
+end
+
+# Hjælpefunktion til at formatere værdier med ∞ for Inf
+function format_value_with_inf(val, dec=2, width=0)
+    if isinf(val)
+        if val > 0
+            return "∞"
+        else
+            return "-∞"
+        end
+    else
+        if width > 0
+            return @sprintf("%-*.*f", width, dec, val)
+        else
+            return @sprintf("%.*f", dec, val)
+        end
+    end
 end
 
 # Funktion til at tjekke om løsningen er heltallig (for at verificere unimodularitet)
@@ -133,6 +152,12 @@ function print_sensitivity_objective_coefficients(M, report, x, x_navne, c, dec=
     limit2_width = calculate_num_width(limit2_vals, dec, 10)
     red_cost_width = calculate_num_width(red_cost_vals, dec, 10)
     
+    # Juster bredder baseret på header længder
+    coeff_width = max(coeff_width, length("Koefficientværdi"))
+    limit1_width = max(limit1_width, length("Maksimalt fald"))
+    limit2_width = max(limit2_width, length("Maksimal stigning"))
+    red_cost_width = max(red_cost_width, length("Reduced costs"))
+    
     total_width = name_width + coeff_width + limit1_width + limit2_width + red_cost_width + 9
     @printf("%-*s |%-*s |%-*s |%-*s |%-*s\n", 
             name_width, "Variabelnavn", 
@@ -145,11 +170,13 @@ function print_sensitivity_objective_coefficients(M, report, x, x_navne, c, dec=
     for i in eachindex(x)
         limits = report[x[i]]
         navn = length(x_navne[i]) > max_name_length ? x_navne[i][1:max_name_length] : x_navne[i]
-        @printf("%-*s |%-*.*f |%-*.*f |%-*.*f |%-*.*f\n", 
+        limit1_str = format_value_with_inf(round_near_zero(limits[1]), dec, limit1_width)
+        limit2_str = format_value_with_inf(round_near_zero(limits[2]), dec, limit2_width)
+        @printf("%-*s |%-*.*f |%-*s |%-*s |%-*.*f\n", 
                 name_width, navn, 
                 coeff_width, dec, c[i], 
-                limit1_width, dec, round_near_zero(limits[1]), 
-                limit2_width, dec, round_near_zero(limits[2]), 
+                limit1_width, limit1_str, 
+                limit2_width, limit2_str, 
                 red_cost_width, dec, round_near_zero(reduced_cost(x[i])))
     end
     println("-"^total_width)
@@ -180,6 +207,11 @@ function print_sensitivity_RHS(report, constraints, b, b_navne, dec=2)
     limit1_width = calculate_num_width(limit1_vals, dec, 10)
     limit2_width = calculate_num_width(limit2_vals, dec, 10)
     
+    # Juster bredder baseret på header længder
+    rhs_width = max(rhs_width, length("RHS (nu)"))
+    limit1_width = max(limit1_width, length("Maksimalt fald"))
+    limit2_width = max(limit2_width, length("Maksimal stigning"))
+    
     total_width = name_width + rhs_width + limit1_width + limit2_width + 6
     @printf("%-*s |%-*s |%-*s |%-*s\n", name_width, "Begrænsningnavn", rhs_width, "RHS (nu)",
             limit1_width, "Maksimalt fald", limit2_width, "Maksimal stigning")
@@ -187,10 +219,12 @@ function print_sensitivity_RHS(report, constraints, b, b_navne, dec=2)
     for i in eachindex(constraints)
         limits = report[constraints[i]]
         navn = length(b_navne[i]) > max_name_length ? b_navne[i][1:max_name_length] : b_navne[i]
-        @printf("%-*s |%-*.*f |%-*.*f |%-*.*f\n", 
+        limit1_str = format_value_with_inf(round_near_zero(limits[1]), dec, limit1_width)
+        limit2_str = format_value_with_inf(round_near_zero(limits[2]), dec, limit2_width)
+        @printf("%-*s |%-*.*f |%-*s |%-*s\n", 
                 name_width, navn, rhs_width, dec, b[i], 
-                limit1_width, dec, round_near_zero(limits[1]), 
-                limit2_width, dec, round_near_zero(limits[2]))
+                limit1_width, limit1_str, 
+                limit2_width, limit2_str)
     end
     println("-"^total_width)
     println("\n")
@@ -2059,13 +2093,15 @@ function print_lager_problem(M, x, P, dec=2, tol=1e-9)
     x_vals = [round_near_zero(value(x[i]), tol) for i in 1:P.k]
     i_vals = [round_near_zero(value(x[P.k + 1 + t]), tol) for t in 0:P.k]
     delta_vals = [round_near_zero(value(x[2*P.k + 1 + i]), tol) for i in 1:P.k]
+    gamma_vals = [round_near_zero(value(x[3*P.k + 1 + 1 + t]), tol) for t in 0:P.k]  # γ variabler
     
     # Beregn omkostninger og omsætning
     total_omsætning = sum(P.d .* P.p)
     variable_omkostninger = sum(x_vals .* P.c_V)
     lager_omkostninger = sum(i_vals .* P.c_I)
-    faste_omkostninger = sum(delta_vals .* P.c_F)
-    total_omkostninger = variable_omkostninger + lager_omkostninger + faste_omkostninger
+    faste_produktionsomkostninger = sum(delta_vals .* P.c_F)
+    faste_lageromkostninger = sum(gamma_vals .* P.c_I_fixed)
+    total_omkostninger = variable_omkostninger + lager_omkostninger + faste_produktionsomkostninger + faste_lageromkostninger
     total_profit = total_omsætning - total_omkostninger
     
     # Objektivværdi (uden omsætning, da den er konstant)
@@ -2087,7 +2123,8 @@ function print_lager_problem(M, x, P, dec=2, tol=1e-9)
     println("-"^100)
     @printf("  %-40s %15.*f\n", "Variable produktionsomkostninger:", dec, variable_omkostninger)
     @printf("  %-40s %15.*f\n", "Lageromkostninger:", dec, lager_omkostninger)
-    @printf("  %-40s %15.*f\n", "Faste omkostninger:", dec, faste_omkostninger)
+    @printf("  %-40s %15.*f\n", "Faste produktionsomkostninger:", dec, faste_produktionsomkostninger)
+    @printf("  %-40s %15.*f\n", "Faste lageromkostninger:", dec, faste_lageromkostninger)
     @printf("  %-40s %15.*f\n", "Total omkostninger:", dec, total_omkostninger)
     @printf("  %-40s %15.*f\n", "Total omsætning:", dec, total_omsætning)
     @printf("  %-40s %15.*f\n", "Total profit:", dec, total_profit)
@@ -2103,41 +2140,46 @@ function print_lager_problem(M, x, P, dec=2, tol=1e-9)
     efterspørgsel_width = max(15, calculate_num_width(P.d, dec, 12))
     lager_width = max(15, calculate_num_width(i_vals, dec, 12))
     delta_width = 8
+    gamma_width = 8
     
     # Header - beregn total bredde
     header_prod = "Produktion (x_i)"
     header_efterspørgsel = "Efterspørgsel (d_i)"
     header_lager = "Slutlager (i_i)"
-    header_delta = "δ_i"
+    header_delta = "δ_i (x_i>0?)"
+    header_gamma = "γ_i (i_i>0?)"
     
     # Juster bredder baseret på header længder
     prod_width = max(prod_width, length(header_prod))
     efterspørgsel_width = max(efterspørgsel_width, length(header_efterspørgsel))
     lager_width = max(lager_width, length(header_lager))
     delta_width = max(delta_width, length(header_delta))
+    gamma_width = max(gamma_width, length(header_gamma))
     
-    total_width = periode_width + prod_width + efterspørgsel_width + lager_width + delta_width + 12
-    @printf("%-*s | %*s | %*s | %*s | %*s\n", 
+    total_width = periode_width + prod_width + efterspørgsel_width + lager_width + delta_width + gamma_width + 15
+    @printf("%-*s | %*s | %*s | %*s | %*s | %*s\n", 
         periode_width, "Periode", prod_width, header_prod, 
         efterspørgsel_width, header_efterspørgsel, 
-        lager_width, header_lager, delta_width, header_delta)
+        lager_width, header_lager, delta_width, header_delta, gamma_width, header_gamma)
     println("-"^total_width)
     
     # Startlager (periode 0)
-    @printf("%-*s | %*s | %*s | %*.*f | %*s\n", 
+    gamma_0_str = round(Int, gamma_vals[1]) == 1 ? "1" : "0"
+    @printf("%-*s | %*s | %*s | %*.*f | %*s | %*s\n", 
         periode_width, "0", prod_width, "-", 
         efterspørgsel_width, "-", 
-        lager_width, dec, i_vals[1], delta_width, "-")
+        lager_width, dec, i_vals[1], delta_width, "-", gamma_width, gamma_0_str)
     
     # Produktionsperioder
     for i in 1:P.k
         delta_str = round(Int, delta_vals[i]) == 1 ? "1" : "0"
-        @printf("%-*s | %*.*f | %*.*f | %*.*f | %*s\n", 
+        gamma_str = round(Int, gamma_vals[i+1]) == 1 ? "1" : "0"
+        @printf("%-*s | %*.*f | %*.*f | %*.*f | %*s | %*s\n", 
             periode_width, string(i), 
             prod_width, dec, x_vals[i], 
             efterspørgsel_width, dec, P.d[i], 
             lager_width, dec, i_vals[i+1], 
-            delta_width, delta_str)
+            delta_width, delta_str, gamma_width, gamma_str)
     end
     
     println("-"^total_width)
@@ -2155,8 +2197,9 @@ function print_lager_problem(M, x, P, dec=2, tol=1e-9)
     for i in 1:P.k
         var_omkost = x_vals[i] * P.c_V[i]
         lager_omkost = i_vals[i+1] * P.c_I[i+1]  # Lageromkostning for slutlager i periode i
-        fast_omkost = delta_vals[i] * P.c_F[i]
-        total_periode_omkost = var_omkost + lager_omkost + fast_omkost
+        fast_prod_omkost = delta_vals[i] * P.c_F[i]
+        fast_lager_omkost = gamma_vals[i+1] * P.c_I_fixed[i+1]  # Faste lageromkostninger for periode i
+        total_periode_omkost = var_omkost + lager_omkost + fast_prod_omkost + fast_lager_omkost
         periode_omsæt = P.d[i] * P.p[i]
         periode_prof = periode_omsæt - total_periode_omkost
         
@@ -2169,7 +2212,8 @@ function print_lager_problem(M, x, P, dec=2, tol=1e-9)
     periode_col_width = 8
     var_omkost_width = max(20, calculate_num_width([x_vals[i] * P.c_V[i] for i in 1:P.k], dec, 15))
     lager_omkost_width = max(20, calculate_num_width([i_vals[i+1] * P.c_I[i+1] for i in 1:P.k], dec, 15))
-    fast_omkost_width = max(20, calculate_num_width([delta_vals[i] * P.c_F[i] for i in 1:P.k], dec, 15))
+    fast_prod_omkost_width = max(20, calculate_num_width([delta_vals[i] * P.c_F[i] for i in 1:P.k], dec, 15))
+    fast_lager_omkost_width = max(20, calculate_num_width([gamma_vals[i+1] * P.c_I_fixed[i+1] for i in 1:P.k], dec, 15))
     total_omkost_width = max(20, calculate_num_width(periode_omkostninger, dec, 15))
     omsætning_width = max(20, calculate_num_width(periode_omsætning, dec, 15))
     profit_width = max(20, calculate_num_width(periode_profit, dec, 15))
@@ -2183,14 +2227,15 @@ function print_lager_problem(M, x, P, dec=2, tol=1e-9)
     omsætning_width = max(omsætning_width, length(header_omsætning))
     profit_width = max(profit_width, length(header_profit))
     
-    total_table_width = periode_col_width + var_omkost_width + lager_omkost_width + fast_omkost_width + 
-                       total_omkost_width + omsætning_width + profit_width + 18
+    total_table_width = periode_col_width + var_omkost_width + lager_omkost_width + fast_prod_omkost_width + 
+                       fast_lager_omkost_width + total_omkost_width + omsætning_width + profit_width + 21
     
-    @printf("%-*s | %*s | %*s | %*s | %*s | %*s | %*s\n",
+    @printf("%-*s | %*s | %*s | %*s | %*s | %*s | %*s | %*s\n",
         periode_col_width, "Periode",
         var_omkost_width, "Var. omkost.",
         lager_omkost_width, "Lager omkost.",
-        fast_omkost_width, "Faste omkost.",
+        fast_prod_omkost_width, "Faste prod. omkost.",
+        fast_lager_omkost_width, "Faste lager omkost.",
         total_omkost_width, header_total,
         omsætning_width, header_omsætning,
         profit_width, header_profit)
@@ -2200,16 +2245,18 @@ function print_lager_problem(M, x, P, dec=2, tol=1e-9)
     for i in 1:P.k
         var_omkost = x_vals[i] * P.c_V[i]
         lager_omkost = i_vals[i+1] * P.c_I[i+1]
-        fast_omkost = delta_vals[i] * P.c_F[i]
+        fast_prod_omkost = delta_vals[i] * P.c_F[i]
+        fast_lager_omkost = gamma_vals[i+1] * P.c_I_fixed[i+1]
         total_periode_omkost = periode_omkostninger[i]
         periode_omsæt = periode_omsætning[i]
         periode_prof = periode_profit[i]
         
-        @printf("%-*s | %*.*f | %*.*f | %*.*f | %*.*f | %*.*f | %*.*f\n",
+        @printf("%-*s | %*.*f | %*.*f | %*.*f | %*.*f | %*.*f | %*.*f | %*.*f\n",
             periode_col_width, string(i),
             var_omkost_width, dec, var_omkost,
             lager_omkost_width, dec, lager_omkost,
-            fast_omkost_width, dec, fast_omkost,
+            fast_prod_omkost_width, dec, fast_prod_omkost,
+            fast_lager_omkost_width, dec, fast_lager_omkost,
             total_omkost_width, dec, total_periode_omkost,
             omsætning_width, dec, periode_omsæt,
             profit_width, dec, periode_prof)
@@ -2217,11 +2264,12 @@ function print_lager_problem(M, x, P, dec=2, tol=1e-9)
     
     # Total række
     println("-"^total_table_width)
-    @printf("%-*s | %*.*f | %*.*f | %*.*f | %*.*f | %*.*f | %*.*f\n",
+    @printf("%-*s | %*.*f | %*.*f | %*.*f | %*.*f | %*.*f | %*.*f | %*.*f\n",
         periode_col_width, "Total",
         var_omkost_width, dec, variable_omkostninger,
         lager_omkost_width, dec, lager_omkostninger,
-        fast_omkost_width, dec, faste_omkostninger,
+        fast_prod_omkost_width, dec, faste_produktionsomkostninger,
+        fast_lager_omkost_width, dec, faste_lageromkostninger,
         total_omkost_width, dec, total_omkostninger,
         omsætning_width, dec, total_omsætning,
         profit_width, dec, total_profit)

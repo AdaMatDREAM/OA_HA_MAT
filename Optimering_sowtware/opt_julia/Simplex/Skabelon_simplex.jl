@@ -1,17 +1,26 @@
 function simplex_skabelon()
 
     # Objektivcoefficienter og variabelnavne
-    c = [4000, 20, 300];
-    x_navne = ["x_a", "x_b", "x_c"];
+    c = [1, 1, 1, 1, 1, 0, 0, 0, 0, 0];
+    x_navne = ["x_1f", "x_2f", "x_3f", "x_4f", "x_5f","x_1a", "x_2a", "x_3a", "x_4a", "x_5a"];
     
     # Begr??nsningskoefficienter og kapaciteter
-    A = [100000  5000  15000;
-         100     1     20;
-         10      -1    -1];
+    A = [1  0  0  0  0  1  0  0  0  0;
+         0  1  0  0  0  0  1  0  0  0;
+         0  0  1  0  0  0  0  1  0  0;
+         0  0  0  1  0  0  0  0  1  0;
+         0  0  0  0  1  0  0  0  0  1;
+         1  0  0  1  0  0  0  0  0  0;
+         0 -1 -1  0  0  0 -1 -1  0  0;
+         0  1  0  0  0  0  0  1  0  0;
+         0  0  1  0  0  0  1  0  0  0;
+         1  1  1  1  1  0  0  0  0  0;
+         0  0  0  0  0  1  1  1  1  1;
+         -1 -1 -1 -1 -1 -1 -1 -1 -1 -1];
     
     # Husk at alle b_dir er <=
-    b = [800000,  1000,  -100];
-    b_navne = ["pris", "Kwm", "SC"];
+    b = [1,  1,  1,  1,  1,  1, -2,  1,  1,  3,  3, -5];
+    b_navne = ["B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12"];
     
     # Danner slackvariable
     # S_navne = ["S_1", "S_2", "S_3"];

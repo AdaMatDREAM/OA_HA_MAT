@@ -8,45 +8,37 @@ function max_flow_skabelon()
 
     # Definer noder
     noder = [
-    "København", 
-    "Rostock", 
-    "Putgarden", 
-    "Padborg", 
-    "Hamburg", 
-    "Berlin", 
-    "Strasbourg", 
-    "Bruxelles", 
-    "Liege", 
-    "Paris"];
+    "S", 
+    "AV", 
+    "SK", 
+    "SL", 
+    "B1", 
+    "B2", 
+    "B3", 
+    "F", 
+    "T"];
 
     # Definer edges(kanter) med kapacitet
     # Format: (from_node, to_node, kapacitet)
     # NOTE: Alle kanter er directed (orienterede) i maximum flow problemer
     kanter = [
-            ("København", "Rostock", 8),
-            ("København", "Putgarden", 11),
-            ("København", "Padborg", 2),
-            ("Rostock", "Hamburg", 3),
-            ("Rostock", "Berlin", 5),
-            ("Putgarden", "Hamburg", 14),
-            ("Putgarden", "Berlin", 11),
-            ("Padborg", "Hamburg", 10),
-            ("Hamburg", "Berlin", 12),
-            ("Hamburg", "Strasbourg", 12),
-            ("Berlin", "Strasbourg", 4),
-            ("Berlin", "Bruxelles", 10),
-            ("Berlin", "Liege", 10),
-            ("Strasbourg", "Bruxelles", 4),
-            ("Strasbourg", "Liege", 12),
-            ("Strasbourg", "Paris", 11),
-            ("Bruxelles", "Liege", 23),
-            ("Bruxelles", "Paris", 16),
-            ("Liege", "Paris", 10)
+            ("S", "AV", 9),
+            ("AV", "SK", 5),
+            ("AV", "SL", 9),
+            ("SK", "B1", 5),
+            ("SK", "B2", 5),
+            ("SK", "B3", 4),
+            ("SL", "B3", 4),
+            ("SL", "F", 3),
+            ("B1", "T", 1),
+            ("B2", "T", 1),
+            ("B3", "T", 4),
+            ("F", "T", 5)
         ];
 
     # Definer source (fra node) og sink (til node)
-    source_node = "København";
-    sink_node = "Paris";
+    source_node = "S";
+    sink_node = "T";
 
     # Vi opretter c-vektoren (objektivkoefficienter) og x_navne-vektoren
     # For max flow: objektiv er at maksimere flow fra source

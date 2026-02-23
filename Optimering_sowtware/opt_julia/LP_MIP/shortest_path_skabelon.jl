@@ -7,33 +7,25 @@ function shortest_path_skabelon()
     obj = :MIN;
 
     # Definer noder
-    noder = ["r", "p", "q", "a", "b", "c", "d", "s"];
+    noder = ["a", "b", "c", "d", "e"];
 
     # Definer edges(kanter) og vægte. 
     # Defineres som (egde1, edge2, vægt, "D"/"U" = directed/undirected)
 kanter = [
-            ("r", "p", 6, "D"),
-            ("p", "r", 5, "D"),
-            ("r", "q", 4, "D"),
-            ("r", "a", 9, "D"),
-            ("p", "q", 2, "D"),
-            ("p", "b", 3, "U"),
-            ("q", "p", 1, "D"),
-            ("q", "b", 2, "D"),
-            ("q", "d", 6, "D"),
-            ("a", "c", 8, "D"),
-            ("a", "d", 1, "D"),
-            ("b", "a", 1, "D"),
-            ("b", "s", 8, "D"),
-            ("c", "q", 1, "D"),
-            ("c", "b", 2, "D"),
-            ("c", "s", 4, "D"),
-            ("d", "c", 1, "D"),
-            ("d", "s", 6, "D")
+            ("a", "b", 3, "D"),
+            ("b", "a", 2, "D"),
+            ("a", "c",-1, "D"),
+            ("b", "d", 2, "D"),
+            ("d", "b",-2, "D"),
+            ("c", "b", 1, "U"),
+            ("c", "d", 4, "D"),
+            ("d", "c", 2, "D"),
+            ("c", "e", 6, "D"),
+            ("d", "e",-3, "D")
         ];
 # Definer source (fra node) og sink (til node)
-source_node = "r";
-sink_node = "s";
+source_node = "a";
+sink_node = "e";
 
 # Vi opretter variable
 # For undirected edges, opret kun én variabel (men den kan bruges i begge retninger i constraints (A-matricen))
