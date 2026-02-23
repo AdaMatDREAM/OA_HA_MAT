@@ -1,26 +1,20 @@
 function simplex_skabelon()
 
     # Objektivcoefficienter og variabelnavne
-    c = [1, 1, 1, 1, 1, 0, 0, 0, 0, 0];
-    x_navne = ["x_1f", "x_2f", "x_3f", "x_4f", "x_5f","x_1a", "x_2a", "x_3a", "x_4a", "x_5a"];
+    c = [99990, 54190, 109990];
+    x_navne = ["x_s", "x_3", "x_x"];
     
     # Begr??nsningskoefficienter og kapaciteter
-    A = [1  0  0  0  0  1  0  0  0  0;
-         0  1  0  0  0  0  1  0  0  0;
-         0  0  1  0  0  0  0  1  0  0;
-         0  0  0  1  0  0  0  0  1  0;
-         0  0  0  0  1  0  0  0  0  1;
-         1  0  0  1  0  0  0  0  0  0;
-         0 -1 -1  0  0  0 -1 -1  0  0;
-         0  1  0  0  0  0  0  1  0  0;
-         0  0  1  0  0  0  1  0  0  0;
-         1  1  1  1  1  0  0  0  0  0;
-         0  0  0  0  0  1  1  1  1  1;
-         -1 -1 -1 -1 -1 -1 -1 -1 -1 -1];
+    A = [2.5    4.75    1.25;
+         2.05   1.87    3.6;
+         2.4    0       4.8;
+         0      0       2;
+         0      1       0;
+         0      -1      0];
     
     # Husk at alle b_dir er <=
-    b = [1,  1,  1,  1,  1,  1, -2,  1,  1,  3,  3, -5];
-    b_navne = ["B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12"];
+    b = [2520,  12975,   25380,   10542,   7500,  -6371];
+    b_navne = ["Produktionstid", "kWh", "Lædderbetræk", "Falcon", "Max x_3", "Min x_3"];
     
     # Danner slackvariable
     # S_navne = ["S_1", "S_2", "S_3"];

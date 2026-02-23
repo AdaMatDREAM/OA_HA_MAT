@@ -1391,6 +1391,169 @@ function plot_max_flow(M, x, x_navne, kanter, noder, source_node, sink_node, kap
 end
 
 ##########################################################
+# Funktion til at printe minimum cost flow løsning
+# supply_dict og demand_dict bruges til at markere kilder/senker i output.
+# kanter: (fra, til, omkostning, kapacitet).
+function print_min_cost_flow(M, x, x_navne, kanter, supply_dict, demand_dict, kapaciteter, dec=2)
+    println("\n" * "="^100)
+    println("MINIMUM COST FLOW - LØSNING")
+    println("="^100)
+
+    total_cost = objective_value(M)
+    active_flows = Dict{Tuple{String, String}, Float64}()
+
+    for (idx, var_name) in enumerate(x_navne)
+        val = value(x[idx])
+        if val > 1e-6
+            parts = split(var_name, "_")
+            if length(parts) >= 3
+                from_node = parts[2]
+                to_node = parts[3]
+                active_flows[(from_node, to_node)] = val
+            end
+        end
+    end
+
+    println("\n" * "─"^100)
+    println("OPTIMAL OMKOSTNING: ", round(total_cost, digits=dec))
+    println("─"^100)
+    println("\nSupply-noder (kilder): ", join([string(k, " => ", v) for (k, v) in supply_dict], ", "))
+    println("Demand-noder (senker): ", join([string(k, " => ", v) for (k, v) in demand_dict], ", "))
+    println("\n" * "─"^100)
+    println("FLOW PÅ KANTER:")
+    println("─"^100)
+    @printf("%-18s | %-18s | %-12s | %-12s | %-12s | %-12s\n",
+        "Fra node", "Til node", "Flow", "Kapacitet", "Omkostn.", "Utilisering")
+    println("─"^100)
+
+    sorted_edges = sort(collect(keys(active_flows)), by = x -> (x[1], x[2]))
+    for (from_node, to_node) in sorted_edges
+        flow_val = active_flows[(from_node, to_node)]
+        cap = 0.0
+        cost_edge = 0.0
+        for (idx, kant) in enumerate(kanter)
+            if kant[1] == from_node && kant[2] == to_node
+                cap = Float64(kant[4])
+                cost_edge = Float64(kant[3])
+                break
+            end
+        end
+        utilization = cap > 0 ? (flow_val / cap) * 100 : 0.0
+        @printf("%-18s | %-18s | %-12.*f | %-12.*f | %-12.*f | %-11.*f%%\n",
+            from_node, to_node, dec, flow_val, dec, cap, dec, cost_edge, dec, utilization)
+    end
+    println("─"^100)
+    @printf("  %-30s %.*f\n", "Total omkostning:", dec, total_cost)
+    @printf("  %-30s %d\n", "Antal kanter med flow > 0:", length(active_flows))
+    println("="^100)
+end
+
+##########################################################
+# Funktion til at visualisere minimum cost flow (som max flow: flow/cap på kanter, farvede noder)
+# supply_dict: kilder (fx rød), demand_dict: senker (fx grøn), resten transshipment (lys blå).
+# kanter: (fra, til, omkostning, kapacitet).
+function plot_min_cost_flow(M, x, x_navne, kanter, noder, supply_dict, demand_dict, kapaciteter, dec=2)
+    num_noder = length(noder)
+    G = SimpleDiGraph(num_noder)
+    node_to_int = Dict(noder[i] => i for i in 1:num_noder)
+    edge_capacities = Dict()
+    edge_flows = Dict()
+
+    for (idx, var_name) in enumerate(x_navne)
+        val = value(x[idx])
+        parts = split(var_name, "_")
+        if length(parts) >= 3
+            from_node = parts[2]
+            to_node = parts[3]
+            if haskey(node_to_int, from_node) && haskey(node_to_int, to_node)
+                i, j = node_to_int[from_node], node_to_int[to_node]
+                edge_flows[(i, j)] = val
+            end
+        end
+    end
+
+    for (idx, kant) in enumerate(kanter)
+        from_node, to_node, _, kap = kant[1], kant[2], kant[3], kant[4]
+        i = node_to_int[from_node]
+        j = node_to_int[to_node]
+        add_edge!(G, i, j)
+        edge_capacities[(i, j)] = Float64(kap)
+        if !haskey(edge_flows, (i, j))
+            edge_flows[(i, j)] = 0.0
+        end
+    end
+
+    max_ratio = 0.0
+    for e in edges(G)
+        i, j = src(e), dst(e)
+        flow = edge_flows[(i, j)]
+        cap = edge_capacities[(i, j)]
+        ratio = cap > 0 ? flow / cap : 0.0
+        max_ratio = max(max_ratio, ratio)
+    end
+
+    edge_colors = []
+    edge_widths = []
+    for e in edges(G)
+        i, j = src(e), dst(e)
+        flow = edge_flows[(i, j)]
+        cap = edge_capacities[(i, j)]
+        ratio = cap > 0 ? flow / cap : 0.0
+        if flow < 1e-6
+            push!(edge_colors, colorant"grey70")
+            push!(edge_widths, 0.5)
+        else
+            nr = max_ratio > 0 ? ratio / max_ratio : 0.0
+            push!(edge_colors, RGB(0.0, 0.7 * (1.0 - nr), 1.0 - 0.5 * nr))
+            push!(edge_widths, 0.5 + 1.5 * nr)
+        end
+    end
+
+    node_colors = fill(colorant"lightsteelblue", num_noder)
+    for (node, _) in supply_dict
+        if haskey(node_to_int, node)
+            node_colors[node_to_int[node]] = colorant"red"
+        end
+    end
+    for (node, _) in demand_dict
+        if haskey(node_to_int, node)
+            node_colors[node_to_int[node]] = colorant"green"
+        end
+    end
+
+    edge_labels = String[]
+    for e in edges(G)
+        i, j = src(e), dst(e)
+        flow = edge_flows[(i, j)]
+        if flow > 1e-6
+            push!(edge_labels, string(round(flow, digits=dec)))
+        else
+            push!(edge_labels, "")
+        end
+    end
+    node_labels = [string(node) for node in noder]
+    p = gplot(G,
+              nodelabel=node_labels,
+              edgelabel=edge_labels,
+              edgestrokec=edge_colors,
+              edgelinewidth=edge_widths,
+              nodesize=5.0,
+              nodefillc=node_colors,
+              nodestrokec=colorant"black",
+              nodestrokelw=1.0)
+    try
+        display("image/svg+xml", p)
+    catch e
+        if occursin("Cairo", string(e)) || occursin("Fontconfig", string(e)) || occursin("image/png", string(e))
+            println("   (Plottet kan ikke vises i denne terminal.)")
+        else
+            rethrow(e)
+        end
+    end
+    return p
+end
+
+##########################################################
 # Funktion til at visualiserer MST
 # Kræver: using Graphs, GraphPlot, Colors (skal være inkluderet i filen der kalder funktionen)
 function plot_MST(M, x, x_navne, kanter, noder, c, dec=2)
