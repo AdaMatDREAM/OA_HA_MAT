@@ -1,6 +1,6 @@
 function LP_MIP_model_skabelon()
 # Type af model: LP eller MIP
-model_type = "MIP";
+model_type = "LP";
 # True hvis du også vil have dualt program
 dual_defined = false;
 
@@ -8,13 +8,13 @@ dual_defined = false;
 obj = :MAX;  # eller :MIN for minimering
 
 # Objektivcoefficienter og variabelnavne
-c = [1, 1, 1, 1, 1, 0, 0, 0, 0, 0];
-x_navne = ["x_1f", "x_2f", "x_3f", "x_4f", "x_5f","x_1a", "x_2a", "x_3a", "x_4a", "x_5a"];
+c = [-1, 1];
+x_navne = ["x_1", "x_2"];
 # Fortegnskrav 
 # :R -> ]-inf, inf[
 # :>= -> x_i >= 0
 # :<= -> x_i <= 0
-fortegn = [:>=, :>=, :>=, :>=, :>=, :>=, :>=, :>=, :>=, :>=]
+fortegn = [:>=, :>=]
 nedre_grænse = zeros(length(fortegn))
 øvre_grænse = zeros(length(fortegn))
 for i in eachindex(fortegn)
@@ -32,27 +32,16 @@ end
 
 L = 1e9; # Må ikke være for høj, da det kan give problemer. 
 # Begrænsninger og kapaciteter
-A = [1  0  0  0  0  1  0  0  0  0;
-     0  1  0  0  0  0  1  0  0  0;
-     0  0  1  0  0  0  0  1  0  0;
-     0  0  0  1  0  0  0  0  1  0;
-     0  0  0  0  1  0  0  0  0  1;
-     1  0  0  1  0  0  0  0  0  0;
-     0 -1 -1  0  0  0 -1 -1  0  0;
-     0  1  0  0  0  0  0  1  0  0;
-     0  0  1  0  0  0  1  0  0  0;
-     1  1  1  1  1  0  0  0  0  0;
-     0  0  0  0  0  1  1  1  1  1;
-    -1 -1 -1 -1 -1 -1 -1 -1 -1 -1];
+A = [1  1];
 
-b = [1,  1,  1,  1,  1,  1, -2,  1,  1,  3,  3, -5];
-b_navne = ["B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12"];
+b = [10];
+b_navne = ["B1"];
 # Retningen af begrænsningerne kan skiftes mellem :<=, :>= og :(==)
-b_dir = [:<=, :<=, :<=, :<=, :<=, :<=, :<=, :<=, :<=, :<=, :<=, :<=];
+b_dir = [:<=];
 
 if model_type == "MIP"
     # vælg variabeltyper hved MIP problemer. Du kan vælge mellem :Integer, :Binary og :Continuous.
-    x_type = [:Integer, :Integer, :Integer, :Integer, :Integer, :Integer, :Integer, :Integer, :Integer, :Integer];
+    x_type = [:Continuous, :Continuous, :Continuous, :Binary,  :Binary,  :Binary];
 elseif model_type == "LP"
     x_type = fill(:Continuous, length(c));
 end

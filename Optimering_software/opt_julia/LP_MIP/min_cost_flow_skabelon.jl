@@ -26,56 +26,38 @@ function min_cost_flow_skabelon()
     # --- Noder ---
     # Kan angives eksplicit, eller udledes af kanter + supply/demand (se nedenfor).
     noder = [
-        "JM", "N", "E",
-        "24.L", "25.L", "26.L",
-        "24.2", "25.1", "26.2",
-        "24.1", "26.1",
-        "24.S", "25.S", "26.S"
-    ];
+        "F1", "F2",
+        "L1", "L2",
+        "G1", "G2", "G3", "G4"
+            ];
 
     # --- Kanter: (fra_node, til_node, omkostning, kapacitet) ---
     # Alle kanter er directed. Kapacitet = øvre grænse for flow på kanten.
+    L = 1e9; #Stor kapacitet, hvis der ingen kapacitet er
     kanter = [
-        ("JM", "N", 5, 10),
-        ("JM", "E", 5, 10),
-        ("N", "24.L", 15, 20),
-        ("JM", "24.L", 10, 15),
-        ("JM", "25.L", 5, 15),
-        ("JM", "26.L", 10, 15),
-        ("E", "26.L", 15, 20),
-        ("24.L", "24.2", 8, 25),
-        ("25.L", "25.1", 12, 20),
-        ("26.L", "26.2", 3, 20),
-        ("24.2", "24.1", 7, 15),
-        ("26.2", "26.1", 6, 15),
-        ("24.1", "24.S", 6, 10),
-        ("25.1", "25.S", 5, 10),
-        ("26.1", "26.S", 7, 10),
-        ("24.2", "25.1", 6, 15),
-        ("25.1", "24.S", 9, 10),
-        ("26.1", "25.S", 9, 10),
-        ("24.S", "26.S", 2, 5),
-        ("26.S", "24.S", 2, 5)
+        ("F1", "L1", 400, 250),
+        ("F1", "L2", 350, L),
+        ("F2", "L2", 250, L),
+        ("L1", "G1", 600, L),
+        ("L1", "G2", 350, L),
+        ("L2", "G2", 550, L),
+        ("L2", "G3", 500, L),
+        ("L2", "G4", 650, L)
     ];
 
     # --- Supply-noder: node => mængde (positiv = hvor meget der forlader noden) ---
     supply_dict = Dict(
-        "JM" => 30,
-        "N"  => 15,
-        "E"  => 10
+        "F1" => 400,
+        "F2" => 250
     );
 
     # --- Demand-noder: node => mængde (positiv = hvor meget der skal modtages) ---
     # I flowbalance bruges b_i = -demand for disse noder.
     demand_dict = Dict(
-        "24.2" => 2,
-        "26.2" => 2,
-        "24.1" => 7,
-        "25.1" => 7,
-        "26.1" => 7,
-        "24.S" => 10,
-        "25.S" => 10,
-        "26.S" => 10
+        "G1" => 200,
+        "G2" => 100,
+        "G3" => 150,
+        "G4" => 200
     );
 
     # --- Udled noder fra kanter + supply + demand (hvis noder tom) ---

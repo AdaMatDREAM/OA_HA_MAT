@@ -8,37 +8,31 @@ function max_flow_skabelon()
 
     # Definer noder
     noder = [
-    "S", 
-    "AV", 
-    "SK", 
-    "SL", 
-    "B1", 
-    "B2", 
-    "B3", 
-    "F", 
-    "T"];
+             "s", 
+             "A", 
+             "B", 
+             "C", 
+             "D", 
+             "t"
+                ];
 
     # Definer edges(kanter) med kapacitet
     # Format: (from_node, to_node, kapacitet)
     # NOTE: Alle kanter er directed (orienterede) i maximum flow problemer
     kanter = [
-            ("S", "AV", 9),
-            ("AV", "SK", 5),
-            ("AV", "SL", 9),
-            ("SK", "B1", 5),
-            ("SK", "B2", 5),
-            ("SK", "B3", 4),
-            ("SL", "B3", 4),
-            ("SL", "F", 3),
-            ("B1", "T", 1),
-            ("B2", "T", 1),
-            ("B3", "T", 4),
-            ("F", "T", 5)
-        ];
+            ("s", "A", 8),
+            ("s", "B", 7),
+            ("A", "C", 6),
+            ("B", "A", 2),
+            ("B", "D", 6),
+            ("C", "t", 7),
+            ("D", "C", 3),
+            ("D", "t", 7)
+                         ];
 
     # Definer source (fra node) og sink (til node)
-    source_node = "S";
-    sink_node = "T";
+    source_node = "s";
+    sink_node = "t";
 
     # Vi opretter c-vektoren (objektivkoefficienter) og x_navne-vektoren
     # For max flow: objektiv er at maksimere flow fra source

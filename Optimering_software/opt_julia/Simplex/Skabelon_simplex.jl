@@ -1,20 +1,17 @@
 function simplex_skabelon()
 
     # Objektivcoefficienter og variabelnavne
-    c = [99990, 54190, 109990];
-    x_navne = ["x_s", "x_3", "x_x"];
+    c = [30, 20];
+    x_navne = ["x_1", "x_2"];
     
     # Begr??nsningskoefficienter og kapaciteter
-    A = [2.5    4.75    1.25;
-         2.05   1.87    3.6;
-         2.4    0       4.8;
-         0      0       2;
-         0      1       0;
-         0      -1      0];
+    A = [2     1;
+         1     2;
+         1     1];
     
     # Husk at alle b_dir er <=
-    b = [2520,  12975,   25380,   10542,   7500,  -6371];
-    b_navne = ["Produktionstid", "kWh", "Lædderbetræk", "Falcon", "Max x_3", "Min x_3"];
+    b = [8,   8,  5];
+    b_navne = ["Arbejdstimer", "Maskintimer", "Gomory"];
     
     # Danner slackvariable
     # S_navne = ["S_1", "S_2", "S_3"];
@@ -34,7 +31,7 @@ function simplex_skabelon()
     if !isdir(output_mappe)
         mkpath(output_mappe)
     end
-    output_fil_navn = joinpath(output_mappe, "simplex_eksempel.txt")
+    output_fil_navn = joinpath(output_mappe, "simplex.txt")
     return (
         c = c, 
         x_navne = x_navne, 

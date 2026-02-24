@@ -32,9 +32,9 @@ function skabelon_kø()
     
     # Hvis rate-parameter er TRUE, så har vi lambda og mu som input
     # Hvis rate-parameter er FALSE, så har vi T_a og T_p som input
-    rate_parameter = false;
-    lambda = 4; # Lambda er ankomst rate; antall som kommer per time(elrno)
-    mu = 75; # Mu er service rate; antall som kan serveres per time(elrno)
+    rate_parameter = true;
+    lambda = 1; # Lambda er ankomst rate; antall som kommer per time(elrno)
+    mu = 1; # Mu er service rate; antall som kan serveres per time(elrno)
     T_a = 4;
     T_p = 8;
     
@@ -51,13 +51,13 @@ function skabelon_kø()
     # sigma_p = T_p;  # For markovian: sigma_p skal være lig T_p
     
     # G/G/N (Generel) - NUVÆRENDE KONFIGURATION:
-    sigma_a = 3; # Sigma_a er standardafvigelse/spredning for ankomst rate
-    sigma_p = 6; # Sigma_p er standardafvigelse/spredning for service rate
+    sigma_a = 0; # Sigma_a er standardafvigelse/spredning for ankomst rate
+    sigma_p = 0; # Sigma_p er standardafvigelse/spredning for service rate
     
-    N = 3; # N er antal servere
+    N = 1000; # N er antal servere
     
     # Antal decimaler i output
-    dec = 4;
+    dec = 3;
     
     # OUTPUT KONFIGURATION
     # Output af resultater i terminal eller fil
