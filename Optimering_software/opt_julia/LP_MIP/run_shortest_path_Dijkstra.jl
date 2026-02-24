@@ -1,6 +1,6 @@
-using Graphs
+using HiGHS, JuMP;
 using Printf
-using GraphPlot, Colors
+using Graphs, GraphPlot, Colors
 
 # Includefiler til funktioner
 include("build.jl")

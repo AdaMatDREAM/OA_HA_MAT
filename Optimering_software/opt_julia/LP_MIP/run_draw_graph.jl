@@ -1,3 +1,5 @@
+using HiGHS, JuMP
+using Printf
 using Graphs, GraphPlot, Colors
 
 include("draw_graph_skabelon.jl")

@@ -1,5 +1,6 @@
 using HiGHS, JuMP;
 using Printf
+using Colors
 
 # Includefiler til funktioner
 include("build.jl")

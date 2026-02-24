@@ -1,6 +1,6 @@
-using HiGHS, JuMP;
+using HiGHS, JuMP
 using Printf
-using Colors  # Nødvendig for colorant i print.jl funktioner
+using Graphs, GraphPlot, Colors # Nødvendig for colorant i print.jl funktioner
 
 # Includefiler til funktioner
 include("build.jl")
